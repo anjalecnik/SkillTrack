@@ -1,0 +1,51 @@
+# Node
+node_modules/
+npm-debug.log*
+pnpm-lock.yaml
+yarn.lock
+package-lock.json
+
+# Output folders
+dist/
+build/
+coverage/
+.cache/
+.next/
+turbo/
+
+# Turborepo cache and cookies
+.turbo/
+turbo.json.lock
+
+# Logs
+logs/
+*.log
+*.log.*
+
+# OS/IDE/System files
+.DS_Store
+Thumbs.db
+.vscode/
+*.swp
+
+# Environment
+.env
+.env.*.local
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Remix-specific
+web/public/build/
+web/.cache/
+
+# NestJS-specific
+api/dist/
+api/coverage/
+
+# TypeScript
+*.tsbuildinfo
+
+# Misc
+*.tgz
