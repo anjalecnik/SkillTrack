@@ -1,0 +1,14 @@
+export const DB_VARCHAR_LENGTH_2 = 2
+export const DB_VARCHAR_LENGTH_4 = 4
+export const DB_VARCHAR_LENGTH_5 = 5
+export const DB_VARCHAR_LENGTH_16 = 16
+export const DB_VARCHAR_LENGTH_32 = 32
+export const DB_VARCHAR_LENGTH_64 = 64
+export const DB_VARCHAR_LENGTH_128 = 128
+export const DB_VARCHAR_LENGTH_256 = 256
+export const DB_VARCHAR_LENGTH_512 = 512
+export const DB_VARCHAR_LENGTH_1024 = 1024
+export const DB_VARCHAR_LENGTH_2048 = 2048
+
+export const POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION = 10
+export const POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE = 2
