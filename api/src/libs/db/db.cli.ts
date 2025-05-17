@@ -2,7 +2,7 @@ import { Config } from "../../utils/config/config"
 import { DataSource } from "typeorm"
 import { PostgresConnectionOptions } from "typeorm/driver/postgres/PostgresConnectionOptions"
 
-const dbConfig: PostgresConnectionOptions = {
+export const dbConfig: PostgresConnectionOptions = {
 	type: "postgres",
 	host: Config.get<string>("POSTGRES_HOST"),
 	port: Config.get<number>("POSTGRES_PORT"),

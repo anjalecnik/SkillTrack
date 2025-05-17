@@ -24,4 +24,67 @@ export class EnvironmentVariables {
 	@Min(0)
 	@Max(65535)
 	POSTGRES_PORT!: number
+
+	//----------------
+	// JWT
+	//----------------
+	@Expose()
+	@IsString()
+	JWT_SECRET_KEY!: string
+
+	@Expose()
+	@IsString()
+	JWT_EXPIRE_TIME!: string
+
+	@Expose()
+	@IsString()
+	JWT_REFRESH_SECRET_KEY!: string
+
+	@Expose()
+	@IsString()
+	JWT_REFRESH_EXPIRE_TIME!: string
+
+	//----------------
+	// GOOGLE
+	//----------------
+	@Expose()
+	@IsString()
+	GOOGLE_CLIENT_ID!: string
+
+	@Expose()
+	@IsString()
+	GOOGLE_CLIENT_SECRET!: string
+
+	@Expose()
+	@IsString()
+	GOOGLE_CALLBACK_URL!: string
+
+	//----------------
+	// APP
+	//----------------
+	@Expose()
+	@IsInt()
+	@Min(0)
+	@Max(65535)
+	APP_PORT!: number
+
+	@Expose()
+	@IsString()
+	APP_API_PREFIX!: string
+
+	@Expose()
+	@IsString()
+	APP_URL!: string
+
+	@Expose()
+	@IsString()
+	API_URL!: string
+
+	@Expose()
+	@IsString()
+	APP_CORS_ORIGIN!: string
+
+	@Expose()
+	@IsString()
+	APP_CORS_METHODS!: string
 }
