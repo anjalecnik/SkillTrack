@@ -1,12 +1,13 @@
 import { Module } from "@nestjs/common"
 import { UserAssignedVacationRepository } from "./repository/user-assigned-vacation.repository"
 import { UserAssignedVacationService } from "./services/user-assigned-vacation.service"
-import { DbModule } from "src/libs/db/db.module"
+import { UserVacationAssignedEntity } from "src/libs/db/entities/user-vacation-assigned.entity"
+import { TypeOrmModule } from "@nestjs/typeorm"
+import { UserEntity } from "src/libs/db/entities/user.entity"
 
 @Module({
-	imports: [DbModule],
-	controllers: [],
+	imports: [TypeOrmModule.forFeature([UserVacationAssignedEntity, UserEntity])],
 	providers: [UserAssignedVacationService, UserAssignedVacationRepository],
-	exports: [UserAssignedVacationService]
+	exports: [UserAssignedVacationService, UserAssignedVacationRepository]
 })
 export class UserAssignedVacationModule {}

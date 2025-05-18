@@ -45,6 +45,19 @@ export class EnvironmentVariables {
 	JWT_REFRESH_EXPIRE_TIME!: string
 
 	//----------------
+	// REDIS
+	//----------------
+	@Expose()
+	@IsString()
+	REDIS_HOST!: string
+
+	@Expose()
+	@IsInt()
+	@Min(0)
+	@Max(65535)
+	REDIS_PORT!: number
+
+	//----------------
 	// GOOGLE
 	//----------------
 	@Expose()

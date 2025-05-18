@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-import { Cache } from "cache-manager"
+import type { Cache } from "cache-manager"
 import { Config } from "../config/config"
 
 export abstract class CacheHelper {

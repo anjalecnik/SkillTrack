@@ -8,7 +8,7 @@ import { HolidayEntity } from "../../libs/db/entities/holiday.entity"
 import { Nullable } from "../types/interfaces"
 import { HolidayHelper } from "./holiday.helper"
 
-dayjsExtend(utc)
+dayjs.extend(utc)
 dayjsExtend(timezone)
 dayjsExtend(isSameOrAfter)
 

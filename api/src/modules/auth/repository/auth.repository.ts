@@ -9,9 +9,7 @@ import { UserStatus } from "src/utils/types/enums/user-status.enum"
 export class AuthRepository {
 	constructor(
 		@InjectRepository(UserEntity)
-		private readonly userRepository: Repository<UserEntity>,
-		@InjectRepository(UserEntity)
-		private readonly workspaceUserRepository: Repository<UserEntity>
+		private readonly userRepository: Repository<UserEntity>
 	) {}
 
 	//#region User
@@ -27,8 +25,9 @@ export class AuthRepository {
 
 	async getOrCreateUserByEmail(email: string): Promise<UserEntity> {
 		const user = await this.userRepository.findOne({ where: { email } })
+		console.log(user)
 		if (user) return user
-		return this.userRepository.save({ email })
+		return this.userRepository.save({ email, status: UserStatus.Active })
 	}
 
 	async createUser(localSignup: IAuthUserLocalSignupDbRequest): Promise<UserEntity> {

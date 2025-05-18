@@ -8,11 +8,16 @@ import { UserAddressEntity } from "./entities/user-address.entity"
 import { UserVacationAssignedEntity } from "./entities/user-vacation-assigned.entity"
 import { UserEntity } from "./entities/user.entity"
 import { WorkPositionEntity } from "./entities/work-position.entity"
-import { MasterDataSource } from "./master-data-source.service"
+import { AppConfigModule } from "src/config/app-config.module"
+import { TypeOrmConfigService } from "./db.config"
 
 @Module({
-	imports: [TypeOrmModule.forFeature([HolidayEntity, ProjectEntity, UserAddressEntity, UserEntity, TeamEntity, WorkPositionEntity, ProjectUserEntity, UserVacationAssignedEntity])],
-	providers: [MasterDataSource],
-	exports: [MasterDataSource, TypeOrmModule]
+	imports: [
+		TypeOrmModule.forRootAsync({
+			imports: [AppConfigModule],
+			useClass: TypeOrmConfigService
+		}),
+		TypeOrmModule.forFeature([HolidayEntity, ProjectUserEntity, ProjectEntity, TeamEntity, UserAddressEntity, UserVacationAssignedEntity, UserEntity, WorkPositionEntity])
+	]
 })
 export class DbModule {}
