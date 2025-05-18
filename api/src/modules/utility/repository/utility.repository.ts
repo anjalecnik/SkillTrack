@@ -22,7 +22,7 @@ export class UtilityRepository {
 	) {}
 
 	async getUser(id: number): Promise<UserEntity | undefined> {
-		return (await this.userRepository.findOne({ where: { id } })) ?? undefined
+		return (await this.userRepository.findOne({ where: { id }, relations: { workPosition: true } })) ?? undefined
 	}
 
 	async getUserWithProjects(id: number): Promise<UserEntity | undefined> {

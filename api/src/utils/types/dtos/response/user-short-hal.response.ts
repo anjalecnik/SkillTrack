@@ -24,7 +24,7 @@ export class UserShortHalResponse extends HalResourceResponse {
 	@ApiProperty({ example: "Builder" })
 	surname!: string
 
-	@ApiPropertyOptional({ example: "inova@inova.si" })
+	@ApiPropertyOptional({ example: "gmail@gmail.com" })
 	email?: string
 
 	@ApiProperty({ type: UserEmbeddedItemsHalResponse })

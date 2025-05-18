@@ -1,0 +1,16 @@
+export enum Tool {
+  Pan = "Pan",
+  Select = "Select",
+  Shape = "Shape",
+  Draw = "Draw",
+  Arrow = "Arrow",
+  Text = "Text",
+  Undo = "Undo",
+  Redo = "Redo",
+  Lock = "Lock",
+  Duplicate = "Duplicate",
+  Add = "Add",
+  ZoomIn = "ZoomIn",
+  ZoomOut = "ZoomOut",
+  Delete = "Delete",
+}

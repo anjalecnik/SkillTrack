@@ -42,7 +42,6 @@ export class UserRepository {
 
 		const queryBuilder = this.userRepository
 			.createQueryBuilder(alias)
-			.leftJoinAndSelect(`${alias}.user`, "user")
 			.leftJoinAndSelect(`${alias}.workPosition`, "workPosition")
 			.leftJoinAndSelect(`${alias}.team`, "team")
 			.skip(skip)
@@ -84,23 +83,13 @@ export class UserRepository {
 						status: UserStatus.Invited,
 						name: invitation.name,
 						surname: invitation.surname,
+						email: invitation.email,
 						invitedByUserId: userInvitationRequest.invitedByUserId
 					}
 
 					const userEntity = await userRepository.findOne({ where: { email: invitation.email } })
 					if (!userEntity) {
-						const { id } = await userRepository.save({ email: invitation.email })
-						return userRepository.save({ ...invitationObject, userId: id })
-					}
-
-					if (userEntity.deletedAt !== null) {
-						return userRepository.save({
-							id: userEntity.id,
-							userId: userEntity.id,
-							deletedAt: null,
-							deletedByUserId: null,
-							...invitationObject
-						})
+						return userRepository.save({ ...invitationObject, status: UserStatus.Invited })
 					}
 
 					throw new BadRequestException(`User email already taken`, `User email already exists: $${invitation.email}`)

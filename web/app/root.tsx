@@ -1,45 +1,129 @@
 import {
+  ClientLoaderFunctionArgs,
+  json,
   Links,
-  Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
+  ShouldRevalidateFunctionArgs,
+  useLoaderData,
 } from "@remix-run/react";
-import type { LinksFunction } from "@remix-run/node";
+import { CustomTheme } from "~/themes";
+import {
+  GlobalErrorBoundary,
+  Notistack,
+  LoaderPage,
+} from "~/components/common";
+import {
+  getWorkspaceUserFromToken,
+  LocalStorageService,
+  MenuProvider,
+} from "./util";
+import { IWorkspace, IWorkspaceUser } from "./types";
+import moment from "moment";
+import dayjs from "dayjs";
+import updateLocale from "dayjs/plugin/updateLocale";
+import "react-dates/lib/css/_datepicker.css";
+import customParseFormat from "dayjs/plugin/customParseFormat";
+import { UserClient } from "./clients";
 
-import "./tailwind.css";
+export type LoaderData = {
+  workspace: IWorkspace;
+  workspaceUser: IWorkspaceUser;
+};
 
-export const links: LinksFunction = () => [
-  { rel: "preconnect", href: "https://fonts.googleapis.com" },
-  {
-    rel: "preconnect",
-    href: "https://fonts.gstatic.com",
-    crossOrigin: "anonymous",
+// eslint-disable-next-line import/no-named-as-default-member
+dayjs.extend(customParseFormat);
+// eslint-disable-next-line import/no-named-as-default-member
+dayjs.extend(updateLocale);
+dayjs.updateLocale("en", {
+  weekStart: 1,
+});
+
+// eslint-disable-next-line import/no-named-as-default-member
+moment.updateLocale("en", {
+  week: {
+    dow: 1,
   },
-  {
-    rel: "stylesheet",
-    href: "https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap",
-  },
-];
+});
 
-export function Layout({ children }: { children: React.ReactNode }) {
+export async function clientLoader(actionArgs: ClientLoaderFunctionArgs) {
+  const url = new URL(actionArgs.request.url);
+  const token = LocalStorageService.getString("token");
+
+  LocalStorageService.set("currentBaseRoute", url.pathname.split("/")[1]);
+
+  if (!token) {
+    return json({
+      user: { name: "", surname: "" },
+    });
+  }
+
+  const userAcc = getWorkspaceUserFromToken(actionArgs);
+
+  const user = await Promise.all([
+    UserClient.getUserById({
+      employeeId: userAcc.id,
+    }),
+  ]);
+
+  return json({ user });
+}
+
+export function shouldRevalidate({
+  nextParams,
+  currentParams,
+  nextUrl,
+  currentUrl,
+  formData,
+}: ShouldRevalidateFunctionArgs) {
+  const nextHub = nextUrl.pathname.split("/")[1];
+  if (currentUrl !== nextUrl) {
+    LocalStorageService.set("currentBaseRoute", nextHub);
+  }
   return (
-    <html lang="en">
-      <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <Meta />
-        <Links />
-      </head>
-      <body>
-        {children}
-        <ScrollRestoration />
-        <Scripts />
-      </body>
-    </html>
+    (currentUrl.pathname.includes("email") &&
+      !nextUrl.pathname.includes("email")) ||
+    (nextUrl.pathname.includes("settings") && formData?.get("name") !== null) ||
+    (nextUrl.pathname.includes("employees") &&
+      formData?.get("name") !== null &&
+      currentParams.employeeId !== undefined)
   );
 }
 
 export default function App() {
-  return <Outlet />;
+  const { user } = useLoaderData() as {
+    user: { isSupervisor: boolean };
+  };
+
+  return (
+    <CustomTheme>
+      <Notistack>
+        <MenuProvider isSupervisor={user.isSupervisor}>
+          <Links />
+          <Outlet />
+          <ScrollRestoration />
+          <Scripts />
+        </MenuProvider>
+      </Notistack>
+    </CustomTheme>
+  );
+}
+
+export function ErrorBoundary() {
+  return (
+    <CustomTheme>
+      <GlobalErrorBoundary />
+      <Scripts />
+    </CustomTheme>
+  );
+}
+
+export function HydrateFallback() {
+  return (
+    <CustomTheme>
+      <LoaderPage />
+      <Scripts />
+    </CustomTheme>
+  );
 }

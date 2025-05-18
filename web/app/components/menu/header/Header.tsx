@@ -1,0 +1,141 @@
+import {
+  AppBar,
+  Switch,
+  Toolbar,
+  Tooltip,
+  Typography,
+  useTheme,
+} from "@mui/material";
+import {
+  DRAWER_WIDTH,
+  HEADER_HEIGHT,
+  MINI_DRAWER_WIDTH,
+  USER_HUB_PATH,
+  WORKSPACE_HUB_PATH,
+} from "~/constants";
+import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
+import { Flex, Avatar, IconButton } from "~/components/common";
+import { displaySuccess, fullNameFormatter, useMenu } from "~/util";
+import { AuthClient } from "~/clients";
+import {
+  useLocation,
+  useNavigate,
+  useParams,
+  useRouteLoaderData,
+} from "@remix-run/react";
+import { IWorkspaceRoot, UserRoles } from "~/types";
+import { t } from "i18next";
+import { useState } from "react";
+
+interface WorkspaceUser {
+  name: string;
+  surname: string;
+  id?: number;
+}
+
+export function Header({ children }: { children?: React.ReactNode }) {
+  const { user } = useRouteLoaderData<IWorkspaceRoot>("root") ?? {
+    user: { name: "", surname: "" } as WorkspaceUser,
+  };
+  console.log(40, user);
+  const { pathname } = useLocation();
+  const params = useParams();
+  const theme = useTheme();
+  const { menuState, handlerDrawerOpen } = useMenu();
+  const drawerOpen = menuState.isMenuOpened;
+  const navigate = useNavigate();
+  const [disableButton, setDisableButton] = useState(false);
+  const workspaceUserRole = AuthClient.getUserRole();
+  const isInWorkspaceHub = pathname.includes(WORKSPACE_HUB_PATH);
+
+  const handleCheckedChange = (checked: boolean) => {
+    setDisableButton(true);
+    if (checked) {
+      displaySuccess(t("common.successfullyChangedToAdmin"));
+      return navigate(`${WORKSPACE_HUB_PATH}/settings`);
+    }
+    displaySuccess(t("common.successfullyChangedToUser"));
+    navigate(`${USER_HUB_PATH}`);
+  };
+
+  return (
+    <AppBar
+      sx={{
+        borderBottom: `1px solid ${theme.palette.divider}`,
+        boxShadow: "none",
+        maxHeight: `${HEADER_HEIGHT}`,
+        display: "flex",
+        justifyContent: "center",
+        width: {
+          xs: "100%",
+          lg: drawerOpen
+            ? `calc(100vw - ${DRAWER_WIDTH}px)`
+            : `calc(100vw - ${MINI_DRAWER_WIDTH}px)`,
+        },
+      }}
+    >
+      <Toolbar
+        sx={{
+          justifyContent: "space-between",
+        }}
+      >
+        <IconButton
+          aria-label="open drawer"
+          onClick={() => {
+            handlerDrawerOpen(!drawerOpen);
+          }}
+          edge="start"
+          color="secondary"
+          variant="light"
+          sx={{
+            color: "text.primary",
+            ml: { xs: 0, lg: -2 },
+          }}
+        >
+          {drawerOpen ? <MenuFoldOutlined /> : <MenuUnfoldOutlined />}
+        </IconButton>
+        <Flex gap="10px" alignItems="center">
+          {workspaceUserRole !== UserRoles.User && (
+            <Flex gap="5px" alignItems="center">
+              <Typography
+                sx={{
+                  color: "black",
+                }}
+              >
+                {isInWorkspaceHub ? t("common.admin") : t("common.user")}
+              </Typography>
+              <Tooltip
+                title={
+                  isInWorkspaceHub
+                    ? t("common.changeToUserView")
+                    : t("common.changeToAdminView")
+                }
+              >
+                <Switch
+                  checked={isInWorkspaceHub}
+                  onChange={(_, checked) => handleCheckedChange(checked)}
+                  disabled={disableButton}
+                />
+              </Tooltip>
+            </Flex>
+          )}
+          {children}
+          <Avatar
+            avatarId={user.id}
+            size="32px"
+            fontSize="14px"
+            name={`${user.name} ${user.surname}`}
+          />
+          <Typography
+            variant="body1"
+            sx={{
+              color: (theme) => theme.palette.secondary.dark,
+            }}
+          >
+            {fullNameFormatter(user)}
+          </Typography>
+        </Flex>
+      </Toolbar>
+    </AppBar>
+  );
+}

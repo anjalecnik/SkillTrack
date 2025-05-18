@@ -2,7 +2,7 @@ import { Body, Controller, Get, Param, ParseIntPipe, Patch, Query, UseGuards } f
 import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
 import { UserGuard, UserLoginGuard, UserSelfOrManagerGuard } from "src/utils/guards"
 import { IAuthJwtPassportUserRequest } from "src/modules/auth/interfaces"
-import { ROUTE_USER, API_TAG_WORKSPACE, API_TAG_USER, ROUTE_USER_HUB } from "src/utils/constants"
+import { ROUTE_USER, API_TAG_USER, ROUTE_USER_HUB } from "src/utils/constants"
 import { AuthJwtPassportUserDetails } from "src/utils/decorators"
 import { UserService } from "../services/user.service"
 import { UserListResponse } from "../dtos/response/user-list.response"
@@ -14,7 +14,7 @@ import { UserBaseResponse } from "../dtos/response/user-base.response"
 import { UserJoinRequest } from "../dtos/request/user-join.request"
 
 @Controller(`/${ROUTE_USER_HUB}/${ROUTE_USER}`)
-@ApiTags(`${API_TAG_WORKSPACE} ${API_TAG_USER}`)
+@ApiTags(`${API_TAG_USER}`)
 export class UserUserHubController {
 	constructor(private userService: UserService) {}
 

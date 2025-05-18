@@ -36,7 +36,6 @@ export class JwtWorkspaceUserStrategy extends PassportStrategy(Strategy, "jwtUse
 		// Unsafe assumption of workspace id in parameters (in that case the guard in in the wrong place or there is a typo in parameters)
 		const params = req.params
 		if (!params) throw new BadRequestException("Invalid request", "Request parameters are missing or undefined")
-		if (!params.workspaceId) throw new BadRequestException("Invalid request", "The workspaceId parameter is required but was not provided in the request")
 		return parseInt(params.workspaceId)
 	}
 }

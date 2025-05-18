@@ -6,7 +6,7 @@ export class UserBaseResponse {
 	@ApiProperty({ example: 1 })
 	id!: number
 
-	@ApiProperty({ example: "bob.the.builder@inova.si" })
+	@ApiProperty({ example: "bob.the.builder@gmail.com" })
 	email!: string
 
 	@ApiProperty({ example: UserStatus.Active, enum: UserStatus })

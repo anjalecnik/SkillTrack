@@ -12,7 +12,7 @@ export class WorkPositionCreateRequest {
 	@ApiProperty({ description: "Work position level [L01 - L10]", example: WorkPositionLevel.L03, enum: WorkPositionLevel })
 	@IsEnum(WorkPositionLevel)
 	level!: WorkPositionLevel
-	WorkPositionLevel
+
 	@ApiPropertyOptional({ description: "Reference to promotion work position id", example: 1 })
 	@IsInt()
 	@IsPositive()
