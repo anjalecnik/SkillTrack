@@ -9,7 +9,6 @@ import { useTablet } from "~/hooks";
 import { SearchParam } from "~/types";
 import { isValidMoment } from "~/util";
 import { t } from "i18next";
-import { DataTestIds } from "~/data-test-ids";
 
 interface DateRangeInputProps {
   label?: ReactNode;
@@ -113,7 +112,6 @@ export const DateRangeInput = ({
           return (
             <div style={{ display: "flex", gap: "8px", padding: "20px" }}>
               <Button
-                data-testid={DataTestIds.common.thisMonthBtn}
                 variant="outlined"
                 color="primary"
                 onClick={() =>
@@ -127,7 +125,6 @@ export const DateRangeInput = ({
                 {t("common.thisMonth")}
               </Button>
               <Button
-                data-testid={DataTestIds.common.previousMonthBtn}
                 variant="outlined"
                 color="primary"
                 onClick={() =>

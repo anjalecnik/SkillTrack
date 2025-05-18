@@ -23,7 +23,6 @@ import { InfoCircleOutlined } from "@ant-design/icons";
 import { Trans } from "react-i18next";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
-import { DataTestIds } from "~/data-test-ids";
 
 interface IBusinessTripDialogFormProps {
   projects: IProjectUserResponse[];
@@ -78,7 +77,6 @@ export function BusinessTripDialogForm({
           }
           minDate={minReportingDate}
           required
-          dataTestId={DataTestIds.moreToReport.businessTrip.startDateInput}
         />
         <TimeSelect
           label={t("userHub.departureTime")}
@@ -86,7 +84,6 @@ export function BusinessTripDialogForm({
           name="departureTime"
           defaultValue={fields.departureTime.initialValue}
           required
-          dataTestId={DataTestIds.moreToReport.businessTrip.startTimeInput}
         />
       </Flex>
       <Flex justifyContent="space-between" gap="20px">
@@ -102,7 +99,6 @@ export function BusinessTripDialogForm({
           }
           minDate={minReportingDate}
           required
-          dataTestId={DataTestIds.moreToReport.businessTrip.endDateInput}
         />
         <TimeSelect
           label={t("userHub.returnTime")}
@@ -110,7 +106,6 @@ export function BusinessTripDialogForm({
           name="returnTime"
           defaultValue={fields.returnTime.initialValue}
           required
-          dataTestId={DataTestIds.moreToReport.businessTrip.endTimeInput}
           errorMessage={t(fields.returnTime.errors?.[0] ?? "")}
         />
       </Flex>
@@ -121,7 +116,6 @@ export function BusinessTripDialogForm({
           {...getInputProps(fields.location, { type: "text" })}
           key={fields.location.key}
           required
-          dataTestId={DataTestIds.moreToReport.businessTrip.destination}
         />
       </Flex>
       <Flex>

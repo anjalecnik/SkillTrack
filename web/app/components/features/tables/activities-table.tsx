@@ -15,7 +15,6 @@ import dayjs from "dayjs";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Flex, FlexColumn, PaginatedTable } from "~/components/common";
-import { DataTestIds } from "~/data-test-ids";
 import { useMobile } from "~/hooks";
 import {
   ActivityAction,
@@ -462,10 +461,6 @@ export function ActivitiesTable({
                     placement="top"
                   >
                     <Box
-                      data-testid={
-                        isToday &&
-                        DataTestIds.activityDashboard.todayBusinessTripCell
-                      }
                       sx={{
                         cursor: "pointer",
                         height: "100%",
@@ -527,22 +522,22 @@ export function ActivitiesTable({
                                 activity.isFirst && activity.isLast
                                   ? "4px"
                                   : activity.isFirst
-                                    ? "4px 4px 0 0"
-                                    : activity.isLast
-                                      ? "0 0 4px 4px"
-                                      : "0",
+                                  ? "4px 4px 0 0"
+                                  : activity.isLast
+                                  ? "0 0 4px 4px"
+                                  : "0",
                               margin:
                                 activity.isFirst && activity.isLast
                                   ? "auto 0 auto 0"
                                   : activity.isFirst
-                                    ? "auto 0 0 0"
-                                    : "0 0 auto 0",
+                                  ? "auto 0 0 0"
+                                  : "0 0 auto 0",
                               height:
                                 activity.isFirst && activity.isLast
                                   ? "50%"
                                   : activity.isFirst || activity.isLast
-                                    ? "75%"
-                                    : "100%",
+                                  ? "75%"
+                                  : "100%",
                               backgroundColor: !isFillActivity
                                 ? backgroundColor
                                 : undefined,
@@ -847,8 +842,8 @@ export function ActivitiesTable({
                           isFirstOnCallRow && isLastOnCallRow
                             ? "auto 0 auto 0"
                             : isFirstOnCallRow
-                              ? "auto 0 0 0"
-                              : "0 0 auto 0",
+                            ? "auto 0 0 0"
+                            : "0 0 auto 0",
                         height:
                           isFirstOnCallRow && isLastOnCallRow ? "50%" : "75%",
                         width: "100%",

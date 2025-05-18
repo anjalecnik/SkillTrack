@@ -6,7 +6,6 @@ import { formatDate } from "~/util";
 import { FEEDBACK_EMAIL_LIST, QUOTES, USER_HUB_PATH } from "~/constants";
 import { ActivityWorkLocation, IActivityByIdResponse } from "~/types";
 import { Link, useParams } from "@remix-run/react";
-import { DataTestIds } from "~/data-test-ids";
 
 interface IDailyReportSuccessPageProps {
   lastActivities: IActivityByIdResponse;
@@ -91,11 +90,7 @@ export function DailyReportSuccessPage({
                 : ""}
             </Typography>
           </Typography>
-          <Button
-            data-testid={DataTestIds.dailyReport.goBackToDashboardBtn}
-            variant="text"
-            href={`${USER_HUB_PATH}`}
-          >
+          <Button variant="text" href={`${USER_HUB_PATH}`}>
             {t("emailSuccess.goBackToDashboard")}
           </Button>
         </FlexColumn>

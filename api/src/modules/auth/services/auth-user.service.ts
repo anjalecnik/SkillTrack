@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { CACHE_MANAGER } from "@nestjs/cache-manager"
-import { Inject, Injectable, Logger, UnauthorizedException } from "@nestjs/common"
+import { BadRequestException, Inject, Injectable, Logger, UnauthorizedException } from "@nestjs/common"
 import type { Cache } from "cache-manager"
 import { OAuth2Client } from "google-auth-library"
 import _ from "lodash"
@@ -17,6 +17,9 @@ import { AuthRepository } from "../repository/auth.repository"
 import { AuthJwtService } from "./auth-jwt.service"
 import { Config } from "src/utils/config/config"
 import { CacheHelper } from "src/utils/helpers/cache.helper"
+import { AuthUserLocalSignupRequest } from "../dtos/request/auth-user-local-signup.request"
+import { PasswordHelper } from "src/utils/helpers/password.helper"
+import { AuthUserLocalLoginRequest } from "../dtos/request/auth-user-local-login.request"
 
 @Injectable()
 export class AuthUserService {
@@ -25,25 +28,15 @@ export class AuthUserService {
 		clientSecret: Config.get<string>("GOOGLE_CLIENT_SECRET")
 	})
 
-	constructor(
-		@Inject(CACHE_MANAGER) private cacheManager: Cache,
-		private readonly authRepository: AuthRepository,
-		private readonly authJwtService: AuthJwtService
-	) {}
+	constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private readonly authRepository: AuthRepository, private readonly authJwtService: AuthJwtService) {}
 
 	async googleLogin({ idToken }: AuthUserGoogleLoginRequest): Promise<AuthSignedJwtResponse> {
-		console.log("CacheManager available:", typeof this.cacheManager.set) // should print "function"
-		console.log("Type of cacheManager.set:", typeof this.cacheManager.set)
-
-		const logger = new Logger(AuthUserService.name)
-		logger.log("Reached point 36")
 		const authResponse = await this.googleAuth.verifyIdToken({ idToken }).catch(() => {
 			throw new UnauthorizedException("Invalid google  idToken")
 		})
-		console.log(40)
 		const payload = authResponse.getPayload()
 		if (!payload || !payload.email) throw new UnauthorizedException(`Something went wrong, please try again later`)
-		console.log(43)
+
 		const user = await this.authRepository.getOrCreateUserByEmail(payload.email)
 
 		return this.createTokenPair(user)
@@ -77,14 +70,33 @@ export class AuthUserService {
 			throw new UnauthorizedException("Invalid authentication token", "Mismatch between saved token data and provided payload")
 	}
 
+	async signup({ email, password }: AuthUserLocalSignupRequest): Promise<AuthSignedJwtResponse> {
+		const existingUser = await this.authRepository.getUserByEmail(email)
+		if (existingUser) throw new Error("User with provided email already exists")
+
+		const hashPassword = await PasswordHelper.hashPassword(password)
+		const user = await this.authRepository.createUser({ email, password: hashPassword })
+
+		return this.createTokenPair(user)
+	}
+
+	async login({ email, password }: AuthUserLocalLoginRequest): Promise<AuthSignedJwtResponse> {
+		const user = await this.authRepository.getUserByEmail(email)
+		if (!user) throw new BadRequestException("Invalid email or password")
+
+		if (!user?.password || !(await PasswordHelper.verifyPassword(password, user.password))) throw new BadRequestException("Invalid email or password")
+
+		return this.createTokenPair(user)
+	}
+
 	private async createTokenPair(user: UserEntity): Promise<AuthSignedJwtResponse> {
 		const uuid = uuidv4()
 		const accessToken = this.authJwtService.signAccessJwt(uuid, user)
 		const refreshToken = this.authJwtService.signRefreshJwt(uuid, user)
-		console.log(83)
+
 		const rawAccessTtl = Config.get<string>("JWT_EXPIRE_TIME") ?? "7d"
 		const rawRefreshTtl = Config.get<string>("JWT_REFRESH_EXPIRE_TIME") ?? "30d"
-		console.log(rawAccessTtl, rawRefreshTtl)
+
 		function parseMsSafe(input: string | undefined | null, fallback: string): number {
 			const parsed = ms(input ?? fallback)
 			if (typeof parsed !== "number") {
@@ -99,7 +111,7 @@ export class AuthUserService {
 		if (typeof accessTokenTTL !== "number" || typeof refreshTokenTTL !== "number") {
 			throw new Error("Invalid TTL format")
 		}
-		console.log(this.cacheManager)
+
 		await this.cacheManager.set(CacheHelper.getPathJwtAccessToken(user.id, uuid), accessToken, {
 			ttl: accessTokenTTL / 1000
 		} as any)

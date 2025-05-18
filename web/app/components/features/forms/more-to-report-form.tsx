@@ -44,7 +44,6 @@ import { fullNameFormatter } from "~/util";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useSearchParams } from "@remix-run/react";
 import dayjs from "dayjs";
-import { DataTestIds } from "~/data-test-ids";
 
 interface IMoreToReportFormProps {
   lastResult?: SubmissionResult<string[]> | null;
@@ -248,7 +247,6 @@ export function MoreToReportForm({
             color="primary"
             type="submit"
             loading={isLoading}
-            data-testid={DataTestIds.moreToReport.submitButton}
           >
             {t("userHub.report")}
           </Button>

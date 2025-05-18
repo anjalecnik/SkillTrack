@@ -8,7 +8,6 @@ import {
   FormEnumSelect,
 } from "~/components/common";
 import { RadioGroupInput } from "~/components/common/inputs/RadioGroupInput";
-import { DataTestIds } from "~/data-test-ids";
 import { IUser } from "~/types";
 import { PerformanceReviewQuartal } from "~/types/enums/performance-review-quartal.enum";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
@@ -68,7 +67,6 @@ export function PerformanceReviewForm({
           setFormValues((prev) => ({ ...prev, year: newValue?.year() }))
         }
         disabled={isEditing || isViewing}
-        dataTestId={DataTestIds.performanceReviews.yearInput}
         required
       />
 
@@ -85,7 +83,6 @@ export function PerformanceReviewForm({
             ),
           }))
         }
-        dataTestId={DataTestIds.performanceReviews.quarterDropdown}
         disabled={isEditing || isViewing}
         required
       />
@@ -105,7 +102,6 @@ export function PerformanceReviewForm({
           setFormValues((prev) => ({ ...prev, answer1: Number(value) }))
         }
         disabled={isViewing}
-        dataTestId={DataTestIds.performanceReviews.answer1RadioInput}
         ratingScale
         required
       />
@@ -125,7 +121,6 @@ export function PerformanceReviewForm({
           setFormValues((prev) => ({ ...prev, answer2: Number(value) }))
         }
         disabled={isViewing}
-        dataTestId={DataTestIds.performanceReviews.answer2RadioInput}
         ratingScale={true}
         required
       />
@@ -142,7 +137,6 @@ export function PerformanceReviewForm({
           setFormValues((prev) => ({ ...prev, answer3: Boolean(value) }))
         }
         disabled={isViewing}
-        dataTestId={DataTestIds.performanceReviews.answer3RadioInput}
         required
       />
 
@@ -158,7 +152,6 @@ export function PerformanceReviewForm({
           setFormValues((prev) => ({ ...prev, answer4: Boolean(value) }))
         }
         disabled={isViewing}
-        dataTestId={DataTestIds.performanceReviews.answer4RadioInput}
         required
       />
     </FlexColumn>

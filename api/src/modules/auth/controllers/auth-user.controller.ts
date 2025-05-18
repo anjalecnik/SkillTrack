@@ -5,11 +5,27 @@ import { AuthUserRefreshTokenRequest } from "../dtos/request/auth-user-refresh-t
 import { AuthSignedJwtResponse } from "../dtos/response/auth-signed-jwt.response"
 import { AuthUserService } from "../services/auth-user.service"
 import { ROUTE_AUTH, ROUTE_USER } from "src/utils/constants"
+import { AuthUserLocalSignupRequest } from "../dtos/request/auth-user-local-signup.request"
+import { AuthUserLocalLoginRequest } from "../dtos/request/auth-user-local-login.request"
 
 @Controller(`${ROUTE_AUTH}/${ROUTE_USER}`)
 @ApiTags("Auth User")
 export class AuthUserController {
 	constructor(private readonly authUserService: AuthUserService) {}
+
+	@Post("/sign-up")
+	@ApiOperation({ summary: "Basic Signup" })
+	@ApiCreatedResponse({ description: "Signup", type: AuthSignedJwtResponse })
+	async signup(@Body() authUserEmailSignupRequest: AuthUserLocalSignupRequest): Promise<AuthSignedJwtResponse> {
+		return this.authUserService.signup(authUserEmailSignupRequest)
+	}
+
+	@Post("/login")
+	@ApiOperation({ summary: "Basic Login" })
+	@ApiCreatedResponse({ description: "Login", type: AuthSignedJwtResponse })
+	async login(@Body() authUserEmailLoginRequest: AuthUserLocalLoginRequest): Promise<AuthSignedJwtResponse> {
+		return this.authUserService.login(authUserEmailLoginRequest)
+	}
 
 	@Post("/google/login")
 	@ApiOperation({ summary: "Google Login" })

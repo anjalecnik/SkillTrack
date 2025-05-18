@@ -17,7 +17,6 @@ import { Typography, useTheme } from "@mui/material";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Trans } from "react-i18next";
 import dayjs, { Dayjs } from "dayjs";
-import { DataTestIds } from "~/data-test-ids";
 
 interface ITripToOfficeDialogFormProps {
   projects: IProjectUserResponse[];
@@ -86,7 +85,6 @@ export function TripToOfficeDialogForm({
               : null
           }
           required
-          dataTestId={DataTestIds.moreToReport.tripToOffice.startDateInput}
         />
         <TimeSelect
           label={t("userHub.departureTime")}
@@ -94,7 +92,6 @@ export function TripToOfficeDialogForm({
           name="departureTime"
           defaultValue={fields.departureTime.initialValue}
           required
-          dataTestId={DataTestIds.moreToReport.tripToOffice.startTimeInput}
         />
       </Flex>
       <Flex justifyContent="space-between" gap="20px">
@@ -105,7 +102,6 @@ export function TripToOfficeDialogForm({
           format="DD.MM.YYYY"
           minDate={minReportingDate}
           required
-          dataTestId={DataTestIds.moreToReport.tripToOffice.endDateInput}
         />
         <TimeSelect
           label={t("userHub.returnTime")}
@@ -113,7 +109,6 @@ export function TripToOfficeDialogForm({
           name="returnTime"
           defaultValue={fields.returnTime.initialValue}
           required
-          dataTestId={DataTestIds.moreToReport.tripToOffice.endTimeInput}
           errorMessage={t(fields.returnTime.errors?.[0] ?? "")}
         />
       </Flex>
@@ -153,7 +148,6 @@ export function TripToOfficeDialogForm({
         error={!!fields.distanceInKM.errors}
         errorMessage={t(fields.distanceInKM.errors?.[0] ?? "")}
         required
-        dataTestId={DataTestIds.moreToReport.tripToOffice.mileage}
       />
       <Flex justifyContent="space-between" gap="20px">
         <TextInput

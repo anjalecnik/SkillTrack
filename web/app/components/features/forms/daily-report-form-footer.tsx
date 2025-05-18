@@ -25,7 +25,6 @@ import { FormId, useFormMetadata } from "@conform-to/react";
 import { DailyActivitySubmissionType } from "~/schemas";
 import { ActivityClient } from "~/clients";
 import { displaySuccess, handleAxiosError } from "~/util";
-import { DataTestIds } from "~/data-test-ids";
 
 interface DailyReportFormFooterProps {
   selectedProjects?: IActivityHours[];
@@ -161,7 +160,6 @@ export function DailyReportFormFooter({
             {t("common.cancel")}
           </Button>
           <Button
-            data-testid={DataTestIds.dailyReport.inOfficeBtn}
             variant="contained"
             color="primary"
             name="location"
@@ -174,7 +172,6 @@ export function DailyReportFormFooter({
             {t("dailyReport.inOffice")}
           </Button>
           <Button
-            data-testid={DataTestIds.dailyReport.fromHomeBtn}
             variant="contained"
             color="primary"
             name="location"

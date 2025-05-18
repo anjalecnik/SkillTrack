@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "@remix-run/react";
 import { t } from "i18next";
 import { Dispatch, SetStateAction, useState } from "react";
 import { Accordion, Flex, FlexColumn, MiniButton } from "~/components/common";
-import { DataTestIds } from "~/data-test-ids";
 import { IReport, IWorkspaceProject } from "~/types";
 
 interface IReportInfo {
@@ -61,7 +60,6 @@ export function ReportInfo({
           {report.workspaceUsers.map((user, index) => (
             <Accordion
               key={index}
-              titleDataTestId={DataTestIds.reports.employeeIds + user._embedded.workspaceUser.workspaceUserId}
               title={`${user._embedded.workspaceUser.firstName} ${user._embedded.workspaceUser.lastName}`}
               desc={
                 userProjectsToString(user.projects) ?? t("error.notPresent")

@@ -9,7 +9,6 @@ import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/acti
 import { Dispatch, SetStateAction } from "react";
 import { EditOutlined } from "@ant-design/icons";
 import { IUser } from "~/types";
-import { DataTestIds } from "~/data-test-ids";
 
 interface IAddPerformanceReviewDialogFormProps {
   employees: IUser[];
@@ -94,7 +93,6 @@ export function AddPerformanceReviewDialogForm({
               setIsViewing(false);
             }}
             loading={isLoading}
-            data-testid={DataTestIds.performanceReviews.editBtn}
           >
             {t("common.edit")}
           </Button>
@@ -129,7 +127,6 @@ export function AddPerformanceReviewDialogForm({
               name="intent"
               value={isEditing ? "update" : "create"}
               loading={isLoading}
-              data-testid={DataTestIds.performanceReviews.saveBtn}
             >
               {t("common.save")}
             </Button>

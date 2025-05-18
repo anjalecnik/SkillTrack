@@ -22,7 +22,6 @@ import {
   ActivitiesTable,
   UserHubTableFilters,
   AbsencesTable,
-  RequestsCard,
 } from "~/components/features";
 import { SubmissionResult } from "@conform-to/react";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
@@ -33,12 +32,7 @@ import { useMobile } from "~/hooks";
 import { t } from "i18next";
 import { Button, Typography } from "@mui/material";
 import { PlusOutlined } from "@ant-design/icons";
-import {
-  ADMIN_HUB_BASE_PATH,
-  USER_HUB_BASE_PATH,
-  DEFAULT_PAGINATION_LIMIT,
-} from "~/constants";
-import { DataTestIds } from "~/data-test-ids";
+import { ADMIN_HUB_BASE_PATH, USER_HUB_BASE_PATH } from "~/constants";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
 
 interface IEmployeeCardProps {
@@ -229,25 +223,6 @@ export function EmployeeCard({
       });
     }
 
-    // newTabs.push({
-    //   label: t("workspaceEmployees.activity"),
-    //   value: EmployeeDetailsView.Activity,
-    // });
-
-    // if (loaderData.requests) {
-    //   newTabs.push({
-    //     label: t("workspaceEmployees.requests"),
-    //     value: EmployeeDetailsView.Requests,
-    //     dataTestId: DataTestIds.user.requestsTab,
-    //   });
-    // }
-
-    // newTabs.push({
-    //   label: t("workspaceEmployees.performanceReviews"),
-    //   value: EmployeeDetailsView.PerformanceReviews,
-    //   dataTestId: DataTestIds.user.performanceReviewsTab,
-    // });
-
     setTabs(newTabs);
   }, [isDetailsViewVisible, loaderData]);
 
@@ -255,24 +230,7 @@ export function EmployeeCard({
     user && (
       <CardLayout sx={{ overflow: "visible" }}>
         <FlexColumn gap="20px">
-          <UserOverviewCard
-            workspaceUser={user}
-            // TODO: Uncomment when user requests are implemented
-            // footerChildren={
-            //   <Flex gap="10px" justifyContent="end">
-            //     <MiniButton
-            //       variant="outlined"
-            //       color="warning"
-            //       fullWidth
-            //       sx={{
-            //         width: { sm: "auto" },
-            //       }}
-            //     >
-            //       {t("common.userRequests")}
-            //     </MiniButton>
-            //   </Flex>
-            // }
-          />
+          <UserOverviewCard workspaceUser={user} />
 
           <MainCard
             content={false}
@@ -337,7 +295,6 @@ export function EmployeeCard({
                     {t("workspaceEmployees.performanceReviews")}
                   </Typography>
                   <Button
-                    data-testid={DataTestIds.user.addNewPerformanceReviewBtn}
                     variant="contained"
                     color="primary"
                     startIcon={<PlusOutlined />}

@@ -40,7 +40,6 @@ import dayjs, { Dayjs } from "dayjs";
 import { useNavigationState } from "~/hooks";
 import { fullNameFormatter } from "~/util";
 import { useSearchParams } from "@remix-run/react";
-import { DataTestIds } from "~/data-test-ids";
 
 interface IPlanAbsenceFormProps {
   lastResult?: SubmissionResult<string[]> | null;
@@ -199,7 +198,6 @@ export function PlanAbsenceForm({
               {t("common.cancel")}
             </Button>
             <Button
-              data-testid={DataTestIds.absence.submitAbsenceBtn}
               variant="contained"
               color="primary"
               type="submit"
@@ -225,7 +223,6 @@ export function PlanAbsenceForm({
             <Autocomplete
               name="employeeId"
               label={t("workspaceRequests.employeeName")}
-              data-testid={DataTestIds.absence.employeeDropdown}
               options={workspaceEmployees ?? []}
               value={workspaceEmployees?.find(
                 (employee) => employee.id === selectedEmployeeId
@@ -243,7 +240,6 @@ export function PlanAbsenceForm({
           )}
           <EnumSelect<PlanAbsenceActivityType>
             label={t("userHub.absenceType")}
-            data-testid={DataTestIds.absence.absenceTypeDropdown}
             enumType={absenceTypeOptions}
             placeholder={t("userHub.absenceType")}
             {...getSelectProps(fields.activityType)}
@@ -269,7 +265,6 @@ export function PlanAbsenceForm({
           <Flex justifyContent="space-between" gap="20px">
             <DateInput
               label={t(partialSickLeave ? "common.date" : "common.dateFrom")}
-              dataTestId={DataTestIds.absence.startDateInput}
               name={fields.dateStart.name}
               containerProps={{ sx: { flex: 1 } }}
               format="DD.MM.YYYY"
@@ -293,7 +288,6 @@ export function PlanAbsenceForm({
                 name={fields.dateEnd.name as string}
                 containerProps={{ sx: { flex: 1 } }}
                 format="DD.MM.YYYY"
-                dataTestId={DataTestIds.absence.endDateInput}
                 value={
                   fields.dateEnd.value
                     ? dayjs(fields.dateEnd.value, "DD.MM.YYYY")

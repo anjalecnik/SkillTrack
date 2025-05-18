@@ -10,8 +10,6 @@ import {
 } from "~/types";
 import { isWeekend } from "~/util";
 import moment from "moment";
-import { DataTestIds } from "~/data-test-ids";
-
 interface IDailiesTableProps {
   activitiesOverview?: IActivitiesOverviewResponse;
   onItemClick: (date: string, action: ActivityAction, userId: number) => void;
@@ -108,7 +106,6 @@ export function ActivityDashboardTable({
               zIndex: 1,
               backgroundColor: "background.paper",
             }}
-            data-testid={DataTestIds.activityDashboard.employeeTableNameColumn + employee.userId}
           >
             {employee.fullName}
           </TableCell>
@@ -136,11 +133,6 @@ export function ActivityDashboardTable({
                   color: isWeekendCell ? "secondary.main" : "inherit",
                 }}
                 key={index}
-                data-testid={
-                  index === employee.activities.length - 1
-                    ? DataTestIds.activityDashboard.employeeTableLastActivityColumn + employee.userId
-                    : undefined
-                } // <-- only add test id for the last cell
                 onClick={() => {
                   if (isUnassigned) {
                     onItemClick(

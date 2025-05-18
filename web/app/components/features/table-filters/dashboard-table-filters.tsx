@@ -14,7 +14,6 @@ import {
   DEFAULT_ABSENCE_END_DATE_RANGE,
   DEFAULT_ACTIVITIES_END_DATE_RANGE,
 } from "~/constants";
-import { DataTestIds } from "~/data-test-ids";
 import { useMobile } from "~/hooks";
 import { ActivityTableView } from "~/types";
 
@@ -76,11 +75,7 @@ export function UserHubTableFilters({
           width={isMobile ? "100%" : undefined}
           justifyContent="space-between"
         >
-          <Button
-            data-testid={DataTestIds.dailyReport.dailyReportBtn}
-            variant="outlined"
-            onClick={onDailyReportClick}
-          >
+          <Button variant="outlined" onClick={onDailyReportClick}>
             {t("userHub.dailyReport")}
           </Button>
           <Button
@@ -90,11 +85,7 @@ export function UserHubTableFilters({
           >
             {t("userHub.moreToReport")}
           </Button>
-          <Button
-            variant="contained"
-            onClick={onPlanAbsenceClick}
-            data-testid={DataTestIds.absence.planAbsenceBtn}
-          >
+          <Button variant="contained" onClick={onPlanAbsenceClick}>
             {t("userHub.planAbsence")}
           </Button>
         </Flex>

@@ -16,7 +16,6 @@ import { reportFormSchema as schema } from "~/schemas";
 import { Dispatch, SetStateAction } from "react";
 import { formatDate } from "~/util";
 import { DEFAULT_PROJECT_DATE_FORMAT } from "~/constants";
-import { DataTestIds } from "~/data-test-ids";
 
 export interface IReportFormProps {
   lastResult?: SubmissionResult<string[]> | null;
@@ -101,7 +100,6 @@ export function ReportForm({
               defaultValue={employees.filter((emp) =>
                 reportFilters.employeeIds.includes(emp.id)
               )}
-              dataTestId={DataTestIds.reports.employeeIds}
               options={employees}
               multiple={true}
               label={t("common.employees")}
@@ -123,7 +121,6 @@ export function ReportForm({
                 defaultValue={projects.filter((proj) =>
                   reportFilters.projectIds.includes(proj.id)
                 )}
-                dataTestId={DataTestIds.reports.projectIds}
                 options={projects}
                 multiple={true}
                 label={t("common.projects")}
@@ -183,7 +180,6 @@ export function ReportForm({
           </Flex>
           <Flex gap="8px" paddingX="20px">
             <Chip
-              data-testid={DataTestIds.reports.thisMonthRange}
               label={t("common.thisMonth")}
               onClick={() =>
                 setReportFilters((prevFilters) => ({
@@ -230,7 +226,6 @@ export function ReportForm({
         <Divider />
         <Flex justifyContent="end" gap="20px" padding="10px 16px">
           <Button
-            data-testid={DataTestIds.reports.generateBtn}
             type="submit"
             variant="contained"
             name="intent"

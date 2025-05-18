@@ -9,7 +9,6 @@ import {
   FlexColumn,
   TimeSelect,
 } from "~/components/common";
-import { DataTestIds } from "~/data-test-ids";
 import { DailyActivitySubmissionType } from "~/schemas";
 import { IProjectUserResponse } from "~/types";
 
@@ -42,7 +41,6 @@ export function DailyActivityForm({
               <Flex gap="10px" alignItems={"end"}>
                 <Autocomplete
                   {...getSelectProps(workingTimeFields.projectId)}
-                  data-testid={`${DataTestIds.dailyReport.projectDropdown}-${index}`}
                   name={workingTimeFields.projectId.name}
                   required
                   label={t("dailyReport.project")}
@@ -65,7 +63,6 @@ export function DailyActivityForm({
                       name: fields.workingTime.name,
                       index: index,
                     })}
-                    data-testid={`${DataTestIds.dailyReport.deleteBtn}-${index}`}
                     size="large"
                     color="default"
                     type="submit"
@@ -85,7 +82,6 @@ export function DailyActivityForm({
                   errorMessage={
                     t(timeRange.fromTimeStart.errors?.[0] ?? "") ?? undefined
                   }
-                  dataTestId={`${DataTestIds.dailyReport.dailyReportStartTimeInput}-${index}`}
                 />
                 <TimeSelect
                   label={t("dailyReport.end")}
@@ -96,7 +92,6 @@ export function DailyActivityForm({
                   errorMessage={
                     t(timeRange.toTimeEnd.errors?.[0] ?? "") ?? undefined
                   }
-                  dataTestId={`${DataTestIds.dailyReport.dailyReportEndTimeInput}-${index}`}
                   required
                 />
               </Flex>
@@ -114,7 +109,6 @@ export function DailyActivityForm({
         )}
       </FlexColumn>
       <AddItemButton
-        data-testid={DataTestIds.dailyReport.addProjectBtn}
         onClick={() =>
           form.insert({
             name: fields.workingTime.name,

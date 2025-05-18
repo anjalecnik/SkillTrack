@@ -9,7 +9,6 @@ import {
   PaginatedTable,
   MiniButton,
 } from "~/components/common";
-import { DataTestIds } from "~/data-test-ids";
 import {
   ActivityStatus,
   ActivityType,
@@ -56,7 +55,6 @@ export function RequestsOverviewTable({
       items={items}
       meta={meta}
       isLoading={isLoading}
-      dataTestId={DataTestIds.requests.requestsTable}
       headers={[
         {
           children: t("workspaceRequests.employeeName"),
@@ -189,7 +187,11 @@ export function RequestsOverviewTable({
               ) : (
                 <Form method="post">
                   <Flex gap="10px">
-                    <input type="hidden" name="action" value={activityStatus ?? ''} />
+                    <input
+                      type="hidden"
+                      name="action"
+                      value={activityStatus ?? ""}
+                    />
                     <input type="hidden" name="id" value={item.id} />
                     <input type="hidden" name="employeeId" value={user.id} />
                     {requestIncludesActivityAction(
@@ -256,7 +258,6 @@ export function RequestsOverviewTable({
                         type="submit"
                         value="delete"
                         name="intent"
-                        data-testid={DataTestIds.requests.cancelBtn}
                         onClick={(e) => {
                           e.stopPropagation();
                           setActivityStatus(ActivityStatus.Canceled);

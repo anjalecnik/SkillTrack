@@ -17,7 +17,6 @@ import { Typography, useTheme } from "@mui/material";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { Trans } from "react-i18next";
 import dayjs, { Dayjs } from "dayjs";
-import { DataTestIds } from "~/data-test-ids";
 
 interface IOnCallDialogFormProps {
   projects: IProjectUserResponse[];
@@ -62,7 +61,6 @@ export function OnCallDialogForm({
               : undefined
           }
           required
-          dataTestId={DataTestIds.moreToReport.onCall.startDateInput}
         />
         <TimeSelect
           label={t("userHub.startTime")}
@@ -70,7 +68,6 @@ export function OnCallDialogForm({
           containerProps={{ sx: { flex: 1 } }}
           defaultValue={fields.startTime.initialValue}
           required
-          dataTestId={DataTestIds.moreToReport.onCall.startTimeInput}
         />
       </Flex>
       <Flex justifyContent="space-between" gap="20px">
@@ -81,7 +78,6 @@ export function OnCallDialogForm({
           format="DD.MM.YYYY"
           minDate={minReportingDate}
           required
-          dataTestId={DataTestIds.moreToReport.onCall.endDateInput}
         />
         <TimeSelect
           label={t("userHub.endTime")}
@@ -89,7 +85,6 @@ export function OnCallDialogForm({
           name="endTime"
           required
           errorMessage={t(fields.endTime?.errors?.[0] ?? "")}
-          dataTestId={DataTestIds.moreToReport.onCall.endTimeInput}
         />
       </Flex>
       <Typography

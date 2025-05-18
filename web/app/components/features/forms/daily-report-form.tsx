@@ -37,7 +37,6 @@ import {
   DailyActivityForm,
   DailyReportFormFooter,
 } from "~/components/features";
-import { DataTestIds } from "~/data-test-ids";
 import { useIsAdminRoute, useNavigationState, useTablet } from "~/hooks";
 import { dailyActivityFormSchema } from "~/schemas";
 import {
@@ -229,7 +228,6 @@ export function DailyReportForm({
                     />
                   ) : null}
                   <DateInput
-                    dataTestId={DataTestIds.dailyReport.dateInput}
                     label={t("workspaceSettings.date")}
                     name={fields.date.name}
                     value={selectedDate}
@@ -255,13 +253,7 @@ export function DailyReportForm({
                       </Box>
                       <Box>
                         {hasUnassigned && hasReportable ? (
-                          <Typography
-                            data-testid={
-                              DataTestIds.dailyReport
-                                .unassignedActivitiesMessage
-                            }
-                            variant="body2"
-                          >
+                          <Typography variant="body2">
                             <Trans i18nKey="dailyReport.youForgotToReportDate" />
                             {reportableUnassignedActivities.map(
                               (activity, index) => (

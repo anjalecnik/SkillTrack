@@ -7,7 +7,6 @@ import { Dispatch, SetStateAction } from "react";
 import { useMatches } from "@remix-run/react";
 import { IWorkspace, IWorkspaceUser } from "~/types";
 import { isSupervisorOrHigher } from "~/util";
-import { DataTestIds } from "~/data-test-ids";
 
 interface RequestsCardHeaderProps {
   setIsMoreToReportDialogOpen: Dispatch<SetStateAction<boolean>>;
@@ -22,7 +21,7 @@ export function RequestsCardHeader({
   setIsPlanAbsenceDialogOpen,
   handleDailyReportClick,
   shouldShowPersonalRequestsCheckbox = true,
-  shouldShowSearchBox = true
+  shouldShowSearchBox = true,
 }: RequestsCardHeaderProps) {
   const isTablet = useTablet();
   const isMobile = useMobile();
@@ -50,7 +49,9 @@ export function RequestsCardHeader({
       >
         <RequestsOverviewTableFilters
           isSupervisorOrAdmin={isSupervisorOrAdmin}
-          shouldShowPersonalRequestsCheckbox={shouldShowPersonalRequestsCheckbox}
+          shouldShowPersonalRequestsCheckbox={
+            shouldShowPersonalRequestsCheckbox
+          }
         />
 
         <Flex
@@ -71,23 +72,17 @@ export function RequestsCardHeader({
             />
           )}
           {isAdminRoute && (
-            <Button
-              data-testid={DataTestIds.dailyReport.dailyReportBtn}
-              variant="outlined"
-              onClick={handleDailyReportClick}
-            >
+            <Button variant="outlined" onClick={handleDailyReportClick}>
               {t("userHub.dailyReport")}
             </Button>
           )}
           <Button
-            data-testid={DataTestIds.moreToReport.moreToReportBtn}
             variant="outlined"
             onClick={() => setIsMoreToReportDialogOpen(true)}
           >
             {t("userHub.moreToReport")}
           </Button>
           <Button
-            data-testid={DataTestIds.absence.planAbsenceBtn}
             variant="contained"
             onClick={() => setIsPlanAbsenceDialogOpen(true)}
           >

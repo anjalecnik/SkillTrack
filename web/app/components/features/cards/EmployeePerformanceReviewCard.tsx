@@ -16,7 +16,6 @@ import { PerformanceReviewQuartal } from "~/types/enums/performance-review-quart
 import { IPerformanceReview } from "~/types/interfaces/performance-review/users-performance-reviews-table";
 import { Dispatch, SetStateAction } from "react";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
-import { DataTestIds } from "~/data-test-ids";
 import { CheckCircleFilled, CheckCircleOutlined } from "@ant-design/icons";
 
 interface IEmployeePerformanceReviewCard {
@@ -81,8 +80,8 @@ export function EmployeePerformanceReviewCard({
                     itemIndex === 0
                       ? "flex-start"
                       : itemIndex === performanceReviews.length - 1
-                        ? "flex-end"
-                        : "center",
+                      ? "flex-end"
+                      : "center",
                   textAlign: "right",
                   flex: "0 0 auto",
                   minWidth: "10ch",
@@ -136,7 +135,6 @@ export function EmployeePerformanceReviewCard({
                         item
                       );
                     }}
-                    data-testid={DataTestIds.user.performanceReviewTimelineCard}
                   >
                     <Box
                       sx={{
