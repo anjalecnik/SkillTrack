@@ -10,8 +10,7 @@ export function isBooleanString(value: string): boolean {
 }
 
 export function IsBooleanString() {
-	return function (object: object, propertyName: string) {
-		// eslint-disable-next-line @typescript-eslint/no-unsafe-call
+	return function (object: Object, propertyName: string) {
 		registerDecorator({
 			name: "isBooleanString",
 			target: object.constructor,

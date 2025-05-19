@@ -1,0 +1,29 @@
+version: "3.9"
+
+services:
+  test-db:
+    image: "postgres:16.3"
+    container_name: skilltrack_test_container
+
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: skilltrack_db
+    ports:
+      - "5433:5432"
+    volumes:
+      - test-db-data:/var/lib/postgresql/data
+    networks:
+      - test_skilltrack_network
+
+  redis:
+    image: "redis:latest"
+    ports:
+      - "6380:6379"
+volumes:
+  test-db-data:
+    driver: local
+
+networks:
+  test_skilltrack_network:
+    driver: bridge

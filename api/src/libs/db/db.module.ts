@@ -1,10 +1,23 @@
 import { Module } from "@nestjs/common"
 import { TypeOrmModule } from "@nestjs/typeorm"
-import { MasterDataSource } from "./master-data-source.service"
+import { HolidayEntity } from "./entities/holiday.entity"
+import { ProjectUserEntity } from "./entities/project-user.entity"
+import { ProjectEntity } from "./entities/project.entity"
+import { TeamEntity } from "./entities/team.entity"
+import { UserAddressEntity } from "./entities/user-address.entity"
+import { UserVacationAssignedEntity } from "./entities/user-vacation-assigned.entity"
+import { UserEntity } from "./entities/user.entity"
+import { WorkPositionEntity } from "./entities/work-position.entity"
+import { AppConfigModule } from "src/config/app-config.module"
+import { TypeOrmConfigService } from "./db.config"
 
 @Module({
-	imports: [TypeOrmModule.forFeature([])],
-	providers: [MasterDataSource],
-	exports: [MasterDataSource, TypeOrmModule]
+	imports: [
+		TypeOrmModule.forRootAsync({
+			imports: [AppConfigModule],
+			useClass: TypeOrmConfigService
+		}),
+		TypeOrmModule.forFeature([HolidayEntity, ProjectUserEntity, ProjectEntity, TeamEntity, UserAddressEntity, UserVacationAssignedEntity, UserEntity, WorkPositionEntity])
+	]
 })
 export class DbModule {}
