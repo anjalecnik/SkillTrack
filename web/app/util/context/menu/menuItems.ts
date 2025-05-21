@@ -5,6 +5,7 @@ import {
   LogoutOutlined,
   RightOutlined,
   PaperClipOutlined,
+  FileTextOutlined,
 } from "@ant-design/icons";
 import i18next from "../../config/i18next";
 
@@ -29,6 +30,13 @@ export const menuItemsList: NavItemType[] = [
     type: "item",
     url: "/positions",
     icon: PaperClipOutlined,
+  },
+  {
+    id: "projects",
+    title: i18next.t("menu.projects"),
+    type: "item",
+    url: "/projects",
+    icon: FileTextOutlined,
   },
   {
     id: "teamMembers",

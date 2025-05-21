@@ -12,7 +12,6 @@ export class AuthClient {
   }
 
   static async signInWithGoogle(idToken: string): Promise<IAccessToken> {
-    console.log(idToken);
     const { data } = await publicClient.post<IAccessToken>(
       `${AUTH_URL}/google/login`,
       {
@@ -30,7 +29,6 @@ export class AuthClient {
     const decodedToken = getDecodedToken();
 
     if (!decodedToken.user.role) {
-      console.log("no role");
       throw redirect("/user-hub");
     }
     return decodedToken.user.role;

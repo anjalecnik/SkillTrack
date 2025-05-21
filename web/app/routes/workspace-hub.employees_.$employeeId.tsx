@@ -1,27 +1,17 @@
 import { AppLayout, AppHeaderBreadcrumbs } from "~/components/layout";
 import {
-  createAbsencePlanActivity,
-  createBusinessTripActivity,
-  createExpensesActivity,
-  createOnCallActivity,
-  createOvertimeActivity,
-  createTripToOfficeActivity,
   displaySuccess,
   formatDate,
   fullNameFormatter,
-  getAbsences,
   getActivities,
   getWorkspaceUserFromToken,
   handleAxiosError,
   requireAdminRoleOrHigher,
-  updateBusinessTripActivity,
-  updateTripToOfficeActivity,
 } from "~/util";
 import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
   json,
-  redirect,
   ShouldRevalidateFunctionArgs,
   useLoaderData,
   useNavigate,
@@ -35,36 +25,22 @@ import {
   MoreToReportActivityType,
   IActivityMoreToReportForm,
   ExtraActivitiesType,
-  ActivityStatus,
-  ActivityTableView,
   EmployeeAddressType,
   EmployeeDetailsView,
-  getActivityTypeLabel,
   IWorkspaceUserUpdateReq,
   WorkspaceProjectUserRole,
-  IEmployeeParams,
   EmployeeSettingsAccordions as Accordions,
 } from "~/types";
 import { t } from "i18next";
 import { EmployeeCard } from "~/components/features";
-import {
-  ActivityClient,
-  RequestClient,
-  UserClient,
-  WorkPositionClient,
-} from "~/clients";
-import { ProjectClient } from "~/clients/project.client";
+import { ProjectClient, UserClient, WorkPositionClient } from "~/clients";
 import { useEffect, useState } from "react";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
-import { parseWithZod } from "@conform-to/zod";
-import { DEFAULT_PROJECT_DATE_FORMAT } from "~/constants";
 import { createUserDetailsAndActivityRequestValidation } from "~/schemas";
-import { IPerformanceReviewActivityReq } from "~/types/interfaces/activity/requests/performance-review-activity.request";
 
 export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
   const formData = await actionArgs.request.formData();
   const { searchParams } = new URL(actionArgs.request.url);
-  const employeeId = actionArgs.params.employeeId;
   const pageView = searchParams.get("view");
 
   if (
@@ -72,10 +48,6 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
     pageView === EmployeeDetailsView.Activity
   ) {
     const submission = createUserDetailsAndActivityRequestValidation(formData);
-
-    const workspaceEmployeeParams: IEmployeeParams = {
-      employeeId: Number(employeeId),
-    };
 
     if (submission.status !== Status.Success) {
       return json(submission.reply());
@@ -218,7 +190,7 @@ export const clientLoader = async (loaderArgs: ClientLoaderFunctionArgs) => {
   const [user, positions, projects, users] = await Promise.all([
     UserClient.getUserById(loaderArgs),
     WorkPositionClient.getWorkPositions(loaderArgs),
-    [], //ProjectClient.getProjects(loaderArgs),
+    ProjectClient.getProjects(loaderArgs),
     UserClient.getUsers(loaderArgs),
   ]);
 

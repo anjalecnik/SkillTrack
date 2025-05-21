@@ -109,9 +109,6 @@ export class UserService {
 		}
 
 		const userEntity = await this.userRepository.updateUser(userPatch)
-		// if (userPatch.status) {
-		// 	await this.accessTokenEmitter.invalidateAccessToken({ id: userEntity.id })
-		// }
 		return this.getUser(userEntity)
 	}
 

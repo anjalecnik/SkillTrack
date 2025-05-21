@@ -36,7 +36,6 @@ export function requireAuth(returnUrl?: string): ITokenData {
 
 export function requireNoAuth(): void {
   const token = LocalStorageService.getString("token");
-  console.log(69);
   if (token) {
     throw redirect("/user-hub");
   }

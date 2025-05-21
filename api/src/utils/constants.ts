@@ -19,9 +19,10 @@ export const ROUTE_USER_HUB = "user-hub"
 
 export const ROUTE_AUTH = "auth"
 export const ROUTE_USER = "users"
-export const API_TAG_WORKSPACE = "Workspace"
-export const API_TAG_USER = "User"
 export const ROUTE_USERS = "users"
 export const ROUTE_WORK_POSITION = "work-positions"
-
+export const ROUTE_PROJECT = "projects"
+export const API_TAG_WORKSPACE = "Workspace"
+export const API_TAG_USER = "User"
 export const API_TAG_WORK_POSITION = "Work Positions"
+export const API_TAG_PROJECT = "Projects"

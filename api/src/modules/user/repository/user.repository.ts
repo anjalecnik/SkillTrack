@@ -126,7 +126,7 @@ export class UserRepository {
 		const addresses = this.setUserAddresses(userPatchRequest)
 		const assignedVacations = this.setUserAssignedVacations(userPatchRequest)
 		const { userProjectsToUpdate, userProjectsToAdd, userProjectsToStay } = await this.setUserProjects(userPatchRequest)
-
+		console.log("userProjectsToAdd: ", userProjectsToAdd)
 		return this.masterDataSource.manager.transaction(async (entityManager: EntityManager) => {
 			const userRepository = entityManager.getRepository(UserEntity)
 			const projectUserRepository = entityManager.getRepository(ProjectUserEntity)
@@ -140,7 +140,7 @@ export class UserRepository {
 				...userPatchRequest,
 				addresses: addresses,
 				assignedVacations: assignedVacations,
-				projects: userPatchRequest.projects ? [...userProjectsToAdd, ...userProjectsToAdd, ...userProjectsToStay] : undefined
+				projects: userPatchRequest.projects ? [...userProjectsToAdd, ...userProjectsToStay] : undefined
 			})
 			if (!userEntity) throw new InternalServerErrorException("Something went wrong!")
 			await userRepository.save(userEntity)
@@ -160,7 +160,7 @@ export class UserRepository {
 							userId: userPatchRequest.id,
 							createdByUserId: userPatchRequest.updatedByUserId!,
 							updatedByUserId: userPatchRequest.updatedByUserId!
-						}
+					  }
 			)
 			return accumulator
 		}, [])
@@ -180,7 +180,7 @@ export class UserRepository {
 							userId: userPatchRequest.id,
 							createdByUserId: userPatchRequest.updatedByUserId!,
 							updatedByUserId: userPatchRequest.updatedByUserId!
-						}
+					  }
 			)
 			return accumulator
 		}, [])

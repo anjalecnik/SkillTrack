@@ -8,6 +8,7 @@ import { AppConfigModule } from "./config/app-config.module"
 import { EventEmitterModule } from "@nestjs/event-emitter"
 import { CacheModule } from "@nestjs/cache-manager"
 import { WorkPositionModule } from "./modules/work-position/work-position.module"
+import { ProjectModule } from "./modules/project/project.module"
 
 @Module({
 	imports: [
@@ -23,7 +24,8 @@ import { WorkPositionModule } from "./modules/work-position/work-position.module
 		TeamModule,
 		UserModule,
 		UtilityModule,
-		WorkPositionModule
+		WorkPositionModule,
+		ProjectModule
 	]
 })
 export class AppModule {}

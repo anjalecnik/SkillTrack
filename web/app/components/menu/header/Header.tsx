@@ -37,7 +37,6 @@ export function Header({ children }: { children?: React.ReactNode }) {
   const { user } = useRouteLoaderData<IWorkspaceRoot>("root") ?? {
     user: { name: "", surname: "" } as WorkspaceUser,
   };
-  console.log(40, user);
   const { pathname } = useLocation();
   const params = useParams();
   const theme = useTheme();

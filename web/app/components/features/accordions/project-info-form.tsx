@@ -23,7 +23,7 @@ export function ProjectInfoForm({
   isCancelPressed,
 }: IProjectFormCommonProps) {
   const { t } = useTranslation();
-
+  console.log("project.name: ", project.name);
   return (
     <FormWrapper
       lastResult={lastResult}
@@ -51,6 +51,7 @@ export function ProjectInfoForm({
                 defaultValue={project.name}
                 label={t("workspaceProjects.projectName")}
                 required
+                name="name"
               />
               <Flex justifyContent="space-between" gap="50px">
                 <FormDateInput

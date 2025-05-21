@@ -25,7 +25,6 @@ export class AuthRepository {
 
 	async getOrCreateUserByEmail(email: string): Promise<UserEntity> {
 		const user = await this.userRepository.findOne({ where: { email } })
-		console.log(user)
 		if (user) return user
 		return this.userRepository.save({ email, status: UserStatus.Active })
 	}

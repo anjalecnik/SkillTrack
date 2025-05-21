@@ -74,6 +74,7 @@ export const TextInput = (props: TextInputProps) => {
       )}
       <TextField
         {...rest}
+        value={control.value}
         onChange={(e) => {
           onChange ? onChange(e.target.value) : control.change(e.target.value);
         }}
