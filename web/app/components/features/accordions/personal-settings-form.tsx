@@ -1,8 +1,6 @@
 import {
   EmployeeAddressType,
-  getWorkspaceGenderLabel,
   IWorkspaceEmployeeFormCommonProps,
-  WorkspaceUserGender,
 } from "~/types";
 import {
   Flex,
@@ -10,7 +8,6 @@ import {
   FormWrapper,
   FormHiddenInput,
   FormTextInput,
-  FormEnumSelect,
   FormCountryInput,
   FormDateInput,
   FormPhoneNumberInput,
@@ -80,6 +77,7 @@ export function PersonalSettingsForm({
           />
           <Flex justifyContent="space-between" gap="50px">
             <FormTextInput
+              name="name"
               fieldName="name"
               defaultValue={workspaceUser.name}
               label={t("workspaceEmployees.name")}
@@ -88,6 +86,7 @@ export function PersonalSettingsForm({
               required
             />
             <FormTextInput
+              name="surname"
               fieldName="surname"
               defaultValue={workspaceUser.surname}
               label={t("workspaceEmployees.surname")}
@@ -96,34 +95,15 @@ export function PersonalSettingsForm({
               required
             />
           </Flex>
-          <Flex justifyContent="space-between" gap="50px">
-            <FormEnumSelect<WorkspaceUserGender>
-              fieldName="gender"
-              defaultValue={workspaceUser.gender as WorkspaceUserGender}
-              enumType={WorkspaceUserGender}
-              label={t("workspaceEmployees.gender")}
-              containerProps={{ sx: { flex: 1 } }}
-              labelFunction={getWorkspaceGenderLabel}
-            />
-            <FormCountryInput
-              fieldName="nationality"
-              label={t("workspaceEmployees.nationality")}
-              variant="nationality"
-              returnValue="nationality"
-              defaultValue={workspaceUser.nationality}
-              containerProps={{ sx: { flex: 1 } }}
-            />
-          </Flex>
           <FormDateInput
             label={t("workspaceEmployees.dateOfBirth")}
             fieldName="birthDate"
             defaultValue={dayjs(workspaceUser.birthDate, "YYYY-MM-DD")}
-            minDate={dayjs().subtract(100, "year")}
-            maxDate={dayjs().subtract(15, "year")}
             format="DD.MM.YYYY"
           />
           <FormTextInput
             disabled
+            name="email"
             fieldName="email"
             defaultValue={workspaceUser.email}
             key={workspaceUser.email}
@@ -140,18 +120,21 @@ export function PersonalSettingsForm({
             }
           />
           <FormTextInput
+            name="address"
             fieldName="streetAddress"
             defaultValue={mainAddress?.streetAddress}
             label={t("workspaceEmployees.address")}
           />
           <Flex justifyContent="space-between" gap="50px">
             <FormTextInput
+              name="city"
               fieldName="city"
               defaultValue={mainAddress?.city}
               label={t("workspaceEmployees.city")}
               containerProps={{ sx: { flex: 1 } }}
             />
             <FormTextInput
+              name="postalCode"
               fieldName="postalCode"
               defaultValue={mainAddress?.postalCode}
               label={t("workspaceEmployees.post")}

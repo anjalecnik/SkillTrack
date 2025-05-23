@@ -29,7 +29,7 @@ export class AuthClient {
     const decodedToken = getDecodedToken();
 
     if (!decodedToken.user.role) {
-      throw redirect("/user-hub");
+      throw redirect("//dashboard");
     }
     return decodedToken.user.role;
   }

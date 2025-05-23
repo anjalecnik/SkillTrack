@@ -1,10 +1,4 @@
-import {
-  Flex,
-  DateInput,
-  TextInput,
-  TimeSelect,
-  Autocomplete,
-} from "~/components/common";
+import { Flex, DateInput, TextInput, Autocomplete } from "~/components/common";
 import { IProjectUserResponse } from "~/types";
 import {
   FormId,
@@ -19,8 +13,6 @@ import {
   Typography,
   useTheme,
 } from "@mui/material";
-import { InfoCircleOutlined } from "@ant-design/icons";
-import { Trans } from "react-i18next";
 import dayjs, { Dayjs } from "dayjs";
 import { useState } from "react";
 
@@ -78,15 +70,6 @@ export function BusinessTripDialogForm({
           minDate={minReportingDate}
           required
         />
-        <TimeSelect
-          label={t("userHub.departureTime")}
-          containerProps={{ sx: { flex: 1 } }}
-          name="departureTime"
-          defaultValue={fields.departureTime.initialValue}
-          required
-        />
-      </Flex>
-      <Flex justifyContent="space-between" gap="20px">
         <DateInput
           label={t("userHub.returnDate")}
           name="dateEnd"
@@ -100,15 +83,8 @@ export function BusinessTripDialogForm({
           minDate={minReportingDate}
           required
         />
-        <TimeSelect
-          label={t("userHub.returnTime")}
-          containerProps={{ sx: { flex: 1 } }}
-          name="returnTime"
-          defaultValue={fields.returnTime.initialValue}
-          required
-          errorMessage={t(fields.returnTime.errors?.[0] ?? "")}
-        />
       </Flex>
+
       <Flex justifyContent="space-between" gap="20px">
         <TextInput
           label={t("userHub.destination")}
@@ -155,12 +131,6 @@ export function BusinessTripDialogForm({
       >
         {t(fields.dateEnd.errors?.[0] ?? "")}
       </Typography>
-      <Flex alignItems="center" gap="10px">
-        <InfoCircleOutlined style={{ color: theme.palette.primary.main }} />
-        <Typography variant="body1">
-          <Trans i18nKey="userHub.activityNotificationEmail" t={t} />
-        </Typography>
-      </Flex>
     </>
   );
 }

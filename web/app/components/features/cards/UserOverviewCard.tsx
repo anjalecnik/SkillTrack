@@ -5,7 +5,6 @@ import {
   CalendarOutlined,
   HomeOutlined,
   MailOutlined,
-  NumberOutlined,
   PhoneOutlined,
   UserOutlined,
 } from "@ant-design/icons";
@@ -14,7 +13,6 @@ import {
   formatDate,
   fullNameFormatter,
   phoneFormatter,
-  vacationDaysFormatter,
 } from "~/util";
 
 interface IUserOverviewCardProps {

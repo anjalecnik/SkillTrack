@@ -6,7 +6,6 @@ import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
 } from "@remix-run/react";
-import { USER_HUB_PATH } from "~/constants";
 
 export function getDecodedToken(url?: string): ITokenData {
   const token = LocalStorageService.getString("token");
@@ -37,7 +36,7 @@ export function requireAuth(returnUrl?: string): ITokenData {
 export function requireNoAuth(): void {
   const token = LocalStorageService.getString("token");
   if (token) {
-    throw redirect("/user-hub");
+    throw redirect("/user-hub/dashboard");
   }
 }
 
@@ -52,7 +51,7 @@ export function getWorkspaceUserFromToken(
 
   const currentHubFromUrl = parsedUrl.pathname.includes("workspace-hub")
     ? "workspace-hub"
-    : "user-hub";
+    : "user-hub/dashboard";
   if (currentHub !== currentHubFromUrl) {
     localStorage.setItem("currentHub", currentHubFromUrl);
   }

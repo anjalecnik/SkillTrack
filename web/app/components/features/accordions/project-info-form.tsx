@@ -23,7 +23,7 @@ export function ProjectInfoForm({
   isCancelPressed,
 }: IProjectFormCommonProps) {
   const { t } = useTranslation();
-  console.log("project.name: ", project.name);
+
   return (
     <FormWrapper
       lastResult={lastResult}

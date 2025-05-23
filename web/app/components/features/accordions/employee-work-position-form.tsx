@@ -58,16 +58,6 @@ export function EmployeeWorkPositionForm({
         borderTop
       >
         <PaddedFlexColumn>
-          {/* <Autocomplete
-               {...getSelectProps(fields.workspaceTeamId)}
-              // key={fields.workspaceTeamId.key}
-              name={fields.workspaceTeamId.name}
-              options={workspaceTeams}
-              label={t("workspaceEmployees.department")}
-              value={workspaceUser.workspaceTeam}
-              getOptionLabel={(option) => option.name ?? ""}
-            /> */}
-
           <FormAutocompleteInput<IPositionResponse>
             fieldName="workspaceWorkPositionId"
             label={t("workspaceEmployees.jobTitle")}

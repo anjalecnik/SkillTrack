@@ -58,10 +58,8 @@ export function LandingPage() {
     const token = await AuthClient.signInWithGoogleProvider();
     if (!token) return;
     await AuthClient.signInWithGoogle(token);
-    const returnUrl = searchParams.get("returnUrl");
-    const fullReturnUrl = location.search.replace("?returnUrl=", "");
 
-    navigate("/workspace-hub/employees");
+    navigate("/user-hub/dashboard");
   }
 
   return (

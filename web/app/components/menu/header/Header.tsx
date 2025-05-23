@@ -38,7 +38,6 @@ export function Header({ children }: { children?: React.ReactNode }) {
     user: { name: "", surname: "" } as WorkspaceUser,
   };
   const { pathname } = useLocation();
-  const params = useParams();
   const theme = useTheme();
   const { menuState, handlerDrawerOpen } = useMenu();
   const drawerOpen = menuState.isMenuOpened;
@@ -51,10 +50,10 @@ export function Header({ children }: { children?: React.ReactNode }) {
     setDisableButton(true);
     if (checked) {
       displaySuccess(t("common.successfullyChangedToAdmin"));
-      return navigate(`${WORKSPACE_HUB_PATH}/settings`);
+      return navigate(`${WORKSPACE_HUB_PATH}/requests`);
     }
     displaySuccess(t("common.successfullyChangedToUser"));
-    navigate(`${USER_HUB_PATH}`);
+    navigate(`${USER_HUB_PATH}/dashboard`);
   };
 
   return (

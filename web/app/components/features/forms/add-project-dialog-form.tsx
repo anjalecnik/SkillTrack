@@ -54,17 +54,6 @@ export function AddProjectDialogForm({
       footer={
         <>
           <Button
-            variant="outlined"
-            name="intent"
-            value="createAndAddMoreDetails"
-            type="submit"
-            loading={isLoading && loadingState.details}
-            disabled={isLoading}
-            onClick={() => setLoadingState({ details: true, create: false })}
-          >
-            {t("workspaceEmployees.createAndAddMoreDetails")}
-          </Button>
-          <Button
             variant="contained"
             color="primary"
             value="create"

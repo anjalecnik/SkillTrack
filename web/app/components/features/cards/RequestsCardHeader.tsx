@@ -30,12 +30,11 @@ export function RequestsCardHeader({
   const matches = useMatches();
   const rootData = matches.find((match) => match.id === "root")?.data as
     | {
-        workspace: { menuItems: never[]; name: string };
-        workspaceUser: { name: string; surname: string };
+        user: { name: string; surname: string };
       }
-    | { workspace: IWorkspace; workspaceUser: IWorkspaceUser };
-  const workspaceUser = (rootData as { workspaceUser: IWorkspaceUser })
-    ?.workspaceUser;
+    | { user: IWorkspaceUser };
+
+  const workspaceUser = (rootData as { user: IWorkspaceUser })?.user;
   const isSupervisorOrAdmin = isSupervisorOrHigher(workspaceUser);
 
   return (

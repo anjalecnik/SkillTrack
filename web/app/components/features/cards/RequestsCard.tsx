@@ -12,8 +12,6 @@ interface RequestsCardProps {
   limit: number;
   requests?: HalPaginatedResponse<IRequestsResponse>;
   disabledItemById?: number;
-  setSelectedRequests: Dispatch<SetStateAction<IActivity[]>>;
-  setIsRequestInfoDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsMoreToReportDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsPlanAbsenceDialogOpen: Dispatch<SetStateAction<boolean>>;
   handleDailyReportClick: () => void;
@@ -25,29 +23,24 @@ export const RequestsCard = ({
   limit,
   requests,
   disabledItemById,
-  setSelectedRequests,
-  setIsRequestInfoDialogOpen,
   setIsMoreToReportDialogOpen,
   setIsPlanAbsenceDialogOpen,
   handleDailyReportClick,
   shouldShowPersonalRequestsCheckbox = true,
-  shouldShowSearchBox = true
+  shouldShowSearchBox = true,
 }: RequestsCardProps) => {
   const { isLoading } = useNavigationState();
 
-  const handleRequestClick = async (request: IActivity) => {
-    setSelectedRequests([request]);
-    setIsRequestInfoDialogOpen(true);
-  };
-
   return (
-    <CardLayout sx={{ overflow: 'visible' }}>
+    <CardLayout sx={{ overflow: "visible" }}>
       <FlexColumn gap="30px" paddingBottom="20px">
         <RequestsCardHeader
           setIsMoreToReportDialogOpen={setIsMoreToReportDialogOpen}
           setIsPlanAbsenceDialogOpen={setIsPlanAbsenceDialogOpen}
           handleDailyReportClick={handleDailyReportClick}
-          shouldShowPersonalRequestsCheckbox={shouldShowPersonalRequestsCheckbox}
+          shouldShowPersonalRequestsCheckbox={
+            shouldShowPersonalRequestsCheckbox
+          }
           shouldShowSearchBox={shouldShowSearchBox}
         />
         <RequestsOverviewTable
@@ -57,7 +50,6 @@ export const RequestsCard = ({
             page: requests?.page,
             limit,
           }}
-          onItemClick={handleRequestClick}
           isLoading={isLoading}
           disabledItemById={disabledItemById}
         />

@@ -69,23 +69,8 @@ export function RequestsOverviewTable({
                 label: t("userHub.businessTrip"),
                 value: ActivityType.BusinessTrip,
               },
-              {
-                label: t("userHub.tripToOffice"),
-                value: ActivityType.TripToOffice,
-              },
-              { label: t("userHub.expense"), value: ActivityType.Expense },
-              { label: t("userHub.overtime"), value: ActivityType.Overtime },
-              { label: t("userHub.onCall"), value: ActivityType.OnCall },
-              {
-                label: t("userHub.schoolSchedule"),
-                value: ActivityType.SchoolSchedule,
-              },
               { label: t("userHub.sickLeave"), value: ActivityType.SickLeave },
               { label: t("userHub.vacation"), value: ActivityType.Vacation },
-              {
-                label: t("userHub.specialLeave"),
-                value: ActivityType.SpecialLeave,
-              },
             ],
             multiple: true,
             param: "types",
@@ -113,7 +98,7 @@ export function RequestsOverviewTable({
         },
       ]}
       render={(item) => {
-        const user = item._embedded.workspaceUser;
+        const user = item._embedded.user;
         const workPosition = user?._embedded?.workPosition?.name;
         const isDisabledItem = disabledItemById === item.id; // Check if this item is currently loading
         return (

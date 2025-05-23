@@ -32,7 +32,7 @@ export function MismatchUserWarningDialog({
 
   const handleOnCloseWarningDialog = () => {
     setIsUserWarningDialogOpen(false);
-    navigate("/user-hub");
+    navigate("/user-hub/dashboard");
   };
 
   useEffect(() => {

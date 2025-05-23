@@ -37,8 +37,9 @@ import {
   isActivityWithinReportableDays,
   isWeekend,
 } from "~/util";
+
 interface IActivitiesTableProps {
-  items: IActivityTableItem[];
+  items: IActivityTableItem[] | null[];
   sortKey?: string;
   projects: IProjectUserResponse[];
   isLoading?: boolean;
@@ -83,20 +84,13 @@ export function ActivitiesTable({
         },
         { children: t("userHub.projectHours") },
         { children: t("userHub.trip") },
-        { children: t("userHub.expenses") },
-        { children: t("userHub.overtime") },
-        { children: t("userHub.onCall") },
       ]}
       render={(item) => {
         const { date, activities } = item;
         const formattedDate = formatDate(date);
         const businessTrips: IActivity[] = [];
-        const tripsToOffice: IActivity[] = [];
-        const overtimes: IActivity[] = [];
         const weekends: IActivity[] = [];
         const holidays: IActivity[] = [];
-        const onCalls: IActivity[] = [];
-        const expenses: IActivity[] = [];
         const unassigned: IActivity[] = [];
         const empty: IActivity[] = [];
         const daily: IActivity[] = [];
@@ -110,26 +104,7 @@ export function ActivitiesTable({
               isPendingApproval =
                 activity.status === ActivityStatus.PendingApproval;
               break;
-            case ActivityType.TripToOffice:
-              tripsToOffice.push(activity);
-              isPendingApproval =
-                activity.status === ActivityStatus.PendingApproval;
-              break;
-            case ActivityType.Overtime:
-              overtimes.push(activity);
-              isPendingApproval =
-                activity.status === ActivityStatus.PendingApproval;
-              break;
-            case ActivityType.OnCall:
-              onCalls.push(activity);
-              isPendingApproval =
-                activity.status === ActivityStatus.PendingApproval;
-              break;
-            case ActivityType.Expense:
-              expenses.push(activity);
-              isPendingApproval =
-                activity.status === ActivityStatus.PendingApproval;
-              break;
+
             case ActivityType.Empty:
               empty.push(activity);
               break;
@@ -139,10 +114,8 @@ export function ActivitiesTable({
             case ActivityType.Daily:
               daily.push(activity);
               break;
-            case ActivityType.SchoolSchedule:
             case ActivityType.SickLeave:
             case ActivityType.Vacation:
-            case ActivityType.SpecialLeave:
               absences.push(activity);
               isPendingApproval =
                 activity.status === ActivityStatus.PendingApproval;
@@ -156,12 +129,9 @@ export function ActivitiesTable({
           }
         });
 
-        const isExpense = expenses.length > 0;
         const isWeekends = weekends.length > 0 || isWeekend(date);
         const isHoliday = holidays.length > 0;
         const hasAbsence = absences.length > 0;
-        const isOvertime = overtimes.length > 0;
-        const onCall = onCalls[0];
 
         const isUnassigned =
           unassigned.length > 0 &&
@@ -171,21 +141,10 @@ export function ActivitiesTable({
         const isEmpty =
           empty.length > 0 && !hasAbsence && !isWeekend(date) && !isHoliday;
 
-        const isFirstOnCallRow = onCalls.some(
-          (activity) => activity.firstOnCall
-        );
-        const isLastOnCallRow = onCalls.some((activity) => activity.lastOnCall);
-
         const isToday = dayjs(date).isSame(dayjs(), "day");
         const id = isUnassigned ? unassigned[0].id : daily[0]?.id;
         const hasReportedAnyActivity =
-          tripsToOffice.length > 0 ||
-          businessTrips.length > 0 ||
-          overtimes.length > 0 ||
-          onCalls.length > 0 ||
-          expenses.length > 0 ||
-          daily.length > 0 ||
-          absences.length > 0;
+          businessTrips.length > 0 || daily.length > 0 || absences.length > 0;
 
         const isClickable =
           (id &&
@@ -202,41 +161,6 @@ export function ActivitiesTable({
             date
           ) &&
             hasReportedAnyActivity);
-
-        const isReportTripOnClickEnabled =
-          (businessTrips.length > 0 ? businessTrips[0] : tripsToOffice[0])
-            ?.activityType === ActivityType.TripToOffice
-            ? isActivityWithinReportableDays(
-                reportActivityRestrictions,
-                ActivityTypeLowerCase.TripToOffice,
-                date
-              )
-            : isActivityWithinReportableDays(
-                reportActivityRestrictions,
-                ActivityTypeLowerCase.BusinessTrip,
-                date
-              ) && !hasAbsence;
-
-        const isReportOvertimeOnClickEnabled =
-          !hasAbsence &&
-          !businessTrips.length &&
-          isActivityWithinReportableDays(
-            reportActivityRestrictions,
-            ActivityTypeLowerCase.Overtime,
-            date
-          );
-        const isReportOnCallOnClickEnabled =
-          isActivityWithinReportableDays(
-            reportActivityRestrictions,
-            ActivityTypeLowerCase.OnCall,
-            date
-          ) && !hasAbsence;
-
-        const isReportExpenseClickEnabled = isActivityWithinReportableDays(
-          reportActivityRestrictions,
-          ActivityTypeLowerCase.Expense,
-          date
-        );
 
         const todaysDailyActivities = activities.filter(
           (activity) =>
@@ -447,16 +371,12 @@ export function ActivitiesTable({
                   maxWidth: "400px",
                 }}
               >
-                {[...businessTrips, ...tripsToOffice].length === 0 ? (
+                {[...businessTrips].length === 0 ? (
                   <Tooltip
-                    title={
-                      isReportTripOnClickEnabled
-                        ? t("userHub.clickToReport", {
-                            activityType:
-                              MoreToReportActivityTooltipType.BusinessTrip,
-                          })
-                        : ""
-                    }
+                    title={t("userHub.clickToReport", {
+                      activityType:
+                        MoreToReportActivityTooltipType.BusinessTrip,
+                    })}
                     followCursor
                     placement="top"
                   >
@@ -465,418 +385,124 @@ export function ActivitiesTable({
                         cursor: "pointer",
                         height: "100%",
                         flexGrow: 1,
-                        "&:hover": {
-                          backgroundColor: isReportTripOnClickEnabled
-                            ? alpha(theme.palette.secondary.light, 0.2)
-                            : undefined,
-                        },
                       }}
-                      onMouseEnter={() =>
-                        isReportTripOnClickEnabled
-                          ? setIsActivityHovered(false)
-                          : setIsActivityHovered(true)
-                      }
-                      onMouseLeave={() =>
-                        isReportTripOnClickEnabled
-                          ? setIsActivityHovered(true)
-                          : setIsActivityHovered(false)
-                      }
                       onClick={(e) => {
-                        if (isReportTripOnClickEnabled) {
-                          e.stopPropagation();
-                          onReportMoreClick(
-                            MoreToReportActivityType.BusinessTrip,
-                            {
-                              dateStart: date,
-                              startTime: "07:00",
-                            }
-                          );
-
-                          return;
-                        }
+                        e.stopPropagation();
+                        onReportMoreClick(
+                          MoreToReportActivityType.BusinessTrip,
+                          {
+                            dateStart: date,
+                            startTime: "07:00",
+                          }
+                        );
                       }}
                     >
                       <div />
                     </Box>
                   </Tooltip>
                 ) : (
-                  [...businessTrips, ...tripsToOffice].map(
-                    (activity, index) => {
-                      const backgroundColor =
-                        activity.status === ActivityStatus.PendingApproval
-                          ? theme.palette.secondary[200]
-                          : theme.palette.customColors.greekBlue.light;
-                      const isFillActivity = activity.isGhost;
+                  [...businessTrips].map((activity, index) => {
+                    const backgroundColor =
+                      activity.status === ActivityStatus.PendingApproval
+                        ? theme.palette.secondary[200]
+                        : theme.palette.customColors.greekBlue.light;
+                    const isFillActivity = activity.isGhost;
 
-                      return (
-                        <Tooltip
-                          key={index}
-                          title=""
-                          followCursor
-                          placement="top"
+                    return (
+                      <Tooltip
+                        key={index}
+                        title=""
+                        followCursor
+                        placement="top"
+                      >
+                        <Box
+                          sx={{
+                            cursor: isFillActivity ? "default" : "pointer",
+                            borderRadius:
+                              activity.isFirst && activity.isLast
+                                ? "4px"
+                                : activity.isFirst
+                                ? "4px 4px 0 0"
+                                : activity.isLast
+                                ? "0 0 4px 4px"
+                                : "0",
+                            margin:
+                              activity.isFirst && activity.isLast
+                                ? "auto 0 auto 0"
+                                : activity.isFirst
+                                ? "auto 0 0 0"
+                                : "0 0 auto 0",
+                            height:
+                              activity.isFirst && activity.isLast
+                                ? "50%"
+                                : activity.isFirst || activity.isLast
+                                ? "75%"
+                                : "100%",
+                            backgroundColor: !isFillActivity
+                              ? backgroundColor
+                              : undefined,
+                            padding: "2px",
+                            flexGrow: 1,
+                            flexBasis: 0,
+                            flexShrink: 0,
+                            overflow: "hidden",
+                            borderBottom: !activity.isLast ? 0 : undefined,
+                          }}
+                          onMouseEnter={() =>
+                            !isFillActivity && setIsActivityHovered(false)
+                          }
+                          onMouseLeave={() =>
+                            !isFillActivity && setIsActivityHovered(true)
+                          }
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            !isFillActivity &&
+                              onRequestClick?.([activity.activityRequestId]);
+                          }}
                         >
-                          <Box
-                            sx={{
-                              cursor: isFillActivity ? "default" : "pointer",
-                              borderRadius:
-                                activity.isFirst && activity.isLast
-                                  ? "4px"
-                                  : activity.isFirst
-                                  ? "4px 4px 0 0"
-                                  : activity.isLast
-                                  ? "0 0 4px 4px"
-                                  : "0",
-                              margin:
-                                activity.isFirst && activity.isLast
-                                  ? "auto 0 auto 0"
-                                  : activity.isFirst
-                                  ? "auto 0 0 0"
-                                  : "0 0 auto 0",
-                              height:
-                                activity.isFirst && activity.isLast
-                                  ? "50%"
-                                  : activity.isFirst || activity.isLast
-                                  ? "75%"
-                                  : "100%",
-                              backgroundColor: !isFillActivity
-                                ? backgroundColor
-                                : undefined,
-                              padding: "2px",
-                              flexGrow: 1,
-                              flexBasis: 0,
-                              flexShrink: 0,
-                              overflow: "hidden",
-                              borderBottom: !activity.isLast ? 0 : undefined,
-                            }}
-                            onMouseEnter={() =>
-                              !isFillActivity && setIsActivityHovered(false)
-                            }
-                            onMouseLeave={() =>
-                              !isFillActivity && setIsActivityHovered(true)
-                            }
-                            onClick={(e) => {
-                              e.stopPropagation();
-                              !isFillActivity &&
-                                onRequestClick?.([activity.activityRequestId]);
-                            }}
-                          >
-                            {!isFillActivity &&
-                              (activity.isFirst || activity.isLast) && (
-                                <Chip
-                                  sx={{
-                                    backgroundColor: backgroundColor,
-                                    color:
-                                      activity.status ===
-                                      ActivityStatus.PendingApproval
-                                        ? alpha(
-                                            theme.palette.secondary.dark,
-                                            0.4
-                                          )
-                                        : theme.palette.customColors.greekBlue
-                                            .main,
-                                    width: "100%",
-                                  }}
-                                  label={
-                                    activity.isFirst && (
-                                      <Tooltip
-                                        title={
-                                          activity.status ===
-                                          ActivityStatus.PendingApproval
-                                            ? t("userHub.pendingApproval")
-                                            : getTripCellValue(activity)
-                                        }
+                          {!isFillActivity &&
+                            (activity.isFirst || activity.isLast) && (
+                              <Chip
+                                sx={{
+                                  backgroundColor: backgroundColor,
+                                  color:
+                                    activity.status ===
+                                    ActivityStatus.PendingApproval
+                                      ? alpha(theme.palette.secondary.dark, 0.4)
+                                      : theme.palette.customColors.greekBlue
+                                          .main,
+                                  width: "100%",
+                                }}
+                                label={
+                                  activity.isFirst && (
+                                    <Tooltip
+                                      title={
+                                        activity.status ===
+                                        ActivityStatus.PendingApproval
+                                          ? t("userHub.pendingApproval")
+                                          : getTripCellValue(activity)
+                                      }
+                                    >
+                                      <Typography
+                                        sx={{
+                                          display: "inline",
+                                        }}
                                       >
-                                        <Typography
-                                          sx={{
-                                            display: "inline",
-                                          }}
-                                        >
-                                          {getTripCellValue(activity)}
-                                        </Typography>
-                                      </Tooltip>
-                                    )
-                                  }
-                                  variant="light"
-                                />
-                              )}
-                          </Box>
-                        </Tooltip>
-                      );
-                    }
-                  )
+                                        {getTripCellValue(activity)}
+                                      </Typography>
+                                    </Tooltip>
+                                  )
+                                }
+                                variant="light"
+                              />
+                            )}
+                        </Box>
+                      </Tooltip>
+                    );
+                  })
                 )}
               </Flex>
             </TableCell>
-
-            <Tooltip
-              title={
-                !isExpense && isReportExpenseClickEnabled
-                  ? t("userHub.clickToReport", {
-                      activityType: MoreToReportActivityTooltipType.Expense,
-                    })
-                  : ""
-              }
-              followCursor
-              placement="top"
-            >
-              <TableCell
-                sx={{
-                  padding: "0 10px !important",
-                  height: 0,
-                  cursor:
-                    isExpense || isClickable || isReportExpenseClickEnabled
-                      ? "pointer"
-                      : "default",
-                  "&:hover": {
-                    backgroundColor:
-                      !isExpense && isReportExpenseClickEnabled
-                        ? alpha(theme.palette.secondary.light, 0.2)
-                        : undefined,
-                  },
-                }}
-                onClick={(e) => {
-                  if (!isExpense && isReportExpenseClickEnabled) {
-                    e.stopPropagation();
-                    onReportMoreClick?.(MoreToReportActivityType.Expense, {
-                      date,
-                    });
-                    return;
-                  }
-                }}
-                onMouseEnter={() =>
-                  isReportExpenseClickEnabled || isExpense
-                    ? setIsActivityHovered(false)
-                    : setIsActivityHovered(true)
-                }
-                onMouseLeave={() =>
-                  isReportExpenseClickEnabled || isExpense
-                    ? setIsActivityHovered(true)
-                    : setIsActivityHovered(false)
-                }
-              >
-                {isExpense && (
-                  <Tooltip
-                    title={
-                      isPendingApproval ? t("userHub.pendingApproval") : ""
-                    }
-                  >
-                    <Chip
-                      sx={{
-                        height: "50%",
-                        width: "100%",
-                        backgroundColor: requestBgColor,
-                        color: requestTextColor,
-                        "&:hover": {
-                          backgroundColor: requestBgColor,
-                        },
-                      }}
-                      variant="light"
-                      label={
-                        expenses
-                          ?.reduce(
-                            (sum, expense) =>
-                              sum + (Number(expense.valueInEuro) || 0),
-                            0
-                          )
-                          .toFixed(2) + " €" || "0.00 €"
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRequestClick?.(
-                          expenses.map((e) => e.activityRequestId)
-                        );
-                      }}
-                    />
-                  </Tooltip>
-                )}
-              </TableCell>
-            </Tooltip>
-
-            <Tooltip
-              title={
-                isReportOvertimeOnClickEnabled && !isOvertime
-                  ? t("userHub.clickToReport", {
-                      activityType: MoreToReportActivityTooltipType.Overtime,
-                    })
-                  : ""
-              }
-              followCursor
-              placement="top"
-            >
-              <TableCell
-                sx={{
-                  padding: "0 10px !important",
-                  height: 0,
-                  cursor:
-                    isReportOvertimeOnClickEnabled || isOvertime || isClickable
-                      ? "pointer"
-                      : "default",
-                  "&:hover": {
-                    backgroundColor:
-                      isReportOvertimeOnClickEnabled && !isOvertime
-                        ? alpha(theme.palette.secondary.light, 0.2)
-                        : undefined,
-                  },
-                }}
-                onClick={(e) => {
-                  if (!isOvertime && isReportOvertimeOnClickEnabled) {
-                    e.stopPropagation();
-                    onReportMoreClick(MoreToReportActivityType.Overtime, {
-                      date,
-                    });
-                    return;
-                  }
-                }}
-                onMouseEnter={() =>
-                  isReportOvertimeOnClickEnabled || isOvertime
-                    ? setIsActivityHovered(false)
-                    : setIsActivityHovered(true)
-                }
-                onMouseLeave={() =>
-                  isReportOvertimeOnClickEnabled || isOvertime
-                    ? setIsActivityHovered(true)
-                    : setIsActivityHovered(false)
-                }
-              >
-                {isOvertime && (
-                  <Tooltip
-                    title={
-                      isPendingApproval ? t("userHub.pendingApproval") : ""
-                    }
-                  >
-                    <Chip
-                      sx={{
-                        height: "50%",
-                        width: "100%",
-                        backgroundColor: requestBgColor,
-                        color: requestTextColor,
-                        "&:hover": {
-                          backgroundColor: requestBgColor,
-                        },
-                      }}
-                      variant="light"
-                      label={
-                        overtimes?.reduce(
-                          (sum, overtime) => (sum += overtime.hours ?? 0),
-                          0
-                        ) + " h"
-                      }
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onRequestClick?.(
-                          overtimes.map((o) => o.activityRequestId)
-                        );
-                      }}
-                    />
-                  </Tooltip>
-                )}
-              </TableCell>
-            </Tooltip>
-            <Tooltip
-              title={
-                isReportOnCallOnClickEnabled && !onCall
-                  ? t("userHub.clickToReport", {
-                      activityType: MoreToReportActivityTooltipType.OnCall,
-                    })
-                  : ""
-              }
-              followCursor
-              placement="top"
-            >
-              <TableCell
-                sx={{
-                  padding: "0 !important",
-                  backgroundColor:
-                    onCall && !isFirstOnCallRow && !isLastOnCallRow
-                      ? isPendingApproval
-                        ? theme.palette.secondary[200]
-                        : theme.palette.customColors.greekBlue.light
-                      : undefined,
-                  height: 0,
-                  maxWidth: "200px",
-                  minWidth: "80px",
-                  borderBottom: onCall && !isLastOnCallRow ? 0 : undefined,
-                  cursor:
-                    onCall || isClickable || isReportOnCallOnClickEnabled
-                      ? "pointer"
-                      : "default",
-                  "&:hover": {
-                    backgroundColor:
-                      isReportOnCallOnClickEnabled && !onCall
-                        ? alpha(theme.palette.secondary.light, 0.2)
-                        : undefined,
-                  },
-                }}
-                onMouseEnter={() =>
-                  isReportOnCallOnClickEnabled || onCall
-                    ? setIsActivityHovered(false)
-                    : setIsActivityHovered(true)
-                }
-                onMouseLeave={() =>
-                  isReportOnCallOnClickEnabled || onCall
-                    ? setIsActivityHovered(true)
-                    : setIsActivityHovered(false)
-                }
-              >
-                <Flex
-                  sx={{ height: "100%" }}
-                  onClick={(e) => {
-                    if (!onCall && isReportOnCallOnClickEnabled) {
-                      e.stopPropagation();
-                      onReportMoreClick(MoreToReportActivityType.OnCall, {
-                        dateStart: date,
-                        startTime: "07:00",
-                      });
-                      return;
-                    }
-                    if (!onCall) return;
-
-                    e.stopPropagation();
-                    onRequestClick?.([onCall.activityRequestId]);
-                  }}
-                >
-                  {onCall && (isFirstOnCallRow || isLastOnCallRow) && (
-                    <Chip
-                      sx={{
-                        margin:
-                          isFirstOnCallRow && isLastOnCallRow
-                            ? "auto 0 auto 0"
-                            : isFirstOnCallRow
-                            ? "auto 0 0 0"
-                            : "0 0 auto 0",
-                        height:
-                          isFirstOnCallRow && isLastOnCallRow ? "50%" : "75%",
-                        width: "100%",
-                        backgroundColor: requestBgColor,
-                        color: requestTextColor,
-                      }}
-                      variant="light"
-                      label={
-                        isFirstOnCallRow && (
-                          <Tooltip
-                            title={
-                              isPendingApproval
-                                ? t("userHub.pendingApproval")
-                                : onCall.description
-                            }
-                            placement="top"
-                          >
-                            <Typography
-                              sx={{
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                              }}
-                            >
-                              {onCall.description ?? t("userHub.onCall")}
-                            </Typography>
-                          </Tooltip>
-                        )
-                      }
-                    />
-                  )}
-                </Flex>
-              </TableCell>
-            </Tooltip>
           </TableRow>
         );
 

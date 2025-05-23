@@ -22,9 +22,9 @@ interface IEmployeeSettingsProps {
   lastResult: SubmissionResult<string[]> | null;
   loaderData: {
     user: IWorkspaceUser;
-    projects: IProject[];
+    projects: null[] | IProject[];
     users: IUserResponse[];
-    positions: IPositionResponse[];
+    positions: IPositionResponse[] | null[];
   };
 }
 

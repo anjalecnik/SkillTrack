@@ -41,12 +41,6 @@ export function AddEmployeeForm({ formId }: IAddEmployeeFormProps) {
         errorMessage={t(fields.email.errors?.[0] ?? "")}
         placeholder={t("common.emailAddress")!}
       />
-      <Flex alignItems="center" gap="5px">
-        <InfoCircleOutlined style={{ color: theme.palette.primary.main }} />
-        <Typography variant="body1">
-          <Trans i18nKey="workspaceEmployees.invitationSubtext" t={t} />
-        </Typography>
-      </Flex>
     </FlexColumn>
   );
 }

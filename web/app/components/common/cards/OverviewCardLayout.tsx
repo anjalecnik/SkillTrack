@@ -20,12 +20,6 @@ interface IOverviewCardLayoutProps {
     value: ReactNode;
     icon: ReactNode;
   }[];
-  centerItems: {
-    key: string;
-    label: ReactNode;
-    value: ReactNode;
-    tooltip?: ReactNode;
-  }[];
   rightItems: {
     key: string;
     value: ReactNode;
@@ -39,7 +33,6 @@ export function OverviewCardLayout({
   image,
   footerChildren,
   leftItems,
-  centerItems,
   rightItems,
 }: IOverviewCardLayoutProps) {
   const isMobile = useMobile();
@@ -74,7 +67,6 @@ export function OverviewCardLayout({
             image={image}
             items={leftItems}
           />
-          <CardOverviewCenter items={centerItems} />
           <CardOverviewRight items={rightItems} />
         </Flex>
         {footerChildren}

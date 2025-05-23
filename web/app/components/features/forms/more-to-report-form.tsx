@@ -18,32 +18,17 @@ import {
   IProjectUserResponse,
   MoreToReportActivityType,
   IActivityMoreToReportForm,
-  IWorkspaceUserResponse,
   getMoreToReportTypeLabel,
-  IAddress,
-  IWorkspaceModuleActivity,
+  IUserResponse,
 } from "~/types";
-import {
-  businessTripFormDialogSchema,
-  overtimeFormDialogSchema,
-  onCallFormDialogSchema,
-  expensesFormDialogSchema,
-  tripToOfficeFormDialogSchema,
-} from "~/schemas";
+import { businessTripFormDialogSchema } from "~/schemas";
 import { parseWithZod } from "@conform-to/zod";
 import { z } from "zod";
-import {
-  BusinessTripDialogForm,
-  ExpensesDialogForm,
-  OnCallDialogForm,
-  OvertimeDialogForm,
-  TripToOfficeDialogForm,
-} from "~/components/features";
+import { BusinessTripDialogForm } from "~/components/features";
 import { useNavigationState } from "~/hooks";
 import { fullNameFormatter } from "~/util";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useSearchParams } from "@remix-run/react";
-import dayjs from "dayjs";
 
 interface IMoreToReportFormProps {
   lastResult?: SubmissionResult<string[]> | null;
@@ -52,11 +37,8 @@ interface IMoreToReportFormProps {
   projects: IProjectUserResponse[];
   selectedType: MoreToReportActivityType;
   defaultValues?: IActivityMoreToReportForm;
-  workspaceEmployees?: IWorkspaceUserResponse[];
+  workspaceEmployees?: IUserResponse[];
   isEditing?: boolean;
-  workspaceAddresses: IAddress[];
-  userAddresses: IAddress[];
-  reportingActivitySettings?: IWorkspaceModuleActivity;
   setSelectedMoreToReportType: Dispatch<
     SetStateAction<MoreToReportActivityType>
   >;
@@ -71,9 +53,6 @@ export function MoreToReportForm({
   defaultValues,
   workspaceEmployees,
   isEditing,
-  workspaceAddresses,
-  userAddresses,
-  reportingActivitySettings,
   setSelectedMoreToReportType,
 }: IMoreToReportFormProps) {
   const { t } = useTranslation();
@@ -90,24 +69,14 @@ export function MoreToReportForm({
     lastResult,
     onValidate({ formData }) {
       return parseWithZod(formData, {
-        schema: z.discriminatedUnion("intent", [
-          overtimeFormDialogSchema,
-          businessTripFormDialogSchema,
-          tripToOfficeFormDialogSchema,
-          onCallFormDialogSchema,
-          expensesFormDialogSchema,
-        ]),
+        schema: z.discriminatedUnion("intent", [businessTripFormDialogSchema]),
       });
     },
     shouldRevalidate: "onBlur",
     defaultValue: {
       activityType: selectedType,
-      date: defaultValues?.date,
       dateStart: defaultValues?.dateStart,
       dateEnd: defaultValues?.dateEnd,
-      startTime: defaultValues?.startTime,
-      departureTime: defaultValues?.departureTime,
-      returnTime: defaultValues?.returnTime,
       location: defaultValues?.location,
       distanceInKM: defaultValues?.distanceInKM,
       description: defaultValues?.description,
@@ -125,98 +94,17 @@ export function MoreToReportForm({
   };
 
   const getIntentForSelectedForm = () => {
-    switch (selectedType) {
-      case MoreToReportActivityType.Overtime:
-        return ActivityFormDialogs.Overtime;
-      case MoreToReportActivityType.OnCall:
-        return ActivityFormDialogs.OnCall;
-      case MoreToReportActivityType.BusinessTrip:
-        return ActivityFormDialogs.BusinessTrip;
-      case MoreToReportActivityType.TripToOffice:
-        return ActivityFormDialogs.TripToOffice;
-      case MoreToReportActivityType.Expense:
-        return ActivityFormDialogs.Expense;
-      default:
-        return ActivityFormDialogs.Overtime;
-    }
+    return ActivityFormDialogs.BusinessTrip;
   };
 
-  if (reportingActivitySettings) {
-    Object.entries(reportingActivitySettings).forEach(([, value]) => {
-      value.maximumDateInPast = dayjs().subtract(
-        value.maximumDaysInPast,
-        "days"
-      );
-    });
-  }
-
   const getActivityForm = () => {
-    switch (selectedType) {
-      case MoreToReportActivityType.Overtime:
-        return (
-          <OvertimeDialogForm
-            formId={form.id}
-            projects={projects}
-            minReportingDate={
-              reportingActivitySettings?.overtime.maximumDateInPast
-            }
-          />
-        );
-      case MoreToReportActivityType.OnCall:
-        return (
-          <OnCallDialogForm
-            formId={form.id}
-            projects={projects}
-            minReportingDate={
-              reportingActivitySettings?.onCall.maximumDateInPast
-            }
-          />
-        );
-      case MoreToReportActivityType.BusinessTrip:
-        return (
-          <BusinessTripDialogForm
-            formId={form.id}
-            projects={projects}
-            isEditing={isEditing}
-            minReportingDate={
-              reportingActivitySettings?.businessTrip.maximumDateInPast
-            }
-          />
-        );
-      case MoreToReportActivityType.TripToOffice:
-        return (
-          <TripToOfficeDialogForm
-            formId={form.id}
-            projects={projects}
-            isEditing={isEditing}
-            workspaceAddresses={workspaceAddresses}
-            userAddresses={userAddresses}
-            minReportingDate={
-              reportingActivitySettings?.tripToOffice.maximumDateInPast
-            }
-          />
-        );
-      case MoreToReportActivityType.Expense:
-        return (
-          <ExpensesDialogForm
-            formId={form.id}
-            projects={projects}
-            minReportingDate={
-              reportingActivitySettings?.expense.maximumDateInPast
-            }
-          />
-        );
-      default:
-        return (
-          <OvertimeDialogForm
-            formId={form.id}
-            projects={projects}
-            minReportingDate={
-              reportingActivitySettings?.overtime.maximumDateInPast
-            }
-          />
-        );
-    }
+    return (
+      <BusinessTripDialogForm
+        formId={form.id}
+        projects={projects}
+        isEditing={isEditing}
+      />
+    );
   };
 
   const handleEmployeeChange = (value: number) => {
@@ -281,7 +169,7 @@ export function MoreToReportForm({
                 ) ?? null
               }
               getOptionLabel={(employee) =>
-                fullNameFormatter(employee as IWorkspaceUserResponse) ?? ""
+                fullNameFormatter(employee as IUserResponse) ?? ""
               }
               onChange={(_, value) => {
                 if (value) {
@@ -295,7 +183,6 @@ export function MoreToReportForm({
           <EnumSelect<MoreToReportActivityType>
             label={t("userHub.type")}
             enumType={MoreToReportActivityType}
-            placeholder={t("userHub.type")!}
             {...getSelectProps(fields.activityType)}
             key={fields.activityType.key}
             defaultValue={selectedType}

@@ -90,7 +90,7 @@ export function DailyReportSuccessPage({
                 : ""}
             </Typography>
           </Typography>
-          <Button variant="text" href={`${USER_HUB_PATH}`}>
+          <Button variant="text" href={`${USER_HUB_PATH}/dashboard`}>
             {t("emailSuccess.goBackToDashboard")}
           </Button>
         </FlexColumn>

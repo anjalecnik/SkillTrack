@@ -34,6 +34,8 @@ import { Button, Typography } from "@mui/material";
 import { PlusOutlined } from "@ant-design/icons";
 import { ADMIN_HUB_BASE_PATH, USER_HUB_BASE_PATH } from "~/constants";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
+import { EmployeePerformanceReviewCard } from "./EmployeePerformanceReviewCard";
+import { IUserPerformanceDetails } from "~/types/interfaces/performance-review/user-performance-details";
 
 interface IEmployeeCardProps {
   lastResult: SubmissionResult<string[]> | null;
@@ -46,6 +48,7 @@ interface IEmployeeCardProps {
       activities?: IActivityTableItem[] | null[];
       absences?: IActivity[] | null[];
     } | null;
+    performanceReviews: IUserPerformanceDetails[];
     requests?: any;
     limit: number;
   };
@@ -60,8 +63,6 @@ interface IEmployeeCardProps {
   setDefaultPerformanceReviewValues: Dispatch<
     SetStateAction<IActivityPerformanceReviewForm | undefined>
   >;
-  setSelectedRequests: Dispatch<SetStateAction<IActivity[]>>;
-  setIsRequestInfoDialogOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedActivity: Dispatch<SetStateAction<IActivity | null>>;
   setDeleteAbsenceDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsPlanAbsenceDialogOpen: Dispatch<SetStateAction<boolean>>;
@@ -81,15 +82,13 @@ export function EmployeeCard({
   setIsMoreToReportDialogOpen,
   setIsPlanAbsenceDialogOpen,
   setDefaultMoreToReportValues,
-  setIsRequestInfoDialogOpen,
   setSelectedMoreToReportType,
-  setSelectedRequests,
   setIsPerformanceReviewPopupOpen,
   setDefaultPerformanceReviewValues,
   isDetailsViewVisible = true,
   enableToCancelAbsenceActivity = true,
 }: IEmployeeCardProps) {
-  const { user, tableData, limit } = loaderData;
+  const { user, tableData } = loaderData;
   const { activities, absences } = tableData ?? {};
   const [searchParams, setSearchParams] = useSearchParams();
   const [tabs, setTabs] =
@@ -161,29 +160,6 @@ export function EmployeeCard({
     setSelectedMoreToReportType(activityType);
   };
 
-  const handleRequestClick = async (requestIds: number[]) => {
-    if (!requestIds?.length) {
-      return;
-    }
-    // User can report multiple overtimes/expenses at once
-    const requests: Promise<IActivity>[] = [];
-    requestIds.forEach(async (id) => {
-      const activityParams: IActivityParams = {
-        userId: user.id,
-        activityId: id,
-      };
-
-      // requests.push(RequestClient.getRequestById(activityParams));
-    });
-    try {
-      const responses = await Promise.all(requests);
-      setSelectedRequests(responses);
-      setIsRequestInfoDialogOpen(true);
-    } catch (error) {
-      handleAxiosError(error);
-    }
-  };
-
   const handleDailyReportClick = () => {
     handleActivityClick(
       formatDate(dayjs()),
@@ -222,6 +198,23 @@ export function EmployeeCard({
         value: EmployeeDetailsView.UserDetails,
       });
     }
+
+    newTabs.push({
+      label: t("workspaceEmployees.activity"),
+      value: EmployeeDetailsView.Activity,
+    });
+
+    if (loaderData.requests) {
+      newTabs.push({
+        label: t("workspaceEmployees.requests"),
+        value: EmployeeDetailsView.Requests,
+      });
+    }
+
+    newTabs.push({
+      label: t("workspaceEmployees.performanceReviews"),
+      value: EmployeeDetailsView.PerformanceReviews,
+    });
 
     setTabs(newTabs);
   }, [isDetailsViewVisible, loaderData]);
@@ -266,7 +259,6 @@ export function EmployeeCard({
                     projects={user.projects ?? []}
                     items={activities ?? []}
                     onItemClick={handleActivityClick}
-                    onRequestClick={handleRequestClick}
                     onReportMoreClick={handleReportMoreClick}
                     reportActivityRestrictions={reportRestrictions}
                   />
@@ -303,6 +295,18 @@ export function EmployeeCard({
                     {t("common.addNew")}
                   </Button>
                 </Flex>
+
+                <EmployeePerformanceReviewCard
+                  userId={user.id}
+                  performanceReviews={loaderData.performanceReviews}
+                  setDefaultPerformanceReviewValues={
+                    setDefaultPerformanceReviewValues
+                  }
+                  setIsViewing={setIsViewing}
+                  setIsPerformanceReviewPopupOpen={
+                    setIsPerformanceReviewPopupOpen
+                  }
+                />
               </FlexColumn>
             )}
           </MainCard>

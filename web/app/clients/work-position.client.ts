@@ -38,7 +38,6 @@ export class WorkPositionClient {
   }
 
   static async createWorkPosition(request: IPositionRequest) {
-    console.log("request for create: ", request);
     const { data } = await privateClient.post<IPositionResponse>(
       `/work-positions`,
       request

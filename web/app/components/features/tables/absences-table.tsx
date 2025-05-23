@@ -10,7 +10,7 @@ import {
 import { formatDateWithStartAndEnd } from "~/util";
 
 interface IAbsencesTableProps {
-  items: IActivity[];
+  items: null[] | IActivity[];
   sortKey?: string;
   isLoading?: boolean;
   enableToCancelAbsenceActivity?: boolean;

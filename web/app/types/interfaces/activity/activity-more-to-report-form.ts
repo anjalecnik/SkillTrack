@@ -11,7 +11,6 @@ export interface IActivityMoreToReportForm
 }
 
 export interface MoreToReportEditRequestType {
-  setIsRequestInfoDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsEditing: Dispatch<SetStateAction<boolean>>;
   setSelectedMoreToReportType: Dispatch<
     SetStateAction<MoreToReportActivityType>

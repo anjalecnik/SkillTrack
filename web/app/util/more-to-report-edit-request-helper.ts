@@ -10,7 +10,6 @@ export class MoreToReportEditRequest {
   static handleBusinessTripEdit(
     activity: IActivity,
     {
-      setIsRequestInfoDialogOpen,
       setIsEditing,
       setSelectedMoreToReportType,
       setDefaultMoreToReportValues,
@@ -18,7 +17,6 @@ export class MoreToReportEditRequest {
       setDefaultMoreToReportProject,
     }: MoreToReportEditRequestType
   ) {
-    setIsRequestInfoDialogOpen(false);
     if (activity.activityType !== ActivityType.BusinessTrip) return;
 
     if (
