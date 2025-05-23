@@ -4,7 +4,7 @@ import { ROUTE_USER, ROUTE_WORK_POSITION } from "src/utils/constants"
 import { HalHelper } from "src/utils/helpers/hal.helper"
 import { UserEmbeddedItemsHalResponse, UserEmbeddedWorkPositionItemsHalResponse, UserShortHalResponse } from "src/utils/types/dtos"
 
-export abstract class serHalMapper {
+export abstract class UserHalMapper {
 	private static composeUserPath(user: UserEntity): string {
 		return `${Config.get<string>("APP_API_PREFIX")}/${ROUTE_USER}/${user.id}`
 	}

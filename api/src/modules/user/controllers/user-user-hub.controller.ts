@@ -1,6 +1,6 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Patch, Query, UseGuards } from "@nestjs/common"
-import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { UserGuard, UserLoginGuard, UserSelfOrManagerGuard } from "src/utils/guards"
+import { Controller, Get, Param, ParseIntPipe, Query, UseGuards } from "@nestjs/common"
+import { ApiBearerAuth, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
+import { UserGuard, UserSelfOrManagerGuard } from "src/utils/guards"
 import { IAuthJwtPassportUserRequest } from "src/modules/auth/interfaces"
 import { ROUTE_USER, API_TAG_USER, ROUTE_USER_HUB } from "src/utils/constants"
 import { AuthJwtPassportUserDetails } from "src/utils/decorators"
@@ -10,8 +10,6 @@ import { UserPaginationFilterRequest } from "../dtos/request/user-pagination-fil
 import { UserMapper } from "../mappers/user.mapper"
 import { UserDetailsResponse } from "../dtos/response/user-details.response"
 import { UserIsSupervisorResponse } from "../dtos/response/user-is-supervisor.response"
-import { UserBaseResponse } from "../dtos/response/user-base.response"
-import { UserJoinRequest } from "../dtos/request/user-join.request"
 
 @Controller(`/${ROUTE_USER_HUB}/${ROUTE_USER}`)
 @ApiTags(`${API_TAG_USER}`)
@@ -35,6 +33,7 @@ export class UserUserHubController {
 	@ApiOkResponse({ description: "User", type: UserDetailsResponse })
 	async getWorkspaceUser(@AuthJwtPassportUserDetails() authPassport: IAuthJwtPassportUserRequest, @Param("userId", ParseIntPipe) userId: number): Promise<UserDetailsResponse> {
 		const userDetails = await this.userService.getUser({ id: userId, authPassport })
+		await this.userService.setUserActive(userDetails.userEntity.id)
 		return UserMapper.mapUserDetails(userDetails)
 	}
 
@@ -52,20 +51,5 @@ export class UserUserHubController {
 	): Promise<UserIsSupervisorResponse> {
 		const isSupervisor = await this.userService.validateGetUser({ id: userId, authPassport })
 		return { isSupervisor: isSupervisor }
-	}
-
-	@Patch("join-workspace")
-	@ApiBearerAuth()
-	@UseGuards(UserLoginGuard)
-	@ApiOperation({ summary: "Join", description: "This endpoint allows a user to join." })
-	@ApiOkResponse({ description: "Joined" })
-	@ApiNotFoundResponse({ description: "User not found", type: UserBaseResponse })
-	async join(@AuthJwtPassportUserDetails() authPassport: IAuthJwtPassportUserRequest, @Body() userJoinRequest: UserJoinRequest): Promise<UserBaseResponse> {
-		const userDetails = await this.userService.join({
-			id: authPassport.user.id,
-			email: authPassport.user.email,
-			...userJoinRequest
-		})
-		return UserMapper.mapUserBase(userDetails.userEntity)
 	}
 }
