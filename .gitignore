@@ -49,3 +49,9 @@ api/coverage/
 
 # Misc
 *.tgz
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

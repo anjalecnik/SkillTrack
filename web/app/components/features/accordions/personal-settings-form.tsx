@@ -57,6 +57,7 @@ export function PersonalSettingsForm({
         title={t("workspaceEmployees.personalSettings")}
         desc={description}
         open={open}
+        dataTestId="personalSettingsAccordion"
         onAccordionClick={() => onAccordionClick(intent)}
         onCancelClick={onCancelClick}
         borderTop
@@ -79,6 +80,7 @@ export function PersonalSettingsForm({
             <FormTextInput
               name="name"
               fieldName="name"
+              dataTestId="employeeName"
               defaultValue={workspaceUser.name}
               label={t("workspaceEmployees.name")}
               containerProps={{ sx: { flex: 1 } }}
@@ -88,6 +90,7 @@ export function PersonalSettingsForm({
             <FormTextInput
               name="surname"
               fieldName="surname"
+              dataTestId="employeeSurname"
               defaultValue={workspaceUser.surname}
               label={t("workspaceEmployees.surname")}
               containerProps={{ sx: { flex: 1 } }}
@@ -97,6 +100,7 @@ export function PersonalSettingsForm({
           </Flex>
           <FormDateInput
             label={t("workspaceEmployees.dateOfBirth")}
+            dataTestId="birthDate"
             fieldName="birthDate"
             defaultValue={dayjs(workspaceUser.birthDate, "YYYY-MM-DD")}
             format="DD.MM.YYYY"

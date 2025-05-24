@@ -51,6 +51,7 @@ export function AddEmployeeDialogForm({
             value="create"
             name="intent"
             type="submit"
+            data-testId="createEmployeeBtn"
             loading={isLoading && loadingState.create}
             disabled={isLoading}
             onClick={() => {

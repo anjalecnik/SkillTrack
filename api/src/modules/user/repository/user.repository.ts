@@ -54,15 +54,7 @@ export class UserRepository {
 		if (filters.ids) queryBuilder.andWhere({ id: In(filters.ids) })
 		if (filters.statuses) queryBuilder.andWhere({ status: In(filters.statuses) })
 		if (filters.fullName) {
-			const query =
-				filters.fullName
-					.split(" ")
-					.filter(name => name.length > 0)
-					.join(" & ") + ":*"
-			queryBuilder.andWhere(
-				`to_tsvector('simple', unaccent("${alias}"."name") || ' ' || unaccent("${alias}"."surname") || ' ' || unaccent(COALESCE("${alias}"."middleName", ''))) @@ to_tsquery('simple', unaccent(:query))`,
-				{ query }
-			)
+			queryBuilder.andWhere(`(${alias}.name || ' ' || ${alias}.surname) ILIKE :query`, { query: `%${filters.fullName.trim()}%` })
 		}
 
 		const [data, count] = await queryBuilder.getManyAndCount()

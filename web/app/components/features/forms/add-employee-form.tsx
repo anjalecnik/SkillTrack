@@ -1,7 +1,6 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
 import { FormId, getInputProps, useFormMetadata } from "@conform-to/react";
-import { Typography, useTheme } from "@mui/material";
-import { Trans, useTranslation } from "react-i18next";
+import { useTheme } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { Flex, FlexColumn, TextInput } from "~/components/common";
 
 export interface IAddEmployeeFormProps {
@@ -23,6 +22,7 @@ export function AddEmployeeForm({ formId }: IAddEmployeeFormProps) {
           label={t("common.firstName")}
           containerProps={{ sx: { flex: 1 } }}
           placeholder={t("common.firstName")!}
+          dataTestId="firstName"
           required
         />
         <TextInput
@@ -30,12 +30,14 @@ export function AddEmployeeForm({ formId }: IAddEmployeeFormProps) {
           label={t("common.lastName")}
           containerProps={{ sx: { flex: 1 } }}
           placeholder={t("common.lastName")!}
+          dataTestId="lastName"
           required
         />
       </Flex>
       <TextInput
         {...getInputProps(fields.email, { type: "text" })}
         label={t("common.emailAddress")}
+        dataTestId="emailAddress"
         required
         error={!!fields.email.errors}
         errorMessage={t(fields.email.errors?.[0] ?? "")}

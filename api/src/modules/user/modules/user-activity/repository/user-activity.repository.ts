@@ -130,9 +130,7 @@ export class UserActivityRepository {
 					.filter(name => name.length > 0)
 					.join(" & ") + ":*"
 
-			queryBuilder.andWhere(`to_tsvector('simple', unaccent("user"."name") || ' ' || unaccent("user"."surname")) @@ to_tsquery('simple', unaccent(:query))`, {
-				query
-			})
+			queryBuilder.andWhere(`to_tsvector('simple', "user"."name" || ' ' || "user"."surname") @@ to_tsquery('simple', :query)`, { query })
 		}
 
 		const order = this.getActivityRequestOrder(filters)
@@ -170,9 +168,7 @@ export class UserActivityRepository {
 					.filter(name => name.length > 0)
 					.join(" & ") + ":*"
 
-			queryBuilder.andWhere(`to_tsvector('simple', unaccent("user"."name") || ' ' || unaccent("user"."surname")) @@ to_tsquery('simple', unaccent(:query))`, {
-				query
-			})
+			queryBuilder.andWhere(`to_tsvector('simple', "user"."name" || ' ' || "user"."surname") @@ to_tsquery('simple', :query)`, { query })
 		}
 
 		const order = this.getActivityRequestPaginationOrder(filters)

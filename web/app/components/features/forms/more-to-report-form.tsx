@@ -134,6 +134,7 @@ export function MoreToReportForm({
             variant="contained"
             color="primary"
             type="submit"
+            data-testid="moreToReportSubmitBtn"
             loading={isLoading}
           >
             {t("userHub.report")}

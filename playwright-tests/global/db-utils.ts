@@ -1,6 +1,5 @@
 import { Pool, QueryResult } from "pg";
 
-// Type definitions
 interface DatabaseConfig {
   host: string;
   port: string | number;
@@ -9,20 +8,18 @@ interface DatabaseConfig {
   database: string;
 }
 
-// Create a database config from environment variables
 const dbConfig: DatabaseConfig = {
-  host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT || "5433",
-  user: process.env.DB_USER || "postgres",
-  password: process.env.DB_PASSWORD || "postgres",
-  database: process.env.DB_NAME || "skilltrack_db",
+  host: "localhost",
+  port: "5432",
+  user: "postgres",
+  password: "postgres",
+  database: "skilltrack_db",
 };
 
 // Create a connection pool to the test database
 const pool = new Pool(dbConfig);
 
-// Helper function to execute a query
-async function query<T = any>(
+export async function query<T = any>(
   text: string,
   params?: any[]
 ): Promise<QueryResult<T>> {
@@ -34,10 +31,3 @@ async function query<T = any>(
     throw error;
   }
 }
-
-// Close pool connections
-async function closePool(): Promise<void> {
-  await pool.end();
-}
-
-export { query, closePool, dbConfig };

@@ -60,6 +60,7 @@ export function BusinessTripDialogForm({
         <DateInput
           label={t("userHub.departureDate")}
           name="dateStart"
+          dataTestId="startDateInput"
           containerProps={{ sx: { flex: 1 } }}
           format="DD.MM.YYYY"
           value={
@@ -73,6 +74,7 @@ export function BusinessTripDialogForm({
         <DateInput
           label={t("userHub.returnDate")}
           name="dateEnd"
+          dataTestId="endDateInput"
           containerProps={{ sx: { flex: 1 } }}
           format="DD.MM.YYYY"
           value={
@@ -88,6 +90,7 @@ export function BusinessTripDialogForm({
       <Flex justifyContent="space-between" gap="20px">
         <TextInput
           label={t("userHub.destination")}
+          dataTestId="destination"
           containerProps={{ sx: { flex: 1 } }}
           {...getInputProps(fields.location, { type: "text" })}
           key={fields.location.key}

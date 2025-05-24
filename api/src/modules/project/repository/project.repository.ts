@@ -57,7 +57,7 @@ export class ProjectRepository {
 			.take(take)
 		if (filters.ids) queryBuilder.andWhere({ id: In(filters.ids) })
 		if (filters.name)
-			queryBuilder.andWhere(`unaccent("${alias}"."name") ILIKE unaccent(:name)`, {
+			queryBuilder.andWhere(`${alias}.name ILIKE :name`, {
 				name: `%${filters.name}%`
 			})
 

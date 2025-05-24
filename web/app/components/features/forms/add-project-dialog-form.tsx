@@ -59,6 +59,7 @@ export function AddProjectDialogForm({
             value="create"
             name="intent"
             type="submit"
+            data-testId="createProjectBtn"
             loading={isLoading && loadingState.create}
             disabled={isLoading}
             onClick={() => setLoadingState({ details: false, create: true })}

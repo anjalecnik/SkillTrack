@@ -189,6 +189,7 @@ export function RequestsOverviewTable({
                         type="submit"
                         value="updateStatus"
                         name="intent"
+                        data-testid={`approveBtn-${item.id}`}
                         onClick={(e) => {
                           e.stopPropagation();
                           setActivityStatus(ActivityStatus.Approved);

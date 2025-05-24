@@ -37,6 +37,7 @@ export function ProjectsCardHeader({
         color="primary"
         startIcon={<PlusOutlined />}
         onClick={onAddClick}
+        data-testid="addProjectBtn"
       >
         {t("common.addNew")}
       </Button>

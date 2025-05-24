@@ -104,7 +104,6 @@ export function CardOverviewLeft({
           <FlexColumn gap={subtitle ? "12px" : "42px"}>
             <FlexColumn>
               <Typography
-                data-testid="userFullName"
                 variant="h2"
                 sx={{
                   fontWeight: (theme) => theme.typography.fontWeightRegular,

@@ -23,6 +23,7 @@ export function EmployeesCardHeader({ onClick }: IEmployeesCardHeaderProps) {
           color="primary"
           startIcon={<PlusOutlined />}
           onClick={onClick}
+          data-testid="addEmployeeBtn"
         >
           {t("common.addNew")}
         </Button>
