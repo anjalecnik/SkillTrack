@@ -5,12 +5,14 @@ import { FormContext } from "~/util/context/form/FormContext";
 
 interface IFormAccordionProps extends IAccordionProps {
   displaySaveButton?: boolean;
+  dataTestId?: string;
 }
 
 /** Wraps Accordion with a Form and adds a hidden intent field. */
 
 export const FormAccordion = ({
   displaySaveButton = true,
+  dataTestId,
   ...props
 }: IFormAccordionProps) => {
   const { t } = useTranslation();
@@ -56,6 +58,7 @@ export const FormAccordion = ({
                 onClick={(e) => {
                   e.stopPropagation();
                 }}
+                data-testid="accordionSaveBtn"
                 disabled={disabled || (form && !form.dirty) || isFormErrored}
               >
                 {t("common.save")}
@@ -70,6 +73,7 @@ export const FormAccordion = ({
             <MiniButton
               id="editButton"
               size="extraSmall"
+              data-testid={dataTestId}
               variant="outlined"
               disabled={disabled}
               onClick={(e) => {

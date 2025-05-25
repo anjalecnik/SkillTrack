@@ -3,17 +3,18 @@ import { CardLayout } from "~/components/layout";
 import { ProjectDetailsCard } from "~/components/features";
 import {
   IProject,
-  IWorkspaceUserResponse,
+  IUserResponse,
   WorkspaceProjectAccordions as Accordions,
 } from "~/types";
 import { SubmissionResult } from "@conform-to/react";
 import { useFormAccordions } from "~/hooks";
+import { ProjectSettings } from "./ProjectSettings";
 
 interface IProjectCardProps {
   lastResult: SubmissionResult<string[]> | null;
   loaderData: {
     project: IProject;
-    users: IWorkspaceUserResponse[];
+    users: IUserResponse[];
     projects: IProject[];
   };
 }
@@ -38,7 +39,7 @@ export function ProjectCard({ loaderData, lastResult }: IProjectCardProps) {
     <CardLayout>
       <FlexColumn gap="20px">
         <ProjectDetailsCard project={project!} />
-        {/* <ProjectSettings
+        <ProjectSettings
           lastResults={lastResults}
           loaderData={loaderData}
           accordionStates={accordionStates}
@@ -46,7 +47,7 @@ export function ProjectCard({ loaderData, lastResult }: IProjectCardProps) {
           toggleCancelState={toggleCancelState}
           loadingStates={loadingStates}
           cancelStates={cancelStates}
-        /> */}
+        />
       </FlexColumn>
     </CardLayout>
   );

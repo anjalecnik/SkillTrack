@@ -84,11 +84,11 @@ export const Accordion = ({
           }
           paddingX={2.5}
           paddingY={1.25}
+          data-testid={titleDataTestId}
           onClick={() => !disabled && onAccordionClick()}
         >
           <FlexColumn>
             <Typography
-              data-testid={titleDataTestId}
               variant="h5"
               sx={{
                 fontWeight: 500,

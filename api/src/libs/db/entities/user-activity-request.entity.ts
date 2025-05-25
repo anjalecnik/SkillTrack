@@ -47,7 +47,7 @@ export class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEn
 	@Column({
 		type: "integer",
 		nullable: true,
-		comment: "Hours worked. Used for Daily, Overtime, BusinessTrip, OnCall"
+		comment: "Hours worked. Used for Daily, BusinessTrip"
 	})
 	hours?: number | null
 	//#endregion  common
@@ -101,40 +101,7 @@ export class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEn
 	})
 	isPaidWithCompanyCard?: boolean | null
 
-	@Column({
-		type: "varchar",
-		length: DB_VARCHAR_LENGTH_2048,
-		comment: "Url to uploaded image",
-		nullable: true
-	})
-	fileUrl?: string | null
-
-	@Column({
-		type: "varchar",
-		length: DB_VARCHAR_LENGTH_128,
-		comment: "File name",
-		nullable: true
-	})
-	fileName?: string | null
 	//#endregion expense
-
-	//#region on call
-	//#endregion on call
-
-	//#region  school schedule
-	//#endregion school schedule
-
-	//#region  sick leave
-	//#endregion sick leave
-
-	//#region  special leave
-	//#endregion special leave
-
-	//#region  vacation
-	//#endregion vacation
-
-	// //#region performance review
-	// //#endregion performance review
 
 	//#region relations
 

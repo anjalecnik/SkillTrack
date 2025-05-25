@@ -89,7 +89,7 @@ export interface IWorkspaceUser {
   assignedVacations: AssignedVacations[] | [];
   workspaceTeam: WorkspaceTeam;
   workspaceWorkPosition: WorkspaceWorkPosition;
-  isSupervisor: boolean; // TODO: replace with Supervisor role
+  isSupervisor: boolean;
 }
 
 export interface IUserResponse {
@@ -111,7 +111,7 @@ export interface IUserResponse {
   vacation: IVacation;
   workspaceTeam: WorkspaceTeam;
   workspaceWorkPosition: WorkspaceWorkPosition;
-  isSupervisor: boolean; // TODO: replace with Supervisor role
+  isSupervisor: boolean;
 }
 
 export interface IWorkspaceUserIsSupervisorResponse {

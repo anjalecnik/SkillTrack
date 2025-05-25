@@ -48,7 +48,7 @@ export interface IActivity {
   locationTo?: string;
   createdAt?: string;
   _embedded: {
-    workspaceUser: IActivitiesUser;
+    user: IActivitiesUser;
     actions?: RequestAction[];
   };
   isGhost?: boolean;

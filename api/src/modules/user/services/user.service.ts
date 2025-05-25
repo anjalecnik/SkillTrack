@@ -10,7 +10,6 @@ import { UserEntity } from "src/libs/db/entities/user.entity"
 import { UserRole } from "src/utils/types/enums/user-role.enum"
 import { UserAddressService } from "../modules/user-address/services/user-address.service"
 import { UserAssignedVacationService } from "../modules/user-assigned-vacation/services/user-assigned-vacation.service"
-import { IUserJoinRequest } from "../interfaces/user-join.interface"
 
 @Injectable()
 export class UserService {
@@ -91,13 +90,6 @@ export class UserService {
 		return userEntities
 	}
 
-	async join(userJoinRequest: IUserJoinRequest): Promise<IUserDetailsResponse> {
-		const userJoined = await this.userRepository.joinWorkspaceByWhitelist(userJoinRequest)
-
-		//await this.accessTokenEmitter.invalidateAccessToken({ userId: userJoined.userId })
-		return this.getUser(userJoined)
-	}
-
 	async updateUser(userPatch: IUserPatchRequest): Promise<IUserDetailsResponse> {
 		await this.validateUserAddresses(userPatch)
 		await this.validateUserAssignedVacation(userPatch)
@@ -109,10 +101,11 @@ export class UserService {
 		}
 
 		const userEntity = await this.userRepository.updateUser(userPatch)
-		// if (userPatch.status) {
-		// 	await this.accessTokenEmitter.invalidateAccessToken({ id: userEntity.id })
-		// }
 		return this.getUser(userEntity)
+	}
+
+	async setUserActive(userId: number) {
+		await this.userRepository.setUserActive(userId)
 	}
 
 	async validateGetUser(userReadRequest: IUserGetRequest): Promise<boolean> {
@@ -121,7 +114,7 @@ export class UserService {
 
 		if (userReadRequest.authPassport?.user.role === UserRole.User && invokerUserId !== userReadRequest.id && !isSupervisor) {
 			throw new ForbiddenException(
-				"You do not have permission to view this workspace user.",
+				"You do not have permission to view this user.",
 				`User with ID: '${invokerUserId}' and role ${userReadRequest.authPassport.user.role} attempted to access user with ID: '${userReadRequest.id}'`
 			)
 		}

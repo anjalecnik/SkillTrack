@@ -84,6 +84,7 @@ export const SearchField = ({
       <FormProvider context={form.context}>
         <TextInput
           {...rest}
+          dataTestId="searchInput"
           onEnterKeyPress={handleOnSubmit}
           onChange={handleOnChange}
           value={searchValue}

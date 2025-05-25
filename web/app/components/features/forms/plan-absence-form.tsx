@@ -1,4 +1,3 @@
-import { InfoCircleOutlined } from "@ant-design/icons";
 import {
   FormProvider,
   SubmissionResult,
@@ -10,13 +9,11 @@ import {
   Checkbox,
   FormControlLabel,
   SelectChangeEvent,
-  Typography,
   useTheme,
 } from "@mui/material";
-import { Trans, useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import {
   Flex,
-  TextInput,
   DateInput,
   EnumSelect,
   Autocomplete,
@@ -29,11 +26,9 @@ import {
   PlanAbsenceActivityType,
   getAbsenceTypeLabel,
   ActivityFormDialogs,
-  IWorkspaceUserResponse,
-  SpecialLeaveActivityType,
-  getSpecialLeaveTypeLabel,
   IWorkspaceModuleActivity,
   ActivityTypeLowerCase,
+  IUserResponse,
 } from "~/types";
 import { useEffect, useState } from "react";
 import dayjs, { Dayjs } from "dayjs";
@@ -46,8 +41,7 @@ interface IPlanAbsenceFormProps {
   open: boolean;
   onClose: () => void;
   defaultType?: PlanAbsenceActivityType | null;
-  workspaceEmployees?: IWorkspaceUserResponse[];
-  showSpecialLeave?: boolean;
+  workspaceEmployees?: IUserResponse[];
   reportingActivitySettings?: IWorkspaceModuleActivity;
 }
 
@@ -57,16 +51,11 @@ export function PlanAbsenceForm({
   onClose,
   defaultType,
   workspaceEmployees,
-  showSpecialLeave,
   reportingActivitySettings,
 }: IPlanAbsenceFormProps) {
-  const theme = useTheme();
   const { t } = useTranslation();
   const [selectedType, setSelectedType] =
     useState<PlanAbsenceActivityType | null>(defaultType ?? null);
-  const [selectedSpecialLeaveType, setSelectedSpecialLeaveType] =
-    useState<SpecialLeaveActivityType | null>(null);
-  const [partialSickLeave, setPartialSickLeave] = useState(false);
   const { isLoading } = useNavigationState();
   const [selectedEmployeeId, setSelectedEmployeeId] = useState<number | "">("");
   const [searchParams, setSearchParams] = useSearchParams();
@@ -80,8 +69,6 @@ export function PlanAbsenceForm({
       activityType: selectedType,
       dateStart: "",
       dateEnd: "",
-      specialLeaveActivityType: null,
-      startTime: "",
       endTime: "",
       employeeId: "",
       description: "",
@@ -111,8 +98,6 @@ export function PlanAbsenceForm({
 
   const closeAndResetForm = () => {
     setSelectedType(null);
-    setSelectedSpecialLeaveType(null);
-    setPartialSickLeave(false);
     form.reset();
     onClose();
     searchParams.delete("employeeId");
@@ -125,8 +110,6 @@ export function PlanAbsenceForm({
   ) => {
     const newType = e.target.value as PlanAbsenceActivityType;
     setSelectedType(newType);
-    setPartialSickLeave(false);
-    setSelectedSpecialLeaveType(null);
 
     if (updatedReportingActivitySettings) {
       const newTypeLowerCase =
@@ -145,33 +128,11 @@ export function PlanAbsenceForm({
     }
   };
 
-  const handleSelectedSpecialLeaveType = (
-    e: SelectChangeEvent<SpecialLeaveActivityType>
-  ) => {
-    const newType = e.target.value as SpecialLeaveActivityType;
-    setSelectedSpecialLeaveType(newType);
-    setPartialSickLeave(false);
-  };
-
-  const handlePartialSickLeaveChange = (
-    e: React.SyntheticEvent,
-    checked: boolean
-  ) => {
-    setPartialSickLeave(checked);
-  };
-
   const handleEmployeeChange = (value: number) => {
     setSelectedEmployeeId(value as number);
     searchParams.set("employeeId", value.toString());
     setSearchParams(searchParams, { replace: true });
   };
-
-  const absenceTypeOptions = Object.fromEntries(
-    Object.entries(PlanAbsenceActivityType).filter(
-      ([, value]) =>
-        showSpecialLeave || value !== PlanAbsenceActivityType.SpecialLeave
-    )
-  );
 
   useEffect(() => {
     if (defaultType) {
@@ -228,7 +189,7 @@ export function PlanAbsenceForm({
                 (employee) => employee.id === selectedEmployeeId
               )}
               getOptionLabel={(employee) =>
-                fullNameFormatter(employee as IWorkspaceUserResponse) ?? ""
+                fullNameFormatter(employee as IUserResponse) ?? ""
               }
               onChange={(_, value) => {
                 if (value) {
@@ -240,7 +201,7 @@ export function PlanAbsenceForm({
           )}
           <EnumSelect<PlanAbsenceActivityType>
             label={t("userHub.absenceType")}
-            enumType={absenceTypeOptions}
+            enumType={PlanAbsenceActivityType}
             placeholder={t("userHub.absenceType")}
             {...getSelectProps(fields.activityType)}
             key={fields.activityType.key}
@@ -249,22 +210,9 @@ export function PlanAbsenceForm({
             onChange={handleSelectedType}
             required
           />
-          {selectedType === PlanAbsenceActivityType.SpecialLeave && (
-            <EnumSelect<SpecialLeaveActivityType>
-              label={t("userHub.specialLeaveType")}
-              enumType={SpecialLeaveActivityType}
-              placeholder={t("userHub.specialLeaveType")}
-              {...getSelectProps(fields.specialLeaveActivityType)}
-              key={fields.specialLeaveActivityType.key}
-              defaultValue={selectedSpecialLeaveType}
-              labelFunction={getSpecialLeaveTypeLabel}
-              onChange={handleSelectedSpecialLeaveType}
-              required
-            />
-          )}
           <Flex justifyContent="space-between" gap="20px">
             <DateInput
-              label={t(partialSickLeave ? "common.date" : "common.dateFrom")}
+              label={t("common.dateFrom")}
               name={fields.dateStart.name}
               containerProps={{ sx: { flex: 1 } }}
               format="DD.MM.YYYY"
@@ -282,85 +230,24 @@ export function PlanAbsenceForm({
               minDate={minDate}
               required
             />
-            {!partialSickLeave && (
-              <DateInput
-                label={t("common.dateTo")}
-                name={fields.dateEnd.name as string}
-                containerProps={{ sx: { flex: 1 } }}
-                format="DD.MM.YYYY"
-                value={
-                  fields.dateEnd.value
-                    ? dayjs(fields.dateEnd.value, "DD.MM.YYYY")
-                    : undefined
-                }
-                minDate={
-                  fields.dateStart.value
-                    ? dayjs(fields.dateStart.value, "DD.MM.YYYY")
-                    : minDate
-                }
-                required
-              />
-            )}
+            <DateInput
+              label={t("common.dateTo")}
+              name={fields.dateEnd.name as string}
+              containerProps={{ sx: { flex: 1 } }}
+              format="DD.MM.YYYY"
+              value={
+                fields.dateEnd.value
+                  ? dayjs(fields.dateEnd.value, "DD.MM.YYYY")
+                  : undefined
+              }
+              minDate={
+                fields.dateStart.value
+                  ? dayjs(fields.dateStart.value, "DD.MM.YYYY")
+                  : minDate
+              }
+              required
+            />
           </Flex>
-
-          {partialSickLeave && (
-            <Flex justifyContent="space-between" gap="20px">
-              <input
-                type="hidden"
-                name="dateEnd"
-                value={fields.dateStart.value || ""}
-              />
-              <TimeSelect
-                label={t("userHub.startTime")}
-                containerProps={{ sx: { flex: 1 } }}
-                name="timeStart"
-                defaultValue={fields.startTime.initialValue}
-                required
-              />
-              <TimeSelect
-                label={t("userHub.endTime")}
-                containerProps={{ sx: { flex: 1 } }}
-                name="timeEnd"
-                defaultValue={fields.endTime.initialValue}
-                required
-                errorMessage={t(fields.endTime.errors?.[0] ?? "")}
-              />
-            </Flex>
-          )}
-          {selectedSpecialLeaveType === SpecialLeaveActivityType.Other &&
-            selectedType === PlanAbsenceActivityType.SpecialLeave && (
-              <TextInput
-                name="description"
-                label={t("userHub.description")}
-                multiline
-                rows={2}
-                required
-              />
-            )}
-          {selectedType === PlanAbsenceActivityType.SickLeave && (
-            <Flex>
-              <FormControlLabel
-                control={<Checkbox checked={partialSickLeave} />}
-                label={t("userHub.partialSickLeave")}
-                labelPlacement="end"
-                onChange={handlePartialSickLeaveChange}
-                sx={{ ml: "1px" }}
-              />
-            </Flex>
-          )}
-
-          {!isSupervisor && (
-            <Flex alignItems="center" gap="5px">
-              <InfoCircleOutlined
-                style={{
-                  color: theme.palette.primary.main,
-                }}
-              />
-              <Typography variant="body1">
-                <Trans i18nKey="userHub.activityNotificationEmail" t={t} />
-              </Typography>
-            </Flex>
-          )}
         </PaddedFlexColumn>
       </FormDialog>
     </FormProvider>

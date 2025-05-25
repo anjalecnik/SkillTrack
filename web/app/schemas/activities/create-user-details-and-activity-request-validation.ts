@@ -8,23 +8,15 @@ import {
   vacationsAssignFormSchema,
   workPositionFormSchema,
   planAbsenceFormSchema,
-  overtimeFormDialogSchema,
   businessTripFormDialogSchema,
-  onCallFormDialogSchema,
-  expensesFormDialogSchema,
   requestUpdateSchema,
   deleteSchema,
   PlanAbsenceSubmissionType,
   BusinessTripSubmissionType,
-  onCallSubmissionType,
   employeeStatusFormSchema,
-  tripToOfficeFormDialogSchema,
 } from "~/schemas";
 import { ActivityFormDialogs as Dialogs } from "~/types";
-import {
-  isEndDateGreaterOrEqualToStartDate,
-  isStartTimeBeforeEndTimeWithDate,
-} from "~/util";
+import { isEndDateGreaterOrEqualToStartDate } from "~/util";
 
 export const createUserDetailsAndActivityRequestValidation = (
   formData: FormData
@@ -39,14 +31,10 @@ export const createUserDetailsAndActivityRequestValidation = (
         vacationsAssignFormSchema,
         addressFormSchema,
         planAbsenceFormSchema,
-        overtimeFormDialogSchema,
         businessTripFormDialogSchema,
-        onCallFormDialogSchema,
-        expensesFormDialogSchema,
         requestUpdateSchema,
         deleteSchema,
         employeeStatusFormSchema,
-        tripToOfficeFormDialogSchema,
       ])
       .refine(
         (data) => {
@@ -61,24 +49,10 @@ export const createUserDetailsAndActivityRequestValidation = (
             }
 
             case Dialogs.BusinessTrip: {
-              const { dateStart, dateEnd, departureTime, returnTime } =
-                data as BusinessTripSubmissionType;
-              return isStartTimeBeforeEndTimeWithDate(
+              const { dateStart, dateEnd } = data as BusinessTripSubmissionType;
+              return isEndDateGreaterOrEqualToStartDate(
                 dateStart,
                 dateEnd,
-                departureTime,
-                returnTime,
-                "DD.MM.YYYY HH:mm"
-              );
-            }
-            case Dialogs.OnCall: {
-              const { dateStart, dateEnd, startTime, endTime } =
-                data as onCallSubmissionType;
-              return isStartTimeBeforeEndTimeWithDate(
-                dateStart,
-                dateEnd,
-                startTime,
-                endTime,
                 "DD.MM.YYYY HH:mm"
               );
             }

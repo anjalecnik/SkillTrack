@@ -1,6 +1,5 @@
-import { handleAxiosError, buildUrlWithParams, formatDate } from "~/util";
+import { buildUrlWithParams, formatDate } from "~/util";
 import { FlexColumn } from "~/components/common";
-import { RequestClient } from "~/clients";
 import { useNavigate, useSearchParams } from "@remix-run/react";
 import {
   UserHubTableFilters,
@@ -12,7 +11,6 @@ import {
   IActivity,
   MoreToReportActivityType,
   ActivityAction,
-  IActivityParams,
   IActivityMoreToReportForm,
   IWorkspaceUser,
   IProjectUserResponse,
@@ -25,6 +23,7 @@ import { Dispatch, SetStateAction } from "react";
 import { useMobile } from "~/hooks";
 import { CardLayout } from "~/components/layout";
 import dayjs from "dayjs";
+import { ADMIN_HUB_BASE_PATH, USER_HUB_BASE_PATH } from "~/constants";
 
 interface DashboardCardProps {
   workspaceUser: IWorkspaceUser;
@@ -39,8 +38,6 @@ interface DashboardCardProps {
   setSelectedMoreToReportType: Dispatch<
     SetStateAction<MoreToReportActivityType>
   >;
-  setSelectedRequests: Dispatch<SetStateAction<IActivity[]>>;
-  setIsRequestInfoDialogOpen: Dispatch<SetStateAction<boolean>>;
   setSelectedActivity: Dispatch<SetStateAction<IActivity | null>>;
   setDeleteAbsenceDialogOpen: Dispatch<SetStateAction<boolean>>;
   setIsPlanAbsenceDialogOpen: Dispatch<SetStateAction<boolean>>;
@@ -55,8 +52,6 @@ export function DashboardCard({
   setDefaultMoreToReportValues,
   setIsMoreToReportDialogOpen,
   setSelectedMoreToReportType,
-  setSelectedRequests,
-  setIsRequestInfoDialogOpen,
   setSelectedActivity,
   setDeleteAbsenceDialogOpen,
   setIsPlanAbsenceDialogOpen,
@@ -80,29 +75,6 @@ export function DashboardCard({
     setSelectedMoreToReportType(activityType);
   };
 
-  const handleRequestClick = async (requestIds: number[]) => {
-    if (!requestIds?.length) {
-      return;
-    }
-    // User can report multiple overtimes/expenses at once
-    const requests: Promise<IActivity>[] = [];
-    requestIds.forEach(async (id) => {
-      const activityParams: IActivityParams = {
-        userId: workspaceUser.id,
-        activityId: id,
-      };
-
-      requests.push(RequestClient.getRequestById(activityParams));
-    });
-    try {
-      const responses = await Promise.all(requests);
-      setSelectedRequests(responses);
-      setIsRequestInfoDialogOpen(true);
-    } catch (error) {
-      handleAxiosError(error);
-    }
-  };
-
   const handleDeleteAbsenceClick = (activity: IActivity) => {
     setSelectedActivity(activity);
     setDeleteAbsenceDialogOpen(true);
@@ -122,7 +94,14 @@ export function DashboardCard({
       params.useDate = useDate;
     }
 
-    const url = buildUrlWithParams("daily-report", params);
+    const url = buildUrlWithParams(
+      `/${
+        location.pathname.startsWith(`/${ADMIN_HUB_BASE_PATH}`)
+          ? ADMIN_HUB_BASE_PATH
+          : USER_HUB_BASE_PATH
+      }/daily-report`,
+      params
+    );
     navigate(url);
   };
 
@@ -152,26 +131,7 @@ export function DashboardCard({
   return (
     <CardLayout sx={{ overflow: "visible" }}>
       <FlexColumn gap="20px">
-        <UserOverviewCard
-          workspaceUser={workspaceUser}
-          // TODO: Uncomment when settings are implemented
-          // footerChildren={
-          //   <Flex gap="10px" justifyContent="end">
-          //     <MiniButton
-          //       variant="outlined"
-          //       color="warning"
-          //       fullWidth
-          //       sx={{
-          //         width: { sm: "auto" },
-          //         gap: "8px",
-          //       }}
-          //     >
-          //       <SettingOutlined />
-          //       {t("common.settings")}
-          //     </MiniButton>
-          //   </Flex>
-          // }
-        />
+        <UserOverviewCard workspaceUser={workspaceUser} />
         <CardLayout sx={{ overflow: "visible" }}>
           <FlexColumn
             gap={isMobile ? "80px" : "20px"}
@@ -188,7 +148,6 @@ export function DashboardCard({
                 projects={projects ?? []}
                 items={activities ?? []}
                 onItemClick={handleActivityClick}
-                onRequestClick={handleRequestClick}
                 onReportMoreClick={handleReportMoreClick}
                 reportActivityRestrictions={reportRestrictions}
               />

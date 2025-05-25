@@ -19,7 +19,7 @@ import {
   LocalStorageService,
   MenuProvider,
 } from "./util";
-import { IWorkspace, IWorkspaceUser } from "./types";
+import { IWorkspaceUser } from "./types";
 import moment from "moment";
 import dayjs from "dayjs";
 import updateLocale from "dayjs/plugin/updateLocale";
@@ -28,8 +28,7 @@ import customParseFormat from "dayjs/plugin/customParseFormat";
 import { UserClient } from "./clients";
 
 export type LoaderData = {
-  workspace: IWorkspace;
-  workspaceUser: IWorkspaceUser;
+  user: IWorkspaceUser;
 };
 
 // eslint-disable-next-line import/no-named-as-default-member
@@ -61,12 +60,11 @@ export async function clientLoader(actionArgs: ClientLoaderFunctionArgs) {
 
   const userAcc = getWorkspaceUserFromToken(actionArgs);
 
-  const user = await Promise.all([
+  const [user] = await Promise.all([
     UserClient.getUserById({
       employeeId: userAcc.id,
     }),
   ]);
-
   return json({ user });
 }
 

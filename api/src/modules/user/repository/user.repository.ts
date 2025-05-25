@@ -10,7 +10,6 @@ import { UserStatus } from "src/utils/types/enums/user-status.enum"
 import { UserAddressEntity } from "src/libs/db/entities/user-address.entity"
 import { ProjectUserEntity } from "src/libs/db/entities/project-user.entity"
 import { UserVacationAssignedEntity } from "src/libs/db/entities/user-vacation-assigned.entity"
-import { IUserJoinDBRequest } from "../interfaces/db/user-join-db.interface"
 
 const LOAD_RELATIONS: FindOptionsRelations<UserEntity> = {
 	team: true,
@@ -43,6 +42,7 @@ export class UserRepository {
 		const queryBuilder = this.userRepository
 			.createQueryBuilder(alias)
 			.leftJoinAndSelect(`${alias}.workPosition`, "workPosition")
+			.leftJoinAndSelect(`${alias}.projects`, "projects")
 			.leftJoinAndSelect(`${alias}.team`, "team")
 			.skip(skip)
 			.take(take)
@@ -54,15 +54,7 @@ export class UserRepository {
 		if (filters.ids) queryBuilder.andWhere({ id: In(filters.ids) })
 		if (filters.statuses) queryBuilder.andWhere({ status: In(filters.statuses) })
 		if (filters.fullName) {
-			const query =
-				filters.fullName
-					.split(" ")
-					.filter(name => name.length > 0)
-					.join(" & ") + ":*"
-			queryBuilder.andWhere(
-				`to_tsvector('simple', unaccent("${alias}"."name") || ' ' || unaccent("${alias}"."surname") || ' ' || unaccent(COALESCE("${alias}"."middleName", ''))) @@ to_tsquery('simple', unaccent(:query))`,
-				{ query }
-			)
+			queryBuilder.andWhere(`(${alias}.name || ' ' || ${alias}.surname) ILIKE :query`, { query: `%${filters.fullName.trim()}%` })
 		}
 
 		const [data, count] = await queryBuilder.getManyAndCount()
@@ -110,18 +102,6 @@ export class UserRepository {
 		return this.userRepository.findOne({ where: { id: userId } })
 	}
 
-	async joinWorkspaceByWhitelist(userJoinDBRequest: IUserJoinDBRequest): Promise<UserEntity> {
-		return this.masterDataSource.queryOnMaster(async (entityManager: EntityManager) => {
-			const userRepository = entityManager.getRepository(UserEntity)
-			const { id } = await userRepository.save({
-				status: UserStatus.Active,
-				name: userJoinDBRequest.name,
-				surname: userJoinDBRequest.surname
-			})
-			return userRepository.findOneOrFail({ where: { id }, relations: LOAD_RELATIONS })
-		})
-	}
-
 	async updateUser(userPatchRequest: IUserPatchDBRequest) {
 		const addresses = this.setUserAddresses(userPatchRequest)
 		const assignedVacations = this.setUserAssignedVacations(userPatchRequest)
@@ -140,11 +120,27 @@ export class UserRepository {
 				...userPatchRequest,
 				addresses: addresses,
 				assignedVacations: assignedVacations,
-				projects: userPatchRequest.projects ? [...userProjectsToAdd, ...userProjectsToAdd, ...userProjectsToStay] : undefined
+				projects: userPatchRequest.projects ? [...userProjectsToAdd, ...userProjectsToStay] : undefined
 			})
 			if (!userEntity) throw new InternalServerErrorException("Something went wrong!")
 			await userRepository.save(userEntity)
 			return userRepository.findOneOrFail({ where: { id: userPatchRequest.id }, relations: LOAD_RELATIONS })
+		})
+	}
+
+	async setUserActive(userId: number): Promise<UserEntity> {
+		return this.masterDataSource.queryOnMaster(async (entityManager: EntityManager) => {
+			const userRepository = entityManager.getRepository(UserEntity)
+
+			const user = await userRepository.findOne({ where: { id: userId } })
+			if (!user) {
+				throw new BadRequestException(`User with ID ${userId} not found`)
+			}
+
+			user.status = UserStatus.Active
+			await userRepository.save(user)
+
+			return userRepository.findOneOrFail({ where: { id: userId }, relations: LOAD_RELATIONS })
 		})
 	}
 
@@ -160,7 +156,7 @@ export class UserRepository {
 							userId: userPatchRequest.id,
 							createdByUserId: userPatchRequest.updatedByUserId!,
 							updatedByUserId: userPatchRequest.updatedByUserId!
-						}
+					  }
 			)
 			return accumulator
 		}, [])
@@ -180,7 +176,7 @@ export class UserRepository {
 							userId: userPatchRequest.id,
 							createdByUserId: userPatchRequest.updatedByUserId!,
 							updatedByUserId: userPatchRequest.updatedByUserId!
-						}
+					  }
 			)
 			return accumulator
 		}, [])

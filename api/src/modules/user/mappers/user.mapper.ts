@@ -133,7 +133,7 @@ export abstract class UserMapper {
 	private static mapUserProjectsShort(project: ProjectUserEntity): UserProjectsShortResponse {
 		return {
 			id: project.projectId,
-			name: project.project!.name,
+			name: project.project?.name ?? "",
 			role: project.role,
 			assignedPercentage: project.assignedPercentage,
 			startDate: DateHelper.formatIso8601DayString(project.project!.dateStart),

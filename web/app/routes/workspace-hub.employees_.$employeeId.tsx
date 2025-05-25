@@ -2,27 +2,21 @@ import { AppLayout, AppHeaderBreadcrumbs } from "~/components/layout";
 import {
   createAbsencePlanActivity,
   createBusinessTripActivity,
-  createExpensesActivity,
-  createOnCallActivity,
-  createOvertimeActivity,
-  createTripToOfficeActivity,
   displaySuccess,
   formatDate,
   fullNameFormatter,
-  getAbsences,
   getActivities,
   getWorkspaceUserFromToken,
   handleAxiosError,
   requireAdminRoleOrHigher,
   updateBusinessTripActivity,
-  updateTripToOfficeActivity,
 } from "~/util";
 import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
   json,
-  redirect,
   ShouldRevalidateFunctionArgs,
+  useActionData,
   useLoaderData,
   useNavigate,
   useSearchParams,
@@ -35,36 +29,43 @@ import {
   MoreToReportActivityType,
   IActivityMoreToReportForm,
   ExtraActivitiesType,
-  ActivityStatus,
-  ActivityTableView,
   EmployeeAddressType,
   EmployeeDetailsView,
-  getActivityTypeLabel,
   IWorkspaceUserUpdateReq,
   WorkspaceProjectUserRole,
-  IEmployeeParams,
   EmployeeSettingsAccordions as Accordions,
+  ActivityFormDialogs,
+  ActivityStatus,
+  getActivityTypeLabel,
+  IEmployeeParams,
 } from "~/types";
 import { t } from "i18next";
-import { EmployeeCard } from "~/components/features";
+import {
+  EmployeeCard,
+  MoreToReportForm,
+  PlanAbsenceForm,
+} from "~/components/features";
 import {
   ActivityClient,
+  ProjectClient,
   RequestClient,
   UserClient,
   WorkPositionClient,
 } from "~/clients";
-import { ProjectClient } from "~/clients/project.client";
 import { useEffect, useState } from "react";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
-import { parseWithZod } from "@conform-to/zod";
-import { DEFAULT_PROJECT_DATE_FORMAT } from "~/constants";
 import { createUserDetailsAndActivityRequestValidation } from "~/schemas";
+import { parseWithZod } from "@conform-to/zod";
 import { IPerformanceReviewActivityReq } from "~/types/interfaces/activity/requests/performance-review-activity.request";
+import dayjs from "dayjs";
+import { WarningDialog } from "~/components/common";
+import { AddPerformanceReviewDialogForm } from "~/components/features/forms/add-performance-review-form";
+import { SubmissionResult } from "@conform-to/react";
+import { performanceReviewFormDialogSchema } from "~/schemas/activities/performance-review-form-schema";
 
 export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
   const formData = await actionArgs.request.formData();
   const { searchParams } = new URL(actionArgs.request.url);
-  const employeeId = actionArgs.params.employeeId;
   const pageView = searchParams.get("view");
 
   if (
@@ -72,9 +73,8 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
     pageView === EmployeeDetailsView.Activity
   ) {
     const submission = createUserDetailsAndActivityRequestValidation(formData);
-
-    const workspaceEmployeeParams: IEmployeeParams = {
-      employeeId: Number(employeeId),
+    const employeeParams: IEmployeeParams = {
+      employeeId: Number(actionArgs.params.employeeId),
     };
 
     if (submission.status !== Status.Success) {
@@ -83,12 +83,10 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
 
     if (pageView === EmployeeDetailsView.UserDetails) {
       let workspaceUser: IWorkspaceUserUpdateReq = {};
+
       try {
         switch (submission.value.intent) {
           case Accordions.PersonalSettings: {
-            const additionalAddresses = JSON.parse(
-              submission.value.additionalAddresses!
-            );
             workspaceUser = {
               name: submission.value.name,
               surname: submission.value.surname,
@@ -101,7 +99,6 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
                 "DD.MM.YYYY",
                 "YYYY-MM-DD"
               ),
-              nationality: submission.value.nationality ?? null,
               addresses:
                 submission.value.streetAddress &&
                 submission.value.city &&
@@ -115,7 +112,6 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
                         postalCode: submission.value.postalCode,
                         type: EmployeeAddressType.Main,
                       },
-                      ...additionalAddresses,
                     ]
                   : undefined,
             };
@@ -198,6 +194,125 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
         return handleAxiosError(error);
       }
     }
+    if (pageView === EmployeeDetailsView.Activity) {
+      try {
+        switch (submission.value.intent) {
+          case ActivityFormDialogs.PlanAbsence: {
+            await createAbsencePlanActivity(employeeParams, submission.value);
+            displaySuccess(t("userHub.activityAbsenceRequest"));
+            break;
+          }
+          case ActivityFormDialogs.BusinessTrip: {
+            if (submission.value.activityId) {
+              await updateBusinessTripActivity(
+                employeeParams,
+                submission.value.activityId,
+                submission.value
+              );
+              displaySuccess(t("userHub.activityUpdateSuccess"));
+              break;
+            } else {
+              await createBusinessTripActivity(
+                employeeParams,
+                submission.value
+              );
+              displaySuccess(t("userHub.activityRequestSuccess"));
+              break;
+            }
+          }
+          case "updateStatus": {
+            const action = submission.value.action;
+            const request = await RequestClient.updateRequest(
+              employeeParams,
+              Number(submission.value.id),
+              { status: action as ActivityStatus }
+            );
+
+            displaySuccess(
+              t(
+                action === ActivityStatus.Approved
+                  ? "workspaceRequests.approveSuccess"
+                  : "workspaceRequests.declineSuccess",
+                {
+                  activityType: getActivityTypeLabel(request.activityType),
+                }
+              )
+            );
+            break;
+          }
+          case "delete": {
+            const activityId = submission.value.id;
+            await ActivityClient.deleteActivity(employeeParams, activityId);
+            displaySuccess(t("userHub.activityCancelSuccess"));
+            break;
+          }
+        }
+      } catch (error) {
+        return handleAxiosError(error);
+      }
+      return json(submission.reply());
+    }
+  }
+
+  if (pageView === EmployeeDetailsView.PerformanceReviews) {
+    const submission = parseWithZod(formData, {
+      schema: performanceReviewFormDialogSchema,
+    });
+
+    if (submission.status !== Status.Success) {
+      return json(submission.reply());
+    }
+
+    try {
+      if (submission.value.activityId) {
+        const updatePerformanceReviewReq: IPerformanceReviewActivityReq = {
+          quartal: submission.value.quartal,
+          year: submission.value.year,
+          answer1: submission.value.answer1,
+          answer2: submission.value.answer2,
+          answer3: submission.value.answer3,
+          answer4: submission.value.answer4,
+          activityType: "PerformanceReview",
+        };
+
+        await ActivityClient.updateActivity(
+          {
+            employeeId: submission.value.employeeId,
+          },
+          submission.value.activityId,
+          updatePerformanceReviewReq
+        );
+
+        displaySuccess(
+          t("workspacePerformanceReviews.updatedPerformanceReview")!
+        );
+      } else {
+        const createPerformanceReviewReq: IPerformanceReviewActivityReq = {
+          quartal: submission.value.quartal,
+          year: submission.value.year,
+          answer1: submission.value.answer1,
+          answer2: submission.value.answer2,
+          answer3: submission.value.answer3,
+          answer4: submission.value.answer4,
+          date: formatDate(dayjs(), undefined, "YYYY-MM-DD"),
+          activityType: "PerformanceReview",
+        };
+
+        await ActivityClient.createActivity(
+          {
+            employeeId: submission.value.employeeId,
+          },
+          createPerformanceReviewReq
+        );
+        displaySuccess(
+          t("workspacePerformanceReviews.addedNewPerformanceReview")!
+        );
+      }
+
+      return json(submission.reply());
+    } catch (error) {
+      return handleAxiosError(error);
+    }
   }
 };
 
@@ -215,12 +330,14 @@ export const clientLoader = async (loaderArgs: ClientLoaderFunctionArgs) => {
 
   const workspaceUserAcc = getWorkspaceUserFromToken(loaderArgs);
 
-  const [user, positions, projects, users] = await Promise.all([
-    UserClient.getUserById(loaderArgs),
-    WorkPositionClient.getWorkPositions(loaderArgs),
-    [], //ProjectClient.getProjects(loaderArgs),
-    UserClient.getUsers(loaderArgs),
-  ]);
+  const [user, positions, projects, users, performanceReviews] =
+    await Promise.all([
+      UserClient.getUserById(loaderArgs),
+      WorkPositionClient.getWorkPositions(loaderArgs),
+      ProjectClient.getProjects(loaderArgs),
+      UserClient.getUsers(loaderArgs),
+      ActivityClient.getUserPerformanceReviews(loaderArgs),
+    ]);
 
   const tableData = await getActivities(
     loaderArgs,
@@ -234,6 +351,7 @@ export const clientLoader = async (loaderArgs: ClientLoaderFunctionArgs) => {
     positions: positions.data,
     projects: projects.data,
     users: users.data,
+    performanceReviews: performanceReviews,
     tableData: tableData,
   });
 };
@@ -256,14 +374,15 @@ export const shouldRevalidate = ({
 };
 
 export default function EmployeeDetailsPage() {
+  const lastResult = useActionData<typeof clientAction>() as SubmissionResult<
+    string[]
+  >;
   const loaderData = useLoaderData<typeof clientLoader>() ?? [];
   const [searchParams, setSearchParams] = useSearchParams();
   const { user } = loaderData;
-
   const [isPlanAbsenceDialogOpen, setIsPlanAbsenceDialogOpen] = useState(false);
   const [isMoreToReportDialogOpen, setIsMoreToReportDialogOpen] =
     useState(false);
-  const [isRequestInfoDialogOpen, setIsRequestInfoDialogOpen] = useState(false);
   const [isPerformanceReviewPopupOpen, setIsPerformanceReviewPopupOpen] =
     useState(false);
   const [deleteAbsenceDialogOpen, setDeleteAbsenceDialogOpen] = useState(false);
@@ -271,11 +390,10 @@ export default function EmployeeDetailsPage() {
     null
   );
 
-  const [selectedRequests, setSelectedRequests] = useState<IActivity[]>([]);
   const [selectedAbsenceType, setSelectedAbsenceType] =
     useState<PlanAbsenceActivityType | null>(null);
   const [selectedMoreToReportType, setSelectedMoreToReportType] =
-    useState<MoreToReportActivityType>(MoreToReportActivityType.Expense);
+    useState<MoreToReportActivityType>(MoreToReportActivityType.BusinessTrip);
   const [selectedPerformanceReview, setSelectedPerformanceReview] = useState<
     IActivityPerformanceReviewForm | undefined
   >({ employeeId: user.id });
@@ -303,15 +421,10 @@ export default function EmployeeDetailsPage() {
 
     switch (action) {
       case MoreToReportActivityType.BusinessTrip:
-      case MoreToReportActivityType.Overtime:
-      case MoreToReportActivityType.OnCall:
-      case MoreToReportActivityType.Expense:
-      case MoreToReportActivityType.TripToOffice:
         setIsMoreToReportDialogOpen(true);
         setSelectedMoreToReportType(action);
         break;
       case PlanAbsenceActivityType.Vacation:
-      case PlanAbsenceActivityType.SchoolSchedule:
       case PlanAbsenceActivityType.SickLeave:
         setIsPlanAbsenceDialogOpen(true);
         setSelectedAbsenceType(action);
@@ -321,10 +434,40 @@ export default function EmployeeDetailsPage() {
     setSearchParams(searchParams);
   }, [searchParams, setSearchParams]);
 
+  useEffect(() => {
+    if (lastResult && lastResult.status === Status.Success) {
+      setIsPlanAbsenceDialogOpen(false);
+      setDeleteAbsenceDialogOpen(false);
+      setIsMoreToReportDialogOpen(false);
+      resetPerformanceReviewState();
+      setIsEditing(false);
+
+      setIsPerformanceReviewPopupOpen(
+        lastResult?.initialValue?.intent === "createAndAddMoreDetails"
+      );
+    }
+  }, [lastResult]);
+
   const [isEditing, setIsEditing] = useState(false);
   const [isViewing, setIsViewing] = useState(false);
   const [defaultMoreToReportValues, setDefaultMoreToReportValues] =
     useState<IActivityMoreToReportForm>();
+
+  const resetPerformanceReviewState = (shouldClose?: boolean) => {
+    shouldClose
+      ? setSelectedPerformanceReview(undefined)
+      : setSelectedPerformanceReview((prevReview) => ({
+          employeeId: prevReview?.employeeId,
+          quartal: prevReview?.quartal,
+          year: prevReview?.year,
+        }));
+    setIsEditing(false);
+    setIsViewing(false);
+
+    if (shouldClose) {
+      setIsPerformanceReviewPopupOpen(false);
+    }
+  };
 
   return (
     <AppLayout>
@@ -348,12 +491,52 @@ export default function EmployeeDetailsPage() {
         setIsPlanAbsenceDialogOpen={setIsPlanAbsenceDialogOpen}
         setSelectedActivity={setSelectedActivity}
         setDefaultMoreToReportValues={setDefaultMoreToReportValues}
-        setIsRequestInfoDialogOpen={setIsRequestInfoDialogOpen}
         setIsPerformanceReviewPopupOpen={setIsPerformanceReviewPopupOpen}
         setDefaultPerformanceReviewValues={setSelectedPerformanceReview}
         setSelectedMoreToReportType={setSelectedMoreToReportType}
-        setSelectedRequests={setSelectedRequests}
         loaderData={loaderData}
+      />
+      <WarningDialog
+        open={deleteAbsenceDialogOpen}
+        onClose={() => setDeleteAbsenceDialogOpen(false)}
+        id={selectedActivity?.id || null}
+        title={t("userHub.activityCancelTitle")}
+        submitButtonText={t("userHub.cancelActivity")}
+      />
+      <PlanAbsenceForm
+        lastResult={lastResult}
+        open={isPlanAbsenceDialogOpen}
+        onClose={() => setIsPlanAbsenceDialogOpen(false)}
+        defaultType={selectedAbsenceType}
+      />
+      <MoreToReportForm
+        lastResult={lastResult}
+        open={isMoreToReportDialogOpen}
+        onClose={() => {
+          setIsEditing(false);
+          setIsMoreToReportDialogOpen(false);
+          setDefaultMoreToReportValues(undefined);
+        }}
+        projects={user.projects ?? []}
+        selectedType={selectedMoreToReportType}
+        setSelectedMoreToReportType={setSelectedMoreToReportType}
+        defaultValues={defaultMoreToReportValues}
+        isEditing={isEditing}
+      />
+      <AddPerformanceReviewDialogForm
+        lastResult={lastResult}
+        employees={[
+          {
+            ...user,
+          },
+        ]}
+        defaultValues={selectedPerformanceReview}
+        isEditing={isEditing}
+        setIsEditing={setIsEditing}
+        isViewing={isViewing}
+        setIsViewing={setIsViewing}
+        isOpen={isPerformanceReviewPopupOpen}
+        onClose={resetPerformanceReviewState}
       />
     </AppLayout>
   );

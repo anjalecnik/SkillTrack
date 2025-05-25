@@ -9,8 +9,8 @@ export const dbConfig: PostgresConnectionOptions = {
 	username: Config.get<string>("POSTGRES_USER"),
 	password: Config.get<string>("SECRET_POSTGRES_PASS"),
 	database: Config.get<string>("POSTGRES_DB"),
-	entities: [`${__dirname}/entities/**/*`],
-	migrations: [`${__dirname}/migrations/**/*`],
+	entities: ["src/libs/db/entities/**/*.ts"],
+	migrations: ["src/libs/db/migrations/**/*.ts"],
 	ssl: false,
 	synchronize: false
 }

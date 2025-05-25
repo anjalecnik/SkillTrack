@@ -1,26 +1,4 @@
-// import {
-//   ClientActionFunctionArgs,
-//   ClientLoaderFunctionArgs,
-// } from "@remix-run/react";
-// import { t } from "i18next";
 import parsePhoneNum from "libphonenumber-js";
-// import { API_URL } from "~/constants";
-// import {
-//   PaginatedResponse,
-//   IWorkspaceUserResponse,
-//   IWorkspaceUserInviteReq,
-//   IWorkspaceUserInviteRes,
-//   IWorkspaceUser,
-//   IWorkspaceUserUpdateReq,
-//   IWorkspaceEmployeeParams,
-//   EmployeeAddressType,
-//   SortBy,
-//   SortDirection,
-//   SearchParam,
-//   IWorkspaceUserIsSupervisorResponse,
-// } from "~/types";
-// import { privateClient } from "~/util/api";
-
 import {
   ClientActionFunctionArgs,
   ClientLoaderFunctionArgs,
@@ -36,6 +14,7 @@ import {
   IWorkspaceUserInviteReq,
   IWorkspaceUserInviteRes,
   IWorkspaceUserUpdateReq,
+  IWorkspaceUserIsSupervisorResponse,
 } from "~/types";
 import { privateClient } from "~/util";
 
@@ -116,19 +95,19 @@ export class UserClient {
     return parsedData;
   }
 
-  //   static async getWorkspaceUserIsSupervisor(
-  //     loaderArgs: ClientLoaderFunctionArgs | IWorkspaceEmployeeParams
-  //   ): Promise<IWorkspaceUserIsSupervisorResponse> {
-  //     const { workspaceId, employeeId } =
-  //       "params" in loaderArgs ? loaderArgs.params : loaderArgs;
+  static async getUserIsSupervisor(
+    loaderArgs: ClientLoaderFunctionArgs | IEmployeeParams
+  ): Promise<IWorkspaceUserIsSupervisorResponse> {
+    const { employeeId } =
+      "params" in loaderArgs ? loaderArgs.params : loaderArgs;
 
-  //     const { data } =
-  //       await privateClient.get<IWorkspaceUserIsSupervisorResponse>(
-  //         `${WORKSPACE_URL}/${workspaceId}/workspace-users/${employeeId}/requestor-is-supervisor`
-  //       );
+    const { data } =
+      await privateClient.get<IWorkspaceUserIsSupervisorResponse>(
+        `/users/${employeeId}/requestor-is-supervisor`
+      );
 
-  //     return data;
-  //   }
+    return data;
+  }
 
   static async updateUser(
     user: IWorkspaceUserUpdateReq,

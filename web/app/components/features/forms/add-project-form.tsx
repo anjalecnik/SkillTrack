@@ -1,6 +1,6 @@
 import { FormId, getInputProps, useFormMetadata } from "@conform-to/react";
 import { useTranslation } from "react-i18next";
-import { FlexColumn , TextInput } from "~/components/common";
+import { FlexColumn, TextInput } from "~/components/common";
 
 interface IAddProjectFormProps {
   formId: FormId;
@@ -17,6 +17,7 @@ export function AddProjectForm({ formId }: IAddProjectFormProps) {
       <TextInput
         {...getInputProps(fields.name, { type: "text" })}
         key={fields.name.key}
+        dataTestId="projectInput"
         label={t("workspaceProjects.project")}
         required
         placeholder={t("workspaceProjects.projectPlaceholder")!}

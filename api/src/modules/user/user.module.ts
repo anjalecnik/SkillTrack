@@ -11,9 +11,19 @@ import { TypeOrmModule } from "@nestjs/typeorm"
 import { UtilityModule } from "../utility/utility.module"
 import { ProjectUserEntity } from "src/libs/db/entities/project-user.entity"
 import { MasterDataSource } from "src/libs/db/master-data-source.service"
+import { UserWorkingHoursModule } from "./modules/user-working-hours/user-working-hours.module"
+import { UserActivityModule } from "./modules/user-activity/modules/user-activity.module"
 
 @Module({
-	imports: [TypeOrmModule.forFeature([UserEntity, ProjectUserEntity]), EmitterModule, UtilityModule, UserAddressModule, UserAssignedVacationModule],
+	imports: [
+		TypeOrmModule.forFeature([UserEntity, ProjectUserEntity]),
+		EmitterModule,
+		UtilityModule,
+		UserAddressModule,
+		UserAssignedVacationModule,
+		UserWorkingHoursModule,
+		UserActivityModule
+	],
 	controllers: [UserUserHubController, UserAdminHubController],
 	providers: [UserService, UserRepository, MasterDataSource],
 	exports: [UserService]

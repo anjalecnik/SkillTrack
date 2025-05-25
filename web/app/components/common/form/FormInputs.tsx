@@ -47,7 +47,9 @@ export const FormTextInput = ({
   const required = useIsFieldRequired(fieldName);
   const { key, ...inputProps } = getInputProps(field, {
     type: "text",
+    defaultValue,
   });
+
   return (
     <TextInput
       key={key}
@@ -323,7 +325,7 @@ export function FormDateInput({
         }
       }}
       {...rest}
-      value={defaultValue}
+      defaultValue={defaultValue}
     />
   );
 }

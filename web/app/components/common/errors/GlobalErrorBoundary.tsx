@@ -14,7 +14,6 @@ export function GlobalErrorBoundary() {
   const error = useRouteError();
   const [isInitialLoad, setIsInitialLoad] = useState(true);
   const errorStatus = null;
-  console.log(error);
   useEffect(() => {
     setIsInitialLoad(false);
   }, []);
@@ -24,7 +23,6 @@ export function GlobalErrorBoundary() {
   }
 
   if (isRouteErrorResponse(error)) {
-    console.log(error);
     const errorStatus = error.status;
     switch (errorStatus) {
       case 401:

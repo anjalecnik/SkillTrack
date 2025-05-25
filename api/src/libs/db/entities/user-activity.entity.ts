@@ -108,45 +108,10 @@ export class UserActivityEntity implements ICreatedAtEntity, IUpdatedAtEntity, I
 
 	@Column({
 		type: "integer",
-		comment: "Quick reference to expense",
-		nullable: true
-	})
-	expenseId?: number | null
-
-	@Column({
-		type: "integer",
 		comment: "Quick reference to sick leave",
 		nullable: true
 	})
 	sickLeaveId?: number | null
-
-	@Column({
-		type: "integer",
-		comment: "Quick reference to sick leave",
-		nullable: true
-	})
-	schoolScheduleId?: number | null
-
-	@Column({
-		type: "integer",
-		comment: "Quick reference to overtime",
-		nullable: true
-	})
-	overtimeId?: number | null
-
-	@Column({
-		type: "integer",
-		comment: "Quick reference to on call",
-		nullable: true
-	})
-	onCallId?: number | null
-
-	@Column({
-		type: "integer",
-		comment: "Quick reference to special leave",
-		nullable: true
-	})
-	specialLeaveId?: number | null
 
 	@Column({
 		type: "integer",

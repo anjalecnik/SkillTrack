@@ -4,6 +4,7 @@
 export class DefaultValues {
 	APP_HOST = "0.0.0.0"
 	APP_PORT = "8080"
+	APP_API_PREFIX = "api"
 	GLOBAL_PREFIX = "api"
 	APP_CORS_ORIGIN = "*"
 	APP_CORS_METHODS = "GET, PUT, PATCH, POST, DELETE, HEAD, OPTIONS"
@@ -29,4 +30,6 @@ export class DefaultValues {
 	GOOGLE_CLIENT_ID = "830251780992-4mg5q31387jh8vra1k8qvektob9drjv9.apps.googleusercontent.com"
 	GOOGLE_CLIENT_SECRET = "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"
 	GOOGLE_CALLBACK_URL = "http://localhost:8080/api/auth/users/google/redirect"
+
+	APP_FEATURE_USER_ACTIVITY_DAILY_EDIT_DAYS_LIMIT = "7"
 }
