@@ -27,6 +27,7 @@ test.describe("Admin SkillTrack tests", () => {
     const employeesPage = new EmployeesPage(page);
 
     await employeesPage.filterEmployees(USER_ENTITY.name);
+    await page.waitForTimeout(1000);
     await employeesPage.goToEmployeePage(
       USER_ENTITY.name + " " + USER_ENTITY.surname
     );
@@ -44,6 +45,7 @@ test.describe("Admin SkillTrack tests", () => {
     await employeesPage.createNewEmployee(USER_CREATE_MOCK);
 
     await employeesPage.filterEmployees(USER_CREATE_MOCK.name);
+    await page.waitForTimeout(1000);
     await employeesPage.goToEmployeePage(
       USER_CREATE_MOCK.name + " " + USER_CREATE_MOCK.surname
     );
@@ -88,7 +90,7 @@ test.describe("Admin SkillTrack tests", () => {
     await projectsPage.openAddNewProjectDialog();
     await projectsPage.createNewProject(PROJECT_CREATE_MOCK);
 
-    const projectLocator = projectsPage.getProjectInProjectTable(
+    const projectLocator = projectsPage.getSecondTdOfProjectRow(
       PROJECT_CREATE_MOCK.name
     );
     await expect(projectLocator).toHaveText(PROJECT_CREATE_MOCK.name);

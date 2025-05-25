@@ -39,7 +39,11 @@ export class ProjectsPage {
     await this.createProjectButton.click();
   }
 
-  getProjectInProjectTable(projectName: string): Locator {
-    return this.page.locator("table tr", { hasText: projectName });
+  getSecondTdOfProjectRow(projectName: string): Locator {
+    return this.page
+      .locator("table tr", { hasText: projectName })
+      .locator("td:nth-of-type(2)")
+      .locator("div:nth-of-type(2)")
+      .locator("p:first-of-type");
   }
 }
