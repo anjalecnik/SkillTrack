@@ -1,0 +1,10 @@
+{
+  "projects": {
+    "web": {
+      "source": "web/**/*",
+      "framework": "remix",
+      "buildCommand": "npm run build",
+      "outputDirectory": "web/.vercel/output"
+    }
+  }
+}
