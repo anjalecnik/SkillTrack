@@ -1,0 +1,30 @@
+import { UserRepository } from "../repository/user.repository";
+import { IUserGetRequest, IUserInvitationRequest, IUserPaginationFilterRequest, IUserPatchRequest } from "../interfaces";
+import { IUserDetailsResponse } from "../interfaces/details-response.interface";
+import { IPaginatedResponse } from "src/utils/types/interfaces";
+import { UtilityService } from "src/modules/utility/services/utility.service";
+import { IUserPaginationItemResponse } from "../interfaces/user-pagination-item-response.interface";
+import { IUserSubordinatesPaginationFilterRequest } from "../interfaces/user-subordinates-pagination-filter-request.interface";
+import { UserEntity } from "src/libs/db/entities/user.entity";
+import { UserAddressService } from "../modules/user-address/services/user-address.service";
+import { UserAssignedVacationService } from "../modules/user-assigned-vacation/services/user-assigned-vacation.service";
+export declare class UserService {
+    private readonly userRepository;
+    private readonly userAddressService;
+    private readonly userAssignedVacationService;
+    private readonly utilityService;
+    constructor(userRepository: UserRepository, userAddressService: UserAddressService, userAssignedVacationService: UserAssignedVacationService, utilityService: UtilityService);
+    getUser(userReadRequest: IUserGetRequest): Promise<IUserDetailsResponse>;
+    getUserList(filters: IUserPaginationFilterRequest): Promise<IPaginatedResponse<IUserPaginationItemResponse>>;
+    getSubordinatesList(filters: IUserSubordinatesPaginationFilterRequest): Promise<IPaginatedResponse<IUserPaginationItemResponse>>;
+    private enrichUserData;
+    invite(userInvitationRequest: IUserInvitationRequest): Promise<UserEntity[]>;
+    updateUser(userPatch: IUserPatchRequest): Promise<IUserDetailsResponse>;
+    setUserActive(userId: number): Promise<void>;
+    validateGetUser(userReadRequest: IUserGetRequest): Promise<boolean>;
+    private validateUserAddresses;
+    validateUserAssignedVacation({ id, assignedVacations }: IUserPatchRequest): Promise<void>;
+    private validateUserProjects;
+    private validateCircularManagerRelationship;
+    private generateAssignedPercentage;
+}
