@@ -22,7 +22,8 @@
 		"test:watch": "jest --watch",
 		"test:cov": "jest --coverage",
 		"test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-		"test:e2e": "jest --config ./test/jest-e2e.json"
+		"test:e2e": "jest --config ./test/jest-e2e.json",
+		"postinstall": "npm install --legacy-peer-deps"
 	},
 	"dependencies": {
 		"@azure/storage-blob": "12.24.0",
@@ -54,6 +55,7 @@
 		"dayjs": "^1.11.13",
 		"dotenv": "^16.4.5",
 		"fireorm": "^0.23.3",
+		"fly": "^4.6.16",
 		"free-email-domains": "^1.2.14",
 		"google-auth-library": "9.14.1",
 		"handlebars": "4.7.8",
