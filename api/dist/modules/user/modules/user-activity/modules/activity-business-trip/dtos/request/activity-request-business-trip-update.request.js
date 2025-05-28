@@ -25,6 +25,9 @@ class ActivityRequestBusinessTripUpdateRequest {
     description;
     location;
     distanceInKM;
+    accommodationCost;
+    foodCost;
+    otherCost;
 }
 exports.ActivityRequestBusinessTripUpdateRequest = ActivityRequestBusinessTripUpdateRequest;
 __decorate([
@@ -78,4 +81,22 @@ __decorate([
     (0, class_validator_1.Min)(0),
     __metadata("design:type", Number)
 ], ActivityRequestBusinessTripUpdateRequest.prototype, "distanceInKM", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: "Accommodation cost in EUR", example: 120.5 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsPositive)(),
+    __metadata("design:type", Number)
+], ActivityRequestBusinessTripUpdateRequest.prototype, "accommodationCost", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: "Food cost in EUR", example: 45.0 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsPositive)(),
+    __metadata("design:type", Number)
+], ActivityRequestBusinessTripUpdateRequest.prototype, "foodCost", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ description: "Other costs in EUR", example: 30.0 }),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsPositive)(),
+    __metadata("design:type", Number)
+], ActivityRequestBusinessTripUpdateRequest.prototype, "otherCost", void 0);
 //# sourceMappingURL=activity-request-business-trip-update.request.js.map

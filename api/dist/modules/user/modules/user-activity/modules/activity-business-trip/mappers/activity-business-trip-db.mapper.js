@@ -14,6 +14,9 @@ class ActivityBusinessTripDBMapper {
             dateStart: createActivityRequest.dateStart,
             dateEnd: createActivityRequest.dateEnd,
             distanceInKM: createActivityRequest.distanceInKM ?? undefined,
+            accommodationCost: createActivityRequest.accommodationCost ?? undefined,
+            foodCost: createActivityRequest.foodCost ?? undefined,
+            otherCost: createActivityRequest.otherCost ?? undefined,
             location: createActivityRequest.location,
             status: user_activity_status_enum_1.UserActivityStatus.PendingApproval
         };

@@ -57,7 +57,6 @@ let ActivityBusinessTripService = class ActivityBusinessTripService {
         const { activityRequest, activityDaily } = activity_shared_db_mapper_1.ActivitySharedDBMapper.cancelActivity(activityBusinessTripCancelRequest, activityRequestBusinessTripEntity.userActivities ?? []);
         this.activityBusinessTripValidationService.preCancelSaveValidation(activityRequestBusinessTripEntity, activityRequest);
         const canceledActivityBusinessTripEntity = await this.activitySharedService.cancelActivityRequest(activityRequest, activityDaily);
-        const canceledActivityBusinessTrips = canceledActivityBusinessTripEntity.userActivities ?? [];
         return this.enrichActivityRequest(userInvoker.user.id, canceledActivityBusinessTripEntity);
     }
     async reviewActivityRequest(userInvoker, activityBusinessTripReviewRequest) {
