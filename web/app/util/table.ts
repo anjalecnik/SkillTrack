@@ -3,19 +3,13 @@ import { t } from "i18next";
 
 const formatTripDetails = (trip: IActivity, type: ActivityType) => {
   const label = getActivityTypeLabel(type);
-  const locations = `${trip.locationFrom || trip.location} ${
-    type === ActivityType.TripToOffice ? `- ${trip?.locationTo}` : ""
-  }`;
+  const locations = `${trip.locationFrom || trip.location}`;
 
   const details = trip.distanceInKM
     ? `${locations} - ${trip.distanceInKM} km`
     : locations;
 
   return `${label}: ${details}`;
-};
-
-const formatTripToOffice = (trip: IActivity) => {
-  return formatTripDetails(trip, ActivityType.TripToOffice);
 };
 
 const formatBusinessTrip = (trip: IActivity) => {
@@ -28,8 +22,6 @@ export const getTripCellValue = (trip: IActivity) => {
   }
 
   switch (trip.activityType) {
-    case ActivityType.TripToOffice:
-      return formatTripToOffice(trip);
     case ActivityType.BusinessTrip:
       return formatBusinessTrip(trip);
     default:
@@ -45,8 +37,6 @@ export const getAbsenceDescription = (absence: IActivity) => {
         (absence.hours ?? 0) < 8 ? (absence.hours ?? 0) + " h" : null;
       return `${absenceType}${hours ? " - " + hours : ""}`;
     }
-    case ActivityType.SpecialLeave:
-      return `${absenceType} - ${absence.description}`;
     default:
       return `${absenceType}`;
   }

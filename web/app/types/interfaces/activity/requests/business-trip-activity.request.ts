@@ -1,4 +1,4 @@
-import { MoreToReportActivityType } from "~/types";
+import { DateTimeWithoutTimezone, MoreToReportActivityType } from "~/types";
 
 export interface IBusinessTripActivityReq {
   activityType: MoreToReportActivityType;
@@ -6,6 +6,9 @@ export interface IBusinessTripActivityReq {
   dateEnd: string | DateTimeWithoutTimezone;
   projectId: number;
   distanceInKM?: number;
+  accommodationCost?: number;
+  foodCost?: number;
+  otherCost?: number;
   location: string;
   description?: string;
 }

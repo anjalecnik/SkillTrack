@@ -10,6 +10,9 @@ export const businessTripFormDialogSchema = z.object({
   dateEnd: z.string(),
   location: z.string(),
   distanceInKM: z.number().min(0).max(10000000).optional(),
+  accommodationCost: z.number().min(0).max(1000000).optional(),
+  foodCost: z.number().min(0).max(1000000).optional(),
+  otherCost: z.number().min(0).max(1000000).optional(),
   description: z.string().optional(),
 });
 

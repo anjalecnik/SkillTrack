@@ -6,27 +6,17 @@ import { t } from "i18next";
 
 class GoogleAuthService implements IAuthProvider {
   async login(): Promise<string | null> {
-    console.log("[GoogleAuthService] Starting Google login...");
     const provider = new firebase.auth.GoogleAuthProvider();
     provider.setCustomParameters({
       prompt: "select_account",
     });
-
     try {
       const { user, credential } = await firebase
         .auth()
         .signInWithPopup(provider);
-      console.log("[GoogleAuthService] Firebase signInWithPopup response:", {
-        user,
-        credential,
-      });
-
       const { idToken } = credential as firebase.auth.OAuthCredential;
 
       if (!idToken || !user) {
-        console.error(
-          "[GoogleAuthService] Missing idToken or user in response"
-        );
         throw new Error(t("error.googleSignInError") as string);
       }
 
@@ -36,19 +26,13 @@ class GoogleAuthService implements IAuthProvider {
         picture: user?.photoURL ?? "",
       };
 
-      console.log(
-        "[GoogleAuthService] Storing user in LocalStorage:",
-        providedUser
-      );
       LocalStorageService.set("user", providedUser);
 
       return idToken;
-    } catch (error) {
-      console.error("[GoogleAuthService] Error during Google sign-in:", error);
+    } catch {
       throw new Error(t("error.googleSignInError") as string);
     }
   }
-
   async logout() {
     try {
       LocalStorageService.remove("user");
