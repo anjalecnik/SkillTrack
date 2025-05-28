@@ -72,8 +72,6 @@ export class ActivityBusinessTripService {
 		this.activityBusinessTripValidationService.preCancelSaveValidation(activityRequestBusinessTripEntity, activityRequest)
 		const canceledActivityBusinessTripEntity = await this.activitySharedService.cancelActivityRequest(activityRequest, activityDaily)
 
-		const canceledActivityBusinessTrips = canceledActivityBusinessTripEntity.userActivities ?? []
-
 		return this.enrichActivityRequest(userInvoker.user.id, canceledActivityBusinessTripEntity)
 	}
 

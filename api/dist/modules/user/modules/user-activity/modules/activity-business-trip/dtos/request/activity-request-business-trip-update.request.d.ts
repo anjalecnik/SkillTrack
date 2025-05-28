@@ -7,4 +7,7 @@ export declare class ActivityRequestBusinessTripUpdateRequest {
     description?: string;
     location?: string;
     distanceInKM?: number;
+    accommodationCost?: number;
+    foodCost?: number;
+    otherCost?: number;
 }

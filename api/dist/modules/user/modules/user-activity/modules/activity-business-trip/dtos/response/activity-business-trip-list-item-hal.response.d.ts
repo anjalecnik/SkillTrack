@@ -7,6 +7,9 @@ export declare class ActivityBusinessTripListItemHalResponse extends ActivityLis
     description?: string;
     location: string;
     distanceInKM?: number;
+    accommodationCost?: number;
+    foodCost?: number;
+    otherCost?: number;
     reviewedByWorkspaceUserId?: number;
     projectId?: number;
     projectName?: string;

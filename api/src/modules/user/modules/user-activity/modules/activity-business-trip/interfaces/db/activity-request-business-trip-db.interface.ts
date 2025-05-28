@@ -4,6 +4,11 @@ import { RequiredNotNull } from "src/utils/types/interfaces"
 
 export interface IActivityRequestBusinessTripDB
 	extends RequiredNotNull<Pick<UserActivityRequestEntity, "id" | "userId" | "reportedByUserId" | "status" | "dateStart" | "dateEnd" | "location" | "createdAt" | "updatedAt">>,
-		Partial<Pick<UserActivityRequestEntity, "projectId" | "project" | "description" | "distanceInKM" | "userActivities" | "reviewedByUserId">> {
+		Partial<
+			Pick<
+				UserActivityRequestEntity,
+				"projectId" | "project" | "description" | "distanceInKM" | "accommodationCost" | "foodCost" | "otherCost" | "userActivities" | "reviewedByUserId"
+			>
+		> {
 	activityType: UserActivityType.BusinessTrip
 }

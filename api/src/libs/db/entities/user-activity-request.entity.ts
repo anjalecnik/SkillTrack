@@ -1,7 +1,5 @@
 import {
 	DB_VARCHAR_LENGTH_1024,
-	DB_VARCHAR_LENGTH_128,
-	DB_VARCHAR_LENGTH_2048,
 	DB_VARCHAR_LENGTH_256,
 	DB_VARCHAR_LENGTH_32,
 	POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
@@ -82,9 +80,7 @@ export class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEn
 		nullable: true
 	})
 	distanceInKM?: number | null
-	//#endregion business trip
 
-	//#region expense
 	@Column({
 		type: "decimal",
 		precision: POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
@@ -101,7 +97,34 @@ export class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEn
 	})
 	isPaidWithCompanyCard?: boolean | null
 
-	//#endregion expense
+	@Column({
+		type: "decimal",
+		precision: POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
+		scale: POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE,
+		comment: "Accommodation cost in Euro",
+		nullable: true
+	})
+	accommodationCost?: number | null
+
+	@Column({
+		type: "decimal",
+		precision: POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
+		scale: POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE,
+		comment: "Food cost in Euro",
+		nullable: true
+	})
+	foodCost?: number | null
+
+	@Column({
+		type: "decimal",
+		precision: POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
+		scale: POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE,
+		comment: "Other costs in Euro",
+		nullable: true
+	})
+	otherCost?: number | null
+
+	//#endregion business trip
 
 	//#region relations
 

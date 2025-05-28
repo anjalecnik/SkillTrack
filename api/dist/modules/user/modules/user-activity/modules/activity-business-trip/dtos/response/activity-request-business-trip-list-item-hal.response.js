@@ -30,6 +30,9 @@ class ActivityRequestBusinessTripListItemHalResponse extends activity_request_li
     description;
     location;
     distanceInKM;
+    accommodationCost;
+    foodCost;
+    otherCost;
     reviewedByWorkspaceUserId;
     projectId;
     projectName;
@@ -55,6 +58,18 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 10 }),
     __metadata("design:type", Number)
 ], ActivityRequestBusinessTripListItemHalResponse.prototype, "distanceInKM", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 120.5, description: "Accommodation cost in EUR" }),
+    __metadata("design:type", Number)
+], ActivityRequestBusinessTripListItemHalResponse.prototype, "accommodationCost", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 45.0, description: "Food cost in EUR" }),
+    __metadata("design:type", Number)
+], ActivityRequestBusinessTripListItemHalResponse.prototype, "foodCost", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 30.0, description: "Other costs in EUR" }),
+    __metadata("design:type", Number)
+], ActivityRequestBusinessTripListItemHalResponse.prototype, "otherCost", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 1 }),
     __metadata("design:type", Number)

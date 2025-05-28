@@ -26,6 +26,9 @@ export abstract class ActivityBusinessTripDBMapper {
 			dateStart: createActivityRequest.dateStart,
 			dateEnd: createActivityRequest.dateEnd,
 			distanceInKM: createActivityRequest.distanceInKM ?? undefined,
+			accommodationCost: createActivityRequest.accommodationCost ?? undefined,
+			foodCost: createActivityRequest.foodCost ?? undefined,
+			otherCost: createActivityRequest.otherCost ?? undefined,
 			location: createActivityRequest.location,
 			status: UserActivityStatus.PendingApproval
 		}

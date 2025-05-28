@@ -18,6 +18,9 @@ export declare class UserActivityRequestEntity implements ICreatedAtEntity, IUpd
     distanceInKM?: number | null;
     valueInEuro?: number | null;
     isPaidWithCompanyCard?: boolean | null;
+    accommodationCost?: number | null;
+    foodCost?: number | null;
+    otherCost?: number | null;
     userId: number;
     reportedByUserId: number;
     reviewedByUserId?: number | null;

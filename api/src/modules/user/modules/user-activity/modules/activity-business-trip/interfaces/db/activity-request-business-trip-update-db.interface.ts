@@ -3,4 +3,6 @@ import { IActivityRequestBusinessTripDB } from "./activity-request-business-trip
 
 export interface IActivityRequestBusinessTripUpdateDBRequest
 	extends RequiredNotNull<Pick<IActivityRequestBusinessTripDB, "id" | "userId" | "reportedByUserId" | "activityType">>,
-		Partial<Pick<IActivityRequestBusinessTripDB, "dateStart" | "dateEnd" | "projectId" | "description" | "location" | "distanceInKM">> {}
+		Partial<
+			Pick<IActivityRequestBusinessTripDB, "dateStart" | "dateEnd" | "projectId" | "description" | "location" | "distanceInKM" | "accommodationCost" | "foodCost" | "otherCost">
+		> {}

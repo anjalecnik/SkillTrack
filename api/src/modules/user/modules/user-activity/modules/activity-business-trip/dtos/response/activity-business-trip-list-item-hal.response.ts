@@ -21,6 +21,15 @@ export class ActivityBusinessTripListItemHalResponse extends ActivityListItemHal
 	@ApiPropertyOptional({ example: 10 })
 	distanceInKM?: number
 
+	@ApiPropertyOptional({ example: 120.5, description: "Accommodation cost in EUR" })
+	accommodationCost?: number
+
+	@ApiPropertyOptional({ example: 45.0, description: "Food cost in EUR" })
+	foodCost?: number
+
+	@ApiPropertyOptional({ example: 30.0, description: "Other costs in EUR" })
+	otherCost?: number
+
 	@ApiPropertyOptional({ example: 1 })
 	reviewedByWorkspaceUserId?: number
 

@@ -47,4 +47,19 @@ export class ActivityRequestBusinessTripCreateRequest {
 	@IsInt()
 	@Min(0)
 	distanceInKM?: number
+
+	@ApiPropertyOptional({ description: "Accommodation cost in EUR", example: 120.5 })
+	@IsOptional()
+	@IsPositive()
+	accommodationCost?: number
+
+	@ApiPropertyOptional({ description: "Food cost in EUR", example: 45.0 })
+	@IsOptional()
+	@IsPositive()
+	foodCost?: number
+
+	@ApiPropertyOptional({ description: "Other costs in EUR", example: 30.0 })
+	@IsOptional()
+	@IsPositive()
+	otherCost?: number
 }

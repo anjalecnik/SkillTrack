@@ -30,6 +30,9 @@ let UserActivityRequestEntity = class UserActivityRequestEntity {
     distanceInKM;
     valueInEuro;
     isPaidWithCompanyCard;
+    accommodationCost;
+    foodCost;
+    otherCost;
     userId;
     reportedByUserId;
     reviewedByUserId;
@@ -130,6 +133,36 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], UserActivityRequestEntity.prototype, "isPaidWithCompanyCard", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "decimal",
+        precision: constants_1.POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
+        scale: constants_1.POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE,
+        comment: "Accommodation cost in Euro",
+        nullable: true
+    }),
+    __metadata("design:type", Object)
+], UserActivityRequestEntity.prototype, "accommodationCost", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "decimal",
+        precision: constants_1.POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
+        scale: constants_1.POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE,
+        comment: "Food cost in Euro",
+        nullable: true
+    }),
+    __metadata("design:type", Object)
+], UserActivityRequestEntity.prototype, "foodCost", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "decimal",
+        precision: constants_1.POSTGRES_EXPENSE_VALUE_IN_EURO_PRECISION,
+        scale: constants_1.POSTGRES_EXPENSE_VALUE_IN_EURO_SCALE,
+        comment: "Other costs in Euro",
+        nullable: true
+    }),
+    __metadata("design:type", Object)
+], UserActivityRequestEntity.prototype, "otherCost", void 0);
 __decorate([
     (0, typeorm_1.Column)({
         type: "integer",
