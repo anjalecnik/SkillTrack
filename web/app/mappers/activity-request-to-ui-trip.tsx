@@ -6,16 +6,9 @@ import { formatDateWithTimeWithoutTimezone } from "~/util";
 
 export const getActivityTypeDescriptionForTrip = (
   request: IActivity,
-  activityType: ActivityType.TripToOffice | ActivityType.BusinessTrip
+  activityType: ActivityType.BusinessTrip
 ) => {
-  const {
-    distanceInKM,
-    location,
-    dateStart,
-    dateEnd,
-    locationFrom,
-    locationTo,
-  } = request;
+  const { distanceInKM, location, dateStart, dateEnd } = request;
 
   return (
     <>
@@ -80,8 +73,6 @@ export const getActivityTypeDescriptionForTrip = (
                 fontWeight: 700,
               }}
             >
-              {activityType === ActivityType.TripToOffice &&
-                `${locationFrom} - ${locationTo}`}
               {activityType === ActivityType.BusinessTrip && location}
             </Typography>
           </div>

@@ -18,11 +18,9 @@ export function mapActivityResponseToTableActivities(
       if (
         activity.dateStart &&
         activity.dateEnd &&
-        (activity.activityType === ActivityType.BusinessTrip ||
-          activity.activityType === ActivityType.TripToOffice ||
-          activity.activityType === ActivityType.OnCall)
+        activity.activityType === ActivityType.BusinessTrip
       ) {
-        if (processedRequestIds.has(activity.activityRequestId)) return []; // Process each requestId once to avoid multi-day duplicates
+        if (processedRequestIds.has(activity.activityRequestId)) return [];
         processedRequestIds.add(activity.activityRequestId);
 
         const activitiesWithSameRequestId =
@@ -51,8 +49,7 @@ export function mapActivityResponseToTableActivities(
             : a.id === first.id;
 
           const activityMeta =
-            activity.activityType === ActivityType.BusinessTrip ||
-            activity.activityType === ActivityType.TripToOffice
+            activity.activityType === ActivityType.BusinessTrip
               ? { isFirst: isFirst, isLast: isLast }
               : { firstOnCall: isFirst, lastOnCall: isLast };
 
@@ -107,10 +104,7 @@ export function addGhostActivitiesForOverlaps(
   const groupedByDate: Record<string, IActivity[]> = {};
   for (const day of activitiesWithDatesJoined) {
     for (const activity of day.activities) {
-      if (
-        activity.activityType === "BusinessTrip" ||
-        activity.activityType === "TripToOffice"
-      ) {
+      if (activity.activityType === "BusinessTrip") {
         if (!groupedByDate[day.date]) groupedByDate[day.date] = [];
         groupedByDate[day.date].push(activity);
       }
@@ -219,7 +213,6 @@ export function addGhostActivitiesForOverlaps(
         };
 
         const shouldInsertAtFront =
-          baseActivity?.activityType === "TripToOffice" &&
           ghostActivity.activityType === "BusinessTrip";
 
         const isSameType =

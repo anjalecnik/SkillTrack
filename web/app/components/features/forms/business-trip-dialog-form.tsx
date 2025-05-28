@@ -127,6 +127,35 @@ export function BusinessTripDialogForm({
           rows={2}
         />
       </Flex>
+      <Flex justifyContent="space-between" gap="20px">
+        <TextInput
+          label={t("userHub.accommodationCost")}
+          containerProps={{ sx: { flex: 1 } }}
+          {...getInputProps(fields.accommodationCost, { type: "number" })}
+          key={fields.accommodationCost.key}
+          error={!!fields.accommodationCost.errors}
+          errorMessage={t(fields.accommodationCost.errors?.[0] ?? "")}
+        />
+        <TextInput
+          label={t("userHub.foodCost")}
+          containerProps={{ sx: { flex: 1 } }}
+          {...getInputProps(fields.foodCost, { type: "number" })}
+          key={fields.foodCost.key}
+          error={!!fields.foodCost.errors}
+          errorMessage={t(fields.foodCost.errors?.[0] ?? "")}
+        />
+      </Flex>
+
+      <Flex justifyContent="space-between" gap="20px">
+        <TextInput
+          label={t("userHub.otherCost")}
+          containerProps={{ sx: { flex: 1 } }}
+          {...getInputProps(fields.otherCost, { type: "number" })}
+          key={fields.otherCost.key}
+          error={!!fields.otherCost.errors}
+          errorMessage={t(fields.otherCost.errors?.[0] ?? "")}
+        />
+      </Flex>
       <Typography
         sx={{
           color: theme.palette.customColors.red.main,
