@@ -55,9 +55,21 @@ export function LandingPage() {
   const isMobile = useMobile();
 
   async function handleGoogleSignIn(redirect: string) {
+    console.log("[handleGoogleSignIn] Initiating Google sign-in...");
     const token = await AuthClient.signInWithGoogleProvider();
-    if (!token) return;
-    await AuthClient.signInWithGoogle(token);
+    console.log("[handleGoogleSignIn] Token received:", token);
+
+    if (!token) {
+      console.error("[handleGoogleSignIn] No token received. Aborting.");
+      return;
+    }
+
+    try {
+      await AuthClient.signInWithGoogle(token);
+      console.log("[handleGoogleSignIn] Sign-in with backend successful.");
+    } catch (err) {
+      console.error("[handleGoogleSignIn] Error signing in with backend:", err);
+    }
 
     navigate("/user-hub/dashboard");
   }
