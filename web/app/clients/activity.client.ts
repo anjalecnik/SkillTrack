@@ -15,7 +15,6 @@ import {
   IDailyActivityReq,
   IGetActivitiesRequest,
   IPlanAbsenceCreateReq,
-  ITripToOfficeActivityReq,
   IEmployeeParams,
   SearchParam,
   PaginatedResponse,
@@ -24,7 +23,7 @@ import { IPerformanceReviewActivityReq } from "~/types/interfaces/activity/reque
 import { IUserPerformanceDetails } from "~/types/interfaces/performance-review/user-performance-details";
 import { IUsersPerformanceReviews } from "~/types/interfaces/performance-review/users-performance-reviews-table";
 import { correctActivityDates, formatDate } from "~/util";
-import { formDataClient, privateClient } from "~/util/api";
+import { privateClient } from "~/util/api";
 
 export class ActivityClient {
   static async getActivitiesOnDay(
@@ -162,7 +161,6 @@ export class ActivityClient {
       | IPlanAbsenceCreateReq
       | IBusinessTripActivityReq
       | IDailyActivityReq
-      | ITripToOfficeActivityReq
       | IPerformanceReviewActivityReq
   ): Promise<IActivityResponse> {
     const { employeeId } =
@@ -180,7 +178,6 @@ export class ActivityClient {
     reportedActivity:
       | IDailyActivityReq
       | IBusinessTripActivityReq
-      | ITripToOfficeActivityReq
       | IPerformanceReviewActivityReq
   ): Promise<IActivityResponse> {
     const { employeeId } =

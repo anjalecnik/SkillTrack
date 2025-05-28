@@ -8,10 +8,7 @@ import { redirect } from "@remix-run/node";
 
 export class AuthClient {
   static async signInWithGoogleProvider(): Promise<string | null> {
-    console.log("[AuthClient] Calling GoogleAuthService.login()");
-    const token = await GoogleAuthService.login();
-    console.log("[AuthClient] Token from GoogleAuthService:", token);
-    return token;
+    return GoogleAuthService.login();
   }
 
   static async signInWithGoogle(idToken: string): Promise<IAccessToken> {

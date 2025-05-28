@@ -38,6 +38,9 @@ export async function createBusinessTripActivity(
     description,
     distanceInKM,
     location,
+    accommodationCost,
+    foodCost,
+    otherCost,
   } = activitySubmission;
 
   const reportedActivity: IBusinessTripActivityReq = {
@@ -48,6 +51,9 @@ export async function createBusinessTripActivity(
     description,
     distanceInKM,
     location,
+    accommodationCost,
+    foodCost,
+    otherCost,
   };
 
   await ActivityClient.createActivity(employeeParams, reportedActivity);
@@ -66,6 +72,9 @@ export async function updateBusinessTripActivity(
     description,
     distanceInKM,
     location,
+    accommodationCost,
+    foodCost,
+    otherCost,
   } = activitySubmission;
 
   const updatedActivity: IBusinessTripActivityReq = {
@@ -76,6 +85,9 @@ export async function updateBusinessTripActivity(
     description,
     distanceInKM,
     location,
+    accommodationCost,
+    foodCost,
+    otherCost,
   };
   await ActivityClient.updateActivity(
     employeeParams,
