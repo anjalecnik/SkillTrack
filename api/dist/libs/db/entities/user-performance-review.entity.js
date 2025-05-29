@@ -23,6 +23,7 @@ let UserPerformanceReviewEntity = class UserPerformanceReviewEntity {
     answer4;
     quartal;
     year;
+    score;
     createdAt;
     updatedAt;
     userId;
@@ -71,6 +72,12 @@ __decorate([
     }),
     __metadata("design:type", Number)
 ], UserPerformanceReviewEntity.prototype, "year", void 0);
+__decorate([
+    (0, typeorm_1.Column)({
+        type: "decimal"
+    }),
+    __metadata("design:type", Number)
+], UserPerformanceReviewEntity.prototype, "score", void 0);
 __decorate([
     (0, typeorm_1.CreateDateColumn)(),
     __metadata("design:type", Date)

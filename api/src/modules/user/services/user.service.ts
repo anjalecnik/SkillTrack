@@ -10,9 +10,6 @@ import { UserEntity } from "src/libs/db/entities/user.entity"
 import { UserRole } from "src/utils/types/enums/user-role.enum"
 import { UserAddressService } from "../modules/user-address/services/user-address.service"
 import { UserAssignedVacationService } from "../modules/user-assigned-vacation/services/user-assigned-vacation.service"
-import JiraApi from "jira-client"
-import { Config } from "src/utils/config/config"
-import { JiraStatisticsResponse } from "src/modules/jira/dtos/response/jira-statistics.response"
 
 @Injectable()
 export class UserService {

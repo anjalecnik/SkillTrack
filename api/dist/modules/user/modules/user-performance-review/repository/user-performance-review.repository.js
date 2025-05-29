@@ -53,14 +53,28 @@ let UserPerformanceReviewRepository = class UserPerformanceReviewRepository {
         return performanceReviewId;
     }
     async createPerformanceReview(userPerformanceReview) {
+        const { answer1, answer2, answer3, answer4, quartal, year } = userPerformanceReview;
+        const scoreAnswer1 = ((5 - answer1) / 4) * 25;
+        const scoreAnswer2 = ((5 - answer2) / 4) * 25;
+        const scoreAnswer3 = answer3 ? 0 : 25;
+        const scoreAnswer4 = answer4 ? 25 : 0;
+        const totalScore = scoreAnswer1 + scoreAnswer2 + scoreAnswer3 + scoreAnswer4;
         return this.performanceReviewRepository.save({
-            ...userPerformanceReview
+            ...userPerformanceReview,
+            score: totalScore
         });
     }
     async updatePerformanceReview(userPerformanceReview) {
         const filteredUserPerformanceReview = Object.fromEntries(Object.entries(userPerformanceReview).filter(([key]) => ["answer1", "answer2", "answer3", "answer4", "quartal", "year"].includes(key)));
+        const { answer1, answer2, answer3, answer4 } = filteredUserPerformanceReview;
+        const scoreAnswer1 = ((5 - answer1) / 4) * 25;
+        const scoreAnswer2 = ((5 - answer2) / 4) * 25;
+        const scoreAnswer3 = answer3 ? 0 : 25;
+        const scoreAnswer4 = answer4 ? 25 : 0;
+        const score = scoreAnswer1 + scoreAnswer2 + scoreAnswer3 + scoreAnswer4;
         await this.performanceReviewRepository.update(userPerformanceReview.id, {
-            ...filteredUserPerformanceReview
+            ...filteredUserPerformanceReview,
+            score
         });
         return this.performanceReviewRepository.findOneOrFail({ where: { id: userPerformanceReview.id } });
     }

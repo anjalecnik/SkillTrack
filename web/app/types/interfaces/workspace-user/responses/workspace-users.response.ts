@@ -111,6 +111,7 @@ export interface IUserResponse {
   vacation: IVacation;
   workspaceTeam: WorkspaceTeam;
   workspaceWorkPosition: WorkspaceWorkPosition;
+  averageScore?: number;
   isSupervisor: boolean;
 }
 

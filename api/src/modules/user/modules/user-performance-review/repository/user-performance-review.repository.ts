@@ -48,8 +48,18 @@ export class UserPerformanceReviewRepository {
 	}
 
 	async createPerformanceReview(userPerformanceReview: IUserPerformanceReviewCreateDBRequest): Promise<UserPerformanceReviewEntity> {
+		const { answer1, answer2, answer3, answer4, quartal, year } = userPerformanceReview
+
+		const scoreAnswer1 = ((5 - answer1) / 4) * 25 // 1 = 25pts, 5 = 0pts
+		const scoreAnswer2 = ((5 - answer2) / 4) * 25
+		const scoreAnswer3 = answer3 ? 0 : 25 // false = 25pts, true = 0pts
+		const scoreAnswer4 = answer4 ? 25 : 0 // true = 25pts, false = 0pts
+
+		const totalScore = scoreAnswer1 + scoreAnswer2 + scoreAnswer3 + scoreAnswer4
+
 		return this.performanceReviewRepository.save({
-			...userPerformanceReview
+			...userPerformanceReview,
+			score: totalScore
 		})
 	}
 
@@ -57,8 +67,19 @@ export class UserPerformanceReviewRepository {
 		const filteredUserPerformanceReview = Object.fromEntries(
 			Object.entries(userPerformanceReview).filter(([key]) => ["answer1", "answer2", "answer3", "answer4", "quartal", "year"].includes(key as keyof UserPerformanceReviewEntity))
 		)
+
+		const { answer1, answer2, answer3, answer4 } = filteredUserPerformanceReview as Pick<UserPerformanceReviewEntity, "answer1" | "answer2" | "answer3" | "answer4">
+
+		const scoreAnswer1 = ((5 - answer1) / 4) * 25
+		const scoreAnswer2 = ((5 - answer2) / 4) * 25
+		const scoreAnswer3 = answer3 ? 0 : 25
+		const scoreAnswer4 = answer4 ? 25 : 0
+
+		const score = scoreAnswer1 + scoreAnswer2 + scoreAnswer3 + scoreAnswer4
+
 		await this.performanceReviewRepository.update(userPerformanceReview.id, {
-			...filteredUserPerformanceReview
+			...filteredUserPerformanceReview,
+			score
 		})
 
 		return this.performanceReviewRepository.findOneOrFail({ where: { id: userPerformanceReview.id } })

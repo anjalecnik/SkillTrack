@@ -24,6 +24,9 @@ export class UserListItemResponse {
 	@ApiProperty({ example: "Builder" })
 	surname!: string
 
+	@ApiPropertyOptional({ example: 1 })
+	averageScore?: number
+
 	@ApiPropertyOptional({ type: UserVacationStatisticResponse })
 	vacation?: UserVacationStatisticResponse
 

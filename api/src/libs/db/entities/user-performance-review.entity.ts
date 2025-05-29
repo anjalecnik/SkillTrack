@@ -41,6 +41,11 @@ export class UserPerformanceReviewEntity implements ICreatedAtEntity, IUpdatedAt
 	})
 	year!: number
 
+	@Column({
+		type: "decimal"
+	})
+	score!: number
+
 	@CreateDateColumn()
 	createdAt!: Date
 

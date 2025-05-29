@@ -30,6 +30,10 @@ export abstract class UserMapper {
 
 	static mapUserListItem(userDetails: IUserPaginationItemResponse): UserListItemResponse {
 		const vacation = this.mapUserActivityStatisticsVacationDetails(userDetails)
+		const avgScore = userDetails.performanceReviews?.length
+			? userDetails.performanceReviews.reduce((sum, r) => sum + Number(r.score || 0), 0) / userDetails.performanceReviews.length
+			: null
+
 		return {
 			id: userDetails.id,
 			email: userDetails.email,
@@ -40,7 +44,8 @@ export abstract class UserMapper {
 
 			team: userDetails.team ? TeamMapper.mapTeamListItem(userDetails.team) : undefined,
 			workPosition: userDetails.workPosition ? WorkPositionMapper.mapWorkPositionListItem(userDetails.workPosition) : undefined,
-			vacation: vacation
+			vacation: vacation,
+			averageScore: avgScore ? Number(avgScore.toFixed(2)) : undefined
 		}
 	}
 
