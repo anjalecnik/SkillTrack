@@ -33,6 +33,7 @@ class EnvironmentVariables {
     API_URL;
     APP_CORS_ORIGIN;
     APP_CORS_METHODS;
+    JIRA_API_TOKEN;
 }
 exports.EnvironmentVariables = EnvironmentVariables;
 __decorate([
@@ -141,4 +142,9 @@ __decorate([
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], EnvironmentVariables.prototype, "APP_CORS_METHODS", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", Object)
+], EnvironmentVariables.prototype, "JIRA_API_TOKEN", void 0);
 //# sourceMappingURL=config.environment-variables.class.js.map

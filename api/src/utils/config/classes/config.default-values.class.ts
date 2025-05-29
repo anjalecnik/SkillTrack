@@ -32,4 +32,6 @@ export class DefaultValues {
 	GOOGLE_CALLBACK_URL = "http://localhost:8080/api/auth/users/google/redirect"
 
 	APP_FEATURE_USER_ACTIVITY_DAILY_EDIT_DAYS_LIMIT = "7"
+
+	JIRA_API_TOKEN = ""
 }

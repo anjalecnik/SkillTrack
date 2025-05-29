@@ -100,4 +100,11 @@ export class EnvironmentVariables {
 	@Expose()
 	@IsString()
 	APP_CORS_METHODS!: string
+
+	//----------------
+	// JIRA
+	//----------------
+	@Expose()
+	@IsString()
+	JIRA_API_TOKEN
 }
