@@ -15,6 +15,7 @@ export interface IPerformanceReview {
 	answer2: number
 	answer3: boolean
 	answer4: boolean
+	score: number
 	quartal: string
 	year: string
 }

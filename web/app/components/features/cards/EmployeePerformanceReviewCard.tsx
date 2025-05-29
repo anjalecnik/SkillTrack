@@ -80,8 +80,8 @@ export function EmployeePerformanceReviewCard({
                     itemIndex === 0
                       ? "flex-start"
                       : itemIndex === performanceReviews.length - 1
-                      ? "flex-end"
-                      : "center",
+                        ? "flex-end"
+                        : "center",
                   textAlign: "right",
                   flex: "0 0 auto",
                   minWidth: "10ch",
@@ -144,7 +144,8 @@ export function EmployeePerformanceReviewCard({
                       }}
                     >
                       <Typography variant="h5" component="span">
-                        {t("workspaceEmployees.performanceReview")}
+                        {t("workspaceEmployees.performanceReview")} -{" "}
+                        {item.score} %
                       </Typography>
                       <Typography variant="caption" color="text.secondary">
                         {dayjs(item.createdAt).format("DD MMM YYYY")}
@@ -153,34 +154,28 @@ export function EmployeePerformanceReviewCard({
                     <Typography>
                       By {fullNameFormatter(item.reportedBy)}
                     </Typography>
-                    <Grid container>
-                      {Object.entries({
-                        "Top Pay": item.answer1,
-                        "Keep on Team": item.answer2,
-                        "Performance Risk": item.answer3 ? "Yes" : "No",
-                        "Promotion Ready": item.answer4 ? "Yes" : "No",
-                      }).map(([label, value], index) => (
-                        <Grid item xs={6} key={index}>
-                          <Box display="flex">
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                            >
-                              • {label}:&nbsp;
-                            </Typography>
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              display="block"
-                              sx={{ textTransform: "capitalize" }}
-                              key={index}
-                            >
-                              {value}
-                            </Typography>
-                          </Box>
-                        </Grid>
-                      ))}
-                    </Grid>
+                    {Object.entries({
+                      "Cross-Functional Collaboration": item.answer1,
+                      "Delivery Consistency": item.answer2,
+                      "Missed Deadlines": item.answer3 ? "Yes" : "No",
+                      "Project Leadership Ready": item.answer4 ? "Yes" : "No",
+                    }).map(([label, value], index) => (
+                      <Grid item xs={12} key={index}>
+                        <Box display="flex">
+                          <Typography variant="caption" color="text.secondary">
+                            • {label}:&nbsp;
+                          </Typography>
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            display="block"
+                            sx={{ textTransform: "capitalize" }}
+                          >
+                            {value}
+                          </Typography>
+                        </Box>
+                      </Grid>
+                    ))}
                   </Paper>
                 ) : (
                   <></>

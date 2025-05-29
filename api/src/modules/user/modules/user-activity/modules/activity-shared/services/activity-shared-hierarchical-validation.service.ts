@@ -32,15 +32,6 @@ export class ActivitySharedHierarchicalValidationService {
 				)
 		}
 
-		// User from other is reporting for other user
-		if (user.id !== reportedBy.id) {
-			// Super Admin is reporting for another user. Check super admin permissions
-			throw new UnauthorizedException(
-				"User lacks permissions to report for others in different workspaces",
-				`User ID: '${reportedBy.id}' does not have permission to report activities'`
-			)
-		}
-
 		return isPrivileged
 	}
 }

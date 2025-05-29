@@ -44,6 +44,7 @@ export class UserRepository {
 			.leftJoinAndSelect(`${alias}.workPosition`, "workPosition")
 			.leftJoinAndSelect(`${alias}.projects`, "projects")
 			.leftJoinAndSelect(`${alias}.team`, "team")
+			.leftJoinAndSelect(`${alias}.performanceReviews`, "performanceReviews")
 			.skip(skip)
 			.take(take)
 
@@ -156,7 +157,7 @@ export class UserRepository {
 							userId: userPatchRequest.id,
 							createdByUserId: userPatchRequest.updatedByUserId!,
 							updatedByUserId: userPatchRequest.updatedByUserId!
-					  }
+						}
 			)
 			return accumulator
 		}, [])
@@ -176,7 +177,7 @@ export class UserRepository {
 							userId: userPatchRequest.id,
 							createdByUserId: userPatchRequest.updatedByUserId!,
 							updatedByUserId: userPatchRequest.updatedByUserId!
-					  }
+						}
 			)
 			return accumulator
 		}, [])

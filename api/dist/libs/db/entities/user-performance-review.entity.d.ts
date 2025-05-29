@@ -10,6 +10,7 @@ export declare class UserPerformanceReviewEntity implements ICreatedAtEntity, IU
     answer4: boolean;
     quartal: UserPerformanceReviewQuartal;
     year: number;
+    score: number;
     createdAt: Date;
     updatedAt: Date;
     userId: number;

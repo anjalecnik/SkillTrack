@@ -50,6 +50,7 @@ let UserRepository = class UserRepository {
             .leftJoinAndSelect(`${alias}.workPosition`, "workPosition")
             .leftJoinAndSelect(`${alias}.projects`, "projects")
             .leftJoinAndSelect(`${alias}.team`, "team")
+            .leftJoinAndSelect(`${alias}.performanceReviews`, "performanceReviews")
             .skip(skip)
             .take(take);
         orderCriteria.forEach(({ orderName, orderSortingDir }) => {

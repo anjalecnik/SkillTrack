@@ -1,11 +1,11 @@
 import { CardLayout } from "~/components/layout";
 import { EmployeesCardHeader, EmployeeTable } from "~/components/features";
-import { IWorkspaceUserResponse, PaginatedResponse } from "~/types";
+import { IUserResponse, PaginatedResponse } from "~/types";
 import { useNavigate } from "@remix-run/react";
 import { useNavigationState } from "~/hooks";
 
 interface IEmployeesCardProps {
-  users: PaginatedResponse<IWorkspaceUserResponse> | null;
+  users: PaginatedResponse<IUserResponse> | null;
   onClick?: () => void;
 }
 

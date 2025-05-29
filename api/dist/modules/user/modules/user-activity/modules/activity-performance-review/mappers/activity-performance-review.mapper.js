@@ -43,6 +43,7 @@ class ActivityPerformanceReviewMapper {
                 answer2: review.answer2 ?? null,
                 answer3: review.answer3 ?? null,
                 answer4: review.answer4 ?? null,
+                score: review.score ?? 0,
                 createdAt: review.createdAt ?? null,
                 reportedBy: relatedActivity?.reportedByUser
                     ? {

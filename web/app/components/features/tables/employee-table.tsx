@@ -14,13 +14,13 @@ import {
   Avatar,
   FormDialog,
 } from "~/components/common";
-import { ITableMeta, IWorkspaceUserResponse, UserStatus } from "~/types";
+import { ITableMeta, IUserResponse, UserStatus } from "~/types";
 import { InfoCircleOutlined } from "@ant-design/icons";
 import { useState } from "react";
 import { StatusFlowBody } from "~/components/features";
 
 export interface IEmployeeTableProps {
-  items: IWorkspaceUserResponse[];
+  items: IUserResponse[];
   meta?: ITableMeta;
   isLoading?: boolean;
   onItemClick: (id: number) => void;
@@ -46,6 +46,7 @@ export function EmployeeTable({
             param: "name",
           },
           { children: t("workspaceEmployees.workPosition") },
+          { children: t("workspaceEmployees.averageScore") },
           {
             children: (
               <>
@@ -121,6 +122,9 @@ export function EmployeeTable({
                 </Flex>
               </TableCell>
               <TableCell>{item?.workspaceWorkPosition?.name ?? "/"}</TableCell>
+              <TableCell>
+                {item?.averageScore ? `${item.averageScore} %` : "/"}
+              </TableCell>
               <TableCell>
                 {item.status === UserStatus.Active ? (
                   <Chip

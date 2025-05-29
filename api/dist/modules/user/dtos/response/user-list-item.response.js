@@ -23,6 +23,7 @@ class UserListItemResponse {
     role;
     name;
     surname;
+    averageScore;
     vacation;
     team;
     workPosition;
@@ -52,6 +53,10 @@ __decorate([
     (0, swagger_1.ApiProperty)({ example: "Builder" }),
     __metadata("design:type", String)
 ], UserListItemResponse.prototype, "surname", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)({ example: 1 }),
+    __metadata("design:type", Number)
+], UserListItemResponse.prototype, "averageScore", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: user_vacation_statistic_response_1.UserVacationStatisticResponse }),
     __metadata("design:type", user_vacation_statistic_response_1.UserVacationStatisticResponse)

@@ -29,9 +29,6 @@ let ActivitySharedHierarchicalValidationService = class ActivitySharedHierarchic
             if (!isPrivileged)
                 throw new common_1.UnauthorizedException("User lacks permissions to report for others", `User ID: '${reportedBy.id}' is not authorized to report activities for user ID: '${user.id}'`);
         }
-        if (user.id !== reportedBy.id) {
-            throw new common_1.UnauthorizedException("User lacks permissions to report for others in different workspaces", `User ID: '${reportedBy.id}' does not have permission to report activities'`);
-        }
         return isPrivileged;
     }
 };

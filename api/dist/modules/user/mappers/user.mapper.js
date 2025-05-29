@@ -22,6 +22,9 @@ let UserMapper = class UserMapper {
     }
     static mapUserListItem(userDetails) {
         const vacation = this.mapUserActivityStatisticsVacationDetails(userDetails);
+        const avgScore = userDetails.performanceReviews?.length
+            ? userDetails.performanceReviews.reduce((sum, r) => sum + Number(r.score || 0), 0) / userDetails.performanceReviews.length
+            : null;
         return {
             id: userDetails.id,
             email: userDetails.email,
@@ -31,7 +34,8 @@ let UserMapper = class UserMapper {
             surname: userDetails.surname,
             team: userDetails.team ? team_mapper_1.TeamMapper.mapTeamListItem(userDetails.team) : undefined,
             workPosition: userDetails.workPosition ? work_position_mapper_1.WorkPositionMapper.mapWorkPositionListItem(userDetails.workPosition) : undefined,
-            vacation: vacation
+            vacation: vacation,
+            averageScore: avgScore ? Number(avgScore.toFixed(2)) : undefined
         };
     }
     static mapUserDetails({ userEntity, ...statistic }) {

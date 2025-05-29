@@ -10,6 +10,7 @@ export declare class UserListItemResponse {
     role: UserRole;
     name: string;
     surname: string;
+    averageScore?: number;
     vacation?: UserVacationStatisticResponse;
     team?: TeamDetailsResponse;
     workPosition?: WorkPositionListItemResponse;
