@@ -163,7 +163,8 @@
     "performanceReviews": "Performance reviews",
     "settings": "Settings",
     "about": "About",
-    "logout": "Log out"
+    "logout": "Log out",
+    "jira": "Jira"
   },
 
   "workspaceReservations": {
@@ -637,5 +638,13 @@
     "unassigned": "Unassigned",
     "pending": "Pending",
     "approved": "Approved"
+  },
+
+  "jira": {
+    "jiraDialogName": "Jira Ticket Analysis",
+    "ticketId": "Ticket ID",
+    "analyze": "Analyze Workload",
+    "selectProject": "Select Project",
+    "workloadSummary": "Workload Summary"
   }
 }

@@ -26,6 +26,7 @@ class DefaultValues {
     GOOGLE_CLIENT_SECRET = "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";
     GOOGLE_CALLBACK_URL = "http://localhost:8080/api/auth/users/google/redirect";
     APP_FEATURE_USER_ACTIVITY_DAILY_EDIT_DAYS_LIMIT = "7";
+    JIRA_API_TOKEN = "";
 }
 exports.DefaultValues = DefaultValues;
 //# sourceMappingURL=config.default-values.class.js.map

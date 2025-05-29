@@ -19,4 +19,5 @@ export declare class EnvironmentVariables {
     API_URL: string;
     APP_CORS_ORIGIN: string;
     APP_CORS_METHODS: string;
+    JIRA_API_TOKEN: any;
 }

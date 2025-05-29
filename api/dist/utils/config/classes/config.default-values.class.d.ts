@@ -23,4 +23,5 @@ export declare class DefaultValues {
     GOOGLE_CLIENT_SECRET: string;
     GOOGLE_CALLBACK_URL: string;
     APP_FEATURE_USER_ACTIVITY_DAILY_EDIT_DAYS_LIMIT: string;
+    JIRA_API_TOKEN: string;
 }

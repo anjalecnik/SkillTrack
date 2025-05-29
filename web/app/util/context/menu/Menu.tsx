@@ -56,11 +56,13 @@ export const MenuProvider = ({
       "reports",
       "activityDashboard",
       "performanceReviews",
+      "jira",
     ];
     const userHubFilteredItems = [
       "dashboard",
       "requests",
       isSupervisor && "performanceReviews",
+      isSupervisor && "jira",
       searchParams.get(SearchParam.SupervisorView) &&
         isSupervisor &&
         "teamMembers",

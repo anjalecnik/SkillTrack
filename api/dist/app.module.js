@@ -19,6 +19,7 @@ const cache_manager_1 = require("@nestjs/cache-manager");
 const work_position_module_1 = require("./modules/work-position/work-position.module");
 const project_module_1 = require("./modules/project/project.module");
 const user_working_hours_module_1 = require("./modules/user/modules/user-working-hours/user-working-hours.module");
+const jira_module_1 = require("./modules/jira/jira.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -37,6 +38,7 @@ exports.AppModule = AppModule = __decorate([
             team_module_1.TeamModule,
             user_module_1.UserModule,
             utility_module_1.UtilityModule,
+            jira_module_1.JiraModule,
             work_position_module_1.WorkPositionModule,
             project_module_1.ProjectModule,
             user_working_hours_module_1.UserWorkingHoursModule
