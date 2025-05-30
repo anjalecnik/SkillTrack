@@ -13,10 +13,11 @@ import { ProjectUserEntity } from "src/libs/db/entities/project-user.entity"
 import { MasterDataSource } from "src/libs/db/master-data-source.service"
 import { UserWorkingHoursModule } from "./modules/user-working-hours/user-working-hours.module"
 import { UserActivityModule } from "./modules/user-activity/modules/user-activity.module"
+import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([UserEntity, ProjectUserEntity]),
+		TypeOrmModule.forFeature([UserEntity, ProjectUserEntity, UserActivityEntity]),
 		EmitterModule,
 		UtilityModule,
 		UserAddressModule,

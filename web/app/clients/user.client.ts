@@ -15,6 +15,8 @@ import {
   IWorkspaceUserInviteRes,
   IWorkspaceUserUpdateReq,
   IWorkspaceUserIsSupervisorResponse,
+  IWorkspaceReportRequest,
+  IWorkspaceReportResponse,
 } from "~/types";
 import { privateClient } from "~/util";
 
@@ -119,6 +121,24 @@ export class UserClient {
       user
     );
 
+    return data;
+  }
+
+  static async getReport(
+    reportReq: IWorkspaceReportRequest
+  ): Promise<IWorkspaceReportResponse> {
+    const serializedParams = {
+      ...reportReq,
+      userIds: reportReq.userIds?.map((id) => String(id)),
+      projectIds: reportReq.projectIds?.map((id) => String(id)),
+    };
+
+    const { data } = await privateClient.get<IWorkspaceReportResponse>(
+      `/users/work/work-overview`,
+      {
+        params: serializedParams,
+      }
+    );
     return data;
   }
 }

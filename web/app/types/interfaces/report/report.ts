@@ -33,8 +33,8 @@ export interface ITotalCount {
 }
 
 interface IUserEmbedded {
-  workspaceUser: {
-    workspaceUserId: number;
+  user: {
+    userId: number;
     firstName: string;
     lastName: string;
   };
@@ -51,9 +51,9 @@ export interface IWorkspaceProject extends ITotalCount {
 
 export interface IReport {
   total: ITotalSum;
-  workspaceUsers: {
+  users: {
     projects: {
-      workspaceProject: IWorkspaceProject[];
+      project: IWorkspaceProject[];
     };
     totalUser: ITotalCount;
     _embedded: IUserEmbedded;

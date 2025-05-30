@@ -14,6 +14,7 @@ export enum SearchParam {
   View = "view",
   EmployeeId = "employeeId",
   EmployeeIds = "employeeIds",
+  ProjectIds = "projectIds",
   Limit = "limit",
   RequestStatuses = "requestStatuses",
   RequestStatus = "requestStatus",

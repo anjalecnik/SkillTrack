@@ -51,8 +51,17 @@ let UtilityService = class UtilityService {
     async getHolidaysOnDateRangeByCountryCode(countryCode, dates) {
         return this.utilityRepository.getHolidaysOnDates(countryCode, dates);
     }
-    async getHolidaysInDateRange(countryCode, dateStart, dateEnd) {
-        return this.utilityRepository.getHolidaysInDateRange(countryCode, dateStart, dateEnd);
+    async getHolidaysInDateRange(dateStart, dateEnd) {
+        const holidays = exports.SLOVENIAN_HOLIDAYS.filter(holiday => holiday.date >= dateStart && holiday.date <= dateEnd).map((holiday, index) => ({
+            ...holiday,
+            id: index + 1,
+            countryCode: "SI",
+            createdAt: new Date(),
+            updatedAt: new Date(),
+            state: null,
+            region: null
+        }));
+        return holidays;
     }
     async getWorkDaysArray() {
         const workingDays = [1, 2, 3, 4, 5];

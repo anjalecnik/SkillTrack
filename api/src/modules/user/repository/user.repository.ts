@@ -1,7 +1,7 @@
 import { UserEntity } from "src/libs/db/entities/user.entity"
 import { BadRequestException, Injectable, InternalServerErrorException } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { DeepPartial, EntityManager, FindOptionsRelations, In, Repository } from "typeorm"
+import { And, DeepPartial, EntityManager, FindOperator, FindOptionsRelations, In, IsNull, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm"
 import { MasterDataSource } from "../../../libs/db/master-data-source.service"
 import { IUserInvitationDBRequest, IUserInvitationListItem, IUserPaginationFilterDBRequest, IUserPatchDBRequest } from "../interfaces"
 import { IPaginatedResponse } from "src/utils/types/interfaces"
@@ -10,6 +10,10 @@ import { UserStatus } from "src/utils/types/enums/user-status.enum"
 import { UserAddressEntity } from "src/libs/db/entities/user-address.entity"
 import { ProjectUserEntity } from "src/libs/db/entities/project-user.entity"
 import { UserVacationAssignedEntity } from "src/libs/db/entities/user-vacation-assigned.entity"
+import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
+import { UserActivityType } from "src/utils/types/enums/user-activity.enum"
+import { IUserWorkOverviewListFilter } from "../interfaces/user-work-overview-list-filter.interface"
+import { UserActivityStatus } from "src/utils/types/enums/user-activity-status.enum"
 
 const LOAD_RELATIONS: FindOptionsRelations<UserEntity> = {
 	team: true,
@@ -27,6 +31,8 @@ export class UserRepository {
 		private userRepository: Repository<UserEntity>,
 		@InjectRepository(ProjectUserEntity)
 		private projectUserRepository: Repository<ProjectUserEntity>,
+		@InjectRepository(UserActivityEntity)
+		private readonly userActivityRepository: Repository<UserActivityEntity>,
 		private readonly masterDataSource: MasterDataSource
 	) {}
 
@@ -142,6 +148,67 @@ export class UserRepository {
 			await userRepository.save(user)
 
 			return userRepository.findOneOrFail({ where: { id: userId }, relations: LOAD_RELATIONS })
+		})
+	}
+
+	async getActiveProjectParticipants(projectIds: number[]): Promise<UserActivityEntity[]> {
+		return this.userActivityRepository.find({
+			where: {
+				projectId: In(projectIds),
+				activityType: In([UserActivityType.BusinessTrip, UserActivityType.Daily, UserActivityType.PerformanceReview])
+			},
+			relations: { user: true }
+		})
+	}
+
+	async getUsersWithProjects(userIds: number[], projectIds?: number[]): Promise<UserEntity[]> {
+		return this.userRepository
+			.createQueryBuilder("user")
+			.leftJoinAndSelect("user.userActivity", "activity")
+			.leftJoinAndSelect("activity.project", "project")
+			.andWhere("user.id IN (:...userIds)", { userIds })
+			.andWhere(projectIds?.length ? "activity.projectId IN (:...projectIds)" : "1=1", { projectIds })
+			.andWhere("activity.activityType IN (:...activityTypes)", { activityTypes: [UserActivityType.BusinessTrip, UserActivityType.Daily, UserActivityType.PerformanceReview] })
+			.addOrderBy("user.name", "ASC")
+			.addOrderBy("user.surname", "ASC")
+			.getMany()
+	}
+
+	async getAssiggnedProjectParticipants(projectIds: number[]): Promise<UserEntity[]> {
+		const projectUserEntities = await this.projectUserRepository.find({
+			where: { projectId: In(projectIds), deletedAt: IsNull() },
+			relations: { user: { projects: true } }
+		})
+		return projectUserEntities.map(projectUserEntity => projectUserEntity.user!)
+	}
+
+	async getActivitiesWithoutProject(filter: IUserWorkOverviewListFilter): Promise<UserActivityEntity[]> {
+		return this.userActivityRepository.find({
+			where: {
+				userId: filter.userIds ? In(filter.userIds) : undefined,
+				activityType: In([UserActivityType.SickLeave, UserActivityType.Vacation, UserActivityType.PublicHoliday]),
+				status: In([UserActivityStatus.Approved, UserActivityStatus.PendingApproval]),
+				date: this.setActivityDateFilter(filter)
+			},
+			order: {
+				userId: { direction: "DESC" }
+			}
+		})
+	}
+
+	async getActivitiesWithProject(filter: IUserWorkOverviewListFilter): Promise<UserActivityEntity[]> {
+		return this.userActivityRepository.find({
+			where: {
+				userId: filter.userIds ? In(filter.userIds) : undefined,
+				activityType: In([UserActivityType.BusinessTrip, UserActivityType.Daily, UserActivityType.PerformanceReview]),
+				status: In([UserActivityStatus.Approved, UserActivityStatus.PendingApproval]),
+				projectId: filter.projectIds ? In(filter.projectIds) : undefined,
+				date: this.setActivityDateFilter(filter)
+			},
+			order: {
+				projectId: { direction: "DESC" },
+				userId: { direction: "DESC" }
+			}
 		})
 	}
 
@@ -271,5 +338,14 @@ export class UserRepository {
 			if (!userProjectToUpdate && !userProjectToAdd && !shouldWorkspaceUserProjectBeRemoved) return true
 			return false
 		})
+	}
+
+	private setActivityDateFilter({ fromDateStart, toDateEnd }: IUserWorkOverviewListFilter): FindOperator<Date> | undefined {
+		const dateAnd: FindOperator<Date>[] = []
+		const endDate = toDateEnd ?? new Date()
+
+		if (fromDateStart) dateAnd.push(MoreThanOrEqual(fromDateStart))
+		if (endDate) dateAnd.push(LessThanOrEqual(endDate))
+		return dateAnd.length > 0 ? And(...dateAnd) : undefined
 	}
 }

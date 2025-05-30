@@ -27,6 +27,9 @@ const user_pagination_filter_request_1 = require("../dtos/request/user-paginatio
 const user_invitation_list_response_1 = require("../dtos/response/user-invitation-list.response");
 const user_invitation_list_request_1 = require("../dtos/request/user-invitation-list.request");
 const user_patch_request_1 = require("../dtos/request/patch/user-patch.request");
+const user_work_overview_list_hal_response_1 = require("../dtos/response/user-work-overview-list.hal.response");
+const user_work_overview_list_filter_request_1 = require("../dtos/request/user-work-overview-list-filter.request");
+const user_work_overview_mapper_1 = require("../mappers/user-work-overview.mapper");
 let UserAdminHubController = class UserAdminHubController {
     userService;
     constructor(userService) {
@@ -39,6 +42,13 @@ let UserAdminHubController = class UserAdminHubController {
     async geteUserList(filter) {
         const entities = await this.userService.getUserList({ ...filter });
         return user_mapper_1.UserMapper.mapUserPaginationList(entities.data, entities.meta);
+    }
+    async getUserWorkOverview(filter) {
+        const workPositions = await this.userService.getOverview({
+            ...filter
+        });
+        const workingDays = await this.userService.getWorkingDays(workPositions, { ...filter });
+        return user_work_overview_mapper_1.UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays);
     }
     async invite(authPassport, userInvitations) {
         const userEntities = await this.userService.invite({
@@ -78,6 +88,15 @@ __decorate([
     __metadata("design:paramtypes", [user_pagination_filter_request_1.UserPaginationFilterRequest]),
     __metadata("design:returntype", Promise)
 ], UserAdminHubController.prototype, "geteUserList", null);
+__decorate([
+    (0, common_1.Get)("/work/work-overview"),
+    (0, swagger_1.ApiOperation)({ summary: "Returns report of work overview", description: `Returns report of work overview` }),
+    (0, swagger_1.ApiOkResponse)({ description: "Returns report of work overview", type: user_work_overview_list_hal_response_1.UserWorkOverviewListHalResponse }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_work_overview_list_filter_request_1.UserWorkOverviewListFilterRequest]),
+    __metadata("design:returntype", Promise)
+], UserAdminHubController.prototype, "getUserWorkOverview", null);
 __decorate([
     (0, common_1.Post)("invite"),
     (0, swagger_1.ApiBearerAuth)(),

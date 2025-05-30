@@ -46,8 +46,18 @@ export class UtilityService {
 		return this.utilityRepository.getHolidaysOnDates(countryCode, dates)
 	}
 
-	async getHolidaysInDateRange(countryCode: string, dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]> {
-		return this.utilityRepository.getHolidaysInDateRange(countryCode, dateStart, dateEnd)
+	async getHolidaysInDateRange(dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]> {
+		const holidays = SLOVENIAN_HOLIDAYS.filter(holiday => holiday.date >= dateStart && holiday.date <= dateEnd).map((holiday, index) => ({
+			...holiday,
+			id: index + 1, // Dummy ID
+			countryCode: "SI",
+			createdAt: new Date(),
+			updatedAt: new Date(),
+			state: null,
+			region: null
+		})) as HolidayEntity[]
+
+		return holidays
 	}
 
 	async getWorkDaysArray(): Promise<number[]> {
