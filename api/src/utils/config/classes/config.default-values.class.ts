@@ -27,8 +27,8 @@ export class DefaultValues {
 	APP_FEATURE_CACHE_JWT_ACCESS_TOKEN_PATH = "auth:jwt:accessToken"
 	APP_FEATURE_CACHE_JWT_REFRESH_TOKEN_PATH = "auth:jwt:refreshToken"
 
-	GOOGLE_CLIENT_ID = "830251780992-4mg5q31387jh8vra1k8qvektob9drjv9.apps.googleusercontent.com"
-	GOOGLE_CLIENT_SECRET = "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"
+	GOOGLE_CLIENT_ID = ""
+	GOOGLE_CLIENT_SECRET = ""
 	GOOGLE_CALLBACK_URL = "http://localhost:8080/api/auth/users/google/redirect"
 
 	APP_FEATURE_USER_ACTIVITY_DAILY_EDIT_DAYS_LIMIT = "7"
