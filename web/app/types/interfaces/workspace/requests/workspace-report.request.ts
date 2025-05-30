@@ -1,5 +1,5 @@
 export interface IWorkspaceReportRequest {
-  workspaceUserIds?: string[];
+  userIds?: string[];
   projectIds?: string[];
   fromDateStart?: string;
   toDateEnd?: string;

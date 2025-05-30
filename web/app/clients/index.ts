@@ -5,4 +5,3 @@ export * from "./work-position.client";
 export * from "./user.client";
 export * from "./activity.client";
 export * from "./request.client";
-export * from "./workspace-report.client";

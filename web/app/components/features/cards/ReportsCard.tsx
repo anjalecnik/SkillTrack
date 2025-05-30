@@ -9,78 +9,71 @@ import {
   IWorkspace,
   IWorkspaceReportRequest,
   IWorkspaceUser,
-  IWorkspaceUserResponse,
+  IUserResponse,
+  SearchParam,
   Status,
 } from "~/types";
 import { ReportForm, ReportInfo } from "~/components/features";
-import { SubmissionResult } from "@conform-to/react";
-import { useCallback, useEffect, useState } from "react";
-import { ReportFormSchema } from "~/schemas";
-import { WorkspaceReportClient } from "~/clients";
+import { FormProvider, SubmissionResult, useForm } from "@conform-to/react";
+import { useEffect, useState } from "react";
+import { ReportFormSchema, reportFormSchema as schema } from "~/schemas";
+import { UserClient } from "~/clients";
 import { handleAxiosError } from "~/util";
-import { ExportDialog } from "../dialogs/export-dialog";
-import { useParams, useSearchParams } from "@remix-run/react";
-import { downloadCSV } from "~/util/download-csv";
+import { Form, useParams, useSearchParams } from "@remix-run/react";
+import { parseWithZod } from "@conform-to/zod";
+import { DEFAULT_PROJECT_DATE_FORMAT } from "~/constants";
+import dayjs, { Dayjs } from "dayjs";
 
 interface ReportsCardProps {
   lastResult?: SubmissionResult<string[]> | null;
   projects: IProject[];
-  workspaceUsers: IWorkspaceUserResponse[];
+  users: IUserResponse[];
   workspace: IWorkspace;
 }
 
-export function ReportsCard({
-  lastResult,
-  projects,
-  workspaceUsers,
-  workspace,
-}: ReportsCardProps) {
+export function ReportsCard({ lastResult, projects, users }: ReportsCardProps) {
   const isTablet = useTablet();
-  const params = useParams();
 
   const [searchParams] = useSearchParams();
   const [report, setReport] = useState<IReport | undefined>();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
-  const [isExportDialogOpen, setIsExportDialogOpen] = useState(false);
 
-  const [reportFilters, setReportFilters] = useState({
-    employeeIds: searchParams.get("employeeIds")
-      ? searchParams.get("employeeIds")!.split(",").map(Number)
-      : [],
-    projectIds: searchParams.get("projectIds")
-      ? searchParams.get("projectIds")!.split(",").map(Number)
-      : [],
-    dateStart: undefined as string | undefined,
-    dateEnd: undefined as string | undefined,
+  const [form, fields] = useForm({
+    lastResult,
+    onValidate({ formData }) {
+      return parseWithZod(formData, { schema });
+    },
+    defaultValue: {
+      intent: "generate",
+      employeeIds: searchParams.get(SearchParam.EmployeeIds) || "",
+      projectIds: searchParams.get(SearchParam.ProjectIds) || "",
+      fromDateStart: dayjs()
+        .startOf("month")
+        .format(DEFAULT_PROJECT_DATE_FORMAT),
+      toDateEnd: dayjs().endOf("month").format(DEFAULT_PROJECT_DATE_FORMAT),
+    },
+    shouldValidate: "onSubmit",
+    id: `reports-form`,
   });
 
-  if (!workspace) {
-    throw new Error(t("error.somethingWentWrong") as string);
-  }
-
-  const exportReport = useCallback(async () => {
-    setIsLoading(true);
-    setError("");
-
-    try {
-      const response = await WorkspaceReportClient.exportReport(
-        Number(params.workspaceId),
-        {
-          workspaceUserIds: reportFilters.employeeIds.map(String),
-          projectIds: reportFilters.projectIds.map(String),
-          fromDateStart: reportFilters.dateStart,
-          toDateEnd: reportFilters.dateEnd,
-        }
-      );
-
-      downloadCSV(response, "WorkProjectOverview.csv");
-    } catch (error) {
-      setError(error instanceof Error ? error.message : "An error occurred");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [reportFilters]);
+  const [reportFilters, setReportFilters] = useState<{
+    employeeIds: number[];
+    projectIds: number[];
+    controlledFromDateStart: Dayjs | null;
+    controlledToDateEnd: Dayjs | null;
+  }>({
+    employeeIds: fields.employeeIds.initialValue?.split(",")?.map(Number) || [],
+    projectIds: fields.projectIds.initialValue?.split(",")?.map(Number) || [],
+    controlledFromDateStart: dayjs(
+      fields.fromDateStart.initialValue,
+      DEFAULT_PROJECT_DATE_FORMAT
+    ),
+    controlledToDateEnd: dayjs(
+      fields.toDateEnd.initialValue,
+      DEFAULT_PROJECT_DATE_FORMAT
+    ),
+  });
 
   useEffect(() => {
     if (lastResult?.status === Status.Error) return;
@@ -90,17 +83,11 @@ export function ReportsCard({
     const getReport = async () => {
       setIsLoading(true);
       try {
-        const {
-          workspaceId,
-          employeeIds,
-          projectIds,
-          fromDateStart,
-          toDateEnd,
-        } = lastResult?.initialValue as ReportFormSchema;
-        if (!workspaceId) return;
+        const { employeeIds, projectIds, fromDateStart, toDateEnd } =
+          lastResult?.initialValue as ReportFormSchema;
 
         const reportRequest: IWorkspaceReportRequest = {
-          workspaceUserIds:
+          userIds:
             employeeIds &&
             JSON.parse(employeeIds).map((user: IWorkspaceUser) =>
               user.id.toString()
@@ -114,10 +101,7 @@ export function ReportsCard({
           toDateEnd,
         };
 
-        const reportData = await WorkspaceReportClient.getWorkspaceReport(
-          workspaceId,
-          reportRequest
-        );
+        const reportData = await UserClient.getReport(reportRequest);
 
         setReport(reportData);
       } catch (error) {
@@ -138,35 +122,22 @@ export function ReportsCard({
           content={false}
         >
           <ComponentLoader isLoading={isLoading}>
-            <ReportForm
-              lastResult={lastResult}
-              workspace={workspace}
-              employees={workspaceUsers}
-              projects={projects}
-              reportFilters={reportFilters}
-              setReportFilters={setReportFilters}
-            />
+            <Form method="post" id={form.id}>
+              <FormProvider context={form.context}>
+                <ReportForm
+                  formId={form.id}
+                  employees={users}
+                  projects={projects}
+                  reportFilters={reportFilters}
+                  setReportFilters={setReportFilters}
+                />
+              </FormProvider>
+            </Form>
           </ComponentLoader>
           <Divider />
           {lastResult?.status === Status.Success && report && (
-            <ReportInfo
-              report={report}
-              setIsExportDialogOpen={setIsExportDialogOpen}
-              onExport={exportReport}
-            />
+            <ReportInfo report={report} />
           )}
-
-          <ExportDialog
-            title="Export"
-            open={isExportDialogOpen}
-            error={error}
-            downloadOptions={{
-              isLoading: isLoading,
-              isExportSuccess: !isLoading,
-              exportSuccessMessage: "workspaceReports.exportSuccessMessage",
-            }}
-            onClose={() => setIsExportDialogOpen(false)}
-          />
         </MainCard>
       </FlexColumn>
     </CardLayout>

@@ -22,13 +22,14 @@ const project_user_entity_1 = require("../../libs/db/entities/project-user.entit
 const master_data_source_service_1 = require("../../libs/db/master-data-source.service");
 const user_working_hours_module_1 = require("./modules/user-working-hours/user-working-hours.module");
 const user_activity_module_1 = require("./modules/user-activity/modules/user-activity.module");
+const user_activity_entity_1 = require("../../libs/db/entities/user-activity.entity");
 let UserModule = class UserModule {
 };
 exports.UserModule = UserModule;
 exports.UserModule = UserModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, project_user_entity_1.ProjectUserEntity]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, project_user_entity_1.ProjectUserEntity, user_activity_entity_1.UserActivityEntity]),
             emitter_module_1.EmitterModule,
             utility_module_1.UtilityModule,
             user_address_module_1.UserAddressModule,

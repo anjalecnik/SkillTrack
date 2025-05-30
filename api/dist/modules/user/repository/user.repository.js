@@ -21,6 +21,9 @@ const master_data_source_service_1 = require("../../../libs/db/master-data-sourc
 const pagination_helper_1 = require("../../../utils/helpers/pagination.helper");
 const user_status_enum_1 = require("../../../utils/types/enums/user-status.enum");
 const project_user_entity_1 = require("../../../libs/db/entities/project-user.entity");
+const user_activity_entity_1 = require("../../../libs/db/entities/user-activity.entity");
+const user_activity_enum_1 = require("../../../utils/types/enums/user-activity.enum");
+const user_activity_status_enum_1 = require("../../../utils/types/enums/user-activity-status.enum");
 const LOAD_RELATIONS = {
     team: true,
     workPosition: { parentWorkPosition: true },
@@ -32,10 +35,12 @@ const LOAD_RELATIONS = {
 let UserRepository = class UserRepository {
     userRepository;
     projectUserRepository;
+    userActivityRepository;
     masterDataSource;
-    constructor(userRepository, projectUserRepository, masterDataSource) {
+    constructor(userRepository, projectUserRepository, userActivityRepository, masterDataSource) {
         this.userRepository = userRepository;
         this.projectUserRepository = projectUserRepository;
+        this.userActivityRepository = userActivityRepository;
         this.masterDataSource = masterDataSource;
     }
     async getAllWorkspaceUsers() {
@@ -130,6 +135,62 @@ let UserRepository = class UserRepository {
             user.status = user_status_enum_1.UserStatus.Active;
             await userRepository.save(user);
             return userRepository.findOneOrFail({ where: { id: userId }, relations: LOAD_RELATIONS });
+        });
+    }
+    async getActiveProjectParticipants(projectIds) {
+        return this.userActivityRepository.find({
+            where: {
+                projectId: (0, typeorm_2.In)(projectIds),
+                activityType: (0, typeorm_2.In)([user_activity_enum_1.UserActivityType.BusinessTrip, user_activity_enum_1.UserActivityType.Daily, user_activity_enum_1.UserActivityType.PerformanceReview])
+            },
+            relations: { user: true }
+        });
+    }
+    async getUsersWithProjects(userIds, projectIds) {
+        return this.userRepository
+            .createQueryBuilder("user")
+            .leftJoinAndSelect("user.userActivity", "activity")
+            .leftJoinAndSelect("activity.project", "project")
+            .andWhere("user.id IN (:...userIds)", { userIds })
+            .andWhere(projectIds?.length ? "activity.projectId IN (:...projectIds)" : "1=1", { projectIds })
+            .andWhere("activity.activityType IN (:...activityTypes)", { activityTypes: [user_activity_enum_1.UserActivityType.BusinessTrip, user_activity_enum_1.UserActivityType.Daily, user_activity_enum_1.UserActivityType.PerformanceReview] })
+            .addOrderBy("user.name", "ASC")
+            .addOrderBy("user.surname", "ASC")
+            .getMany();
+    }
+    async getAssiggnedProjectParticipants(projectIds) {
+        const projectUserEntities = await this.projectUserRepository.find({
+            where: { projectId: (0, typeorm_2.In)(projectIds), deletedAt: (0, typeorm_2.IsNull)() },
+            relations: { user: { projects: true } }
+        });
+        return projectUserEntities.map(projectUserEntity => projectUserEntity.user);
+    }
+    async getActivitiesWithoutProject(filter) {
+        return this.userActivityRepository.find({
+            where: {
+                userId: filter.userIds ? (0, typeorm_2.In)(filter.userIds) : undefined,
+                activityType: (0, typeorm_2.In)([user_activity_enum_1.UserActivityType.SickLeave, user_activity_enum_1.UserActivityType.Vacation, user_activity_enum_1.UserActivityType.PublicHoliday]),
+                status: (0, typeorm_2.In)([user_activity_status_enum_1.UserActivityStatus.Approved, user_activity_status_enum_1.UserActivityStatus.PendingApproval]),
+                date: this.setActivityDateFilter(filter)
+            },
+            order: {
+                userId: { direction: "DESC" }
+            }
+        });
+    }
+    async getActivitiesWithProject(filter) {
+        return this.userActivityRepository.find({
+            where: {
+                userId: filter.userIds ? (0, typeorm_2.In)(filter.userIds) : undefined,
+                activityType: (0, typeorm_2.In)([user_activity_enum_1.UserActivityType.BusinessTrip, user_activity_enum_1.UserActivityType.Daily, user_activity_enum_1.UserActivityType.PerformanceReview]),
+                status: (0, typeorm_2.In)([user_activity_status_enum_1.UserActivityStatus.Approved, user_activity_status_enum_1.UserActivityStatus.PendingApproval]),
+                projectId: filter.projectIds ? (0, typeorm_2.In)(filter.projectIds) : undefined,
+                date: this.setActivityDateFilter(filter)
+            },
+            order: {
+                projectId: { direction: "DESC" },
+                userId: { direction: "DESC" }
+            }
         });
     }
     setUserAddresses(userPatchRequest) {
@@ -240,13 +301,24 @@ let UserRepository = class UserRepository {
             return false;
         });
     }
+    setActivityDateFilter({ fromDateStart, toDateEnd }) {
+        const dateAnd = [];
+        const endDate = toDateEnd ?? new Date();
+        if (fromDateStart)
+            dateAnd.push((0, typeorm_2.MoreThanOrEqual)(fromDateStart));
+        if (endDate)
+            dateAnd.push((0, typeorm_2.LessThanOrEqual)(endDate));
+        return dateAnd.length > 0 ? (0, typeorm_2.And)(...dateAnd) : undefined;
+    }
 };
 exports.UserRepository = UserRepository;
 exports.UserRepository = UserRepository = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_entity_1.UserEntity)),
     __param(1, (0, typeorm_1.InjectRepository)(project_user_entity_1.ProjectUserEntity)),
+    __param(2, (0, typeorm_1.InjectRepository)(user_activity_entity_1.UserActivityEntity)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
+        typeorm_2.Repository,
         typeorm_2.Repository,
         master_data_source_service_1.MasterDataSource])
 ], UserRepository);

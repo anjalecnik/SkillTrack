@@ -8,6 +8,8 @@ import { IUserSubordinatesPaginationFilterRequest } from "../interfaces/user-sub
 import { UserEntity } from "src/libs/db/entities/user.entity";
 import { UserAddressService } from "../modules/user-address/services/user-address.service";
 import { UserAssignedVacationService } from "../modules/user-assigned-vacation/services/user-assigned-vacation.service";
+import { IUserWorkOverviewListFilter } from "../interfaces/user-work-overview-list-filter.interface";
+import { IRawData } from "../interfaces/user-work-overview-raw-data.interface";
 export declare class UserService {
     private readonly userRepository;
     private readonly userAddressService;
@@ -15,8 +17,10 @@ export declare class UserService {
     private readonly utilityService;
     constructor(userRepository: UserRepository, userAddressService: UserAddressService, userAssignedVacationService: UserAssignedVacationService, utilityService: UtilityService);
     getUser(userReadRequest: IUserGetRequest): Promise<IUserDetailsResponse>;
+    getOverview(filter: IUserWorkOverviewListFilter): Promise<IRawData>;
     getUserList(filters: IUserPaginationFilterRequest): Promise<IPaginatedResponse<IUserPaginationItemResponse>>;
     getSubordinatesList(filters: IUserSubordinatesPaginationFilterRequest): Promise<IPaginatedResponse<IUserPaginationItemResponse>>;
+    getWorkingDays(data: IRawData, filter: IUserWorkOverviewListFilter): Promise<number>;
     private enrichUserData;
     invite(userInvitationRequest: IUserInvitationRequest): Promise<UserEntity[]>;
     updateUser(userPatch: IUserPatchRequest): Promise<IUserDetailsResponse>;
@@ -27,4 +31,13 @@ export declare class UserService {
     private validateUserProjects;
     private validateCircularManagerRelationship;
     private generateAssignedPercentage;
+    private getOverviewRawData;
+    private getProjectParticipants;
+    private getUsersWithNoActivities;
+    private getUserProjects;
+    private augmentFilter;
+    private getDateRange;
+    private validateDateRange;
+    private getMinMaxDates;
+    private countWeekendsInDateRange;
 }

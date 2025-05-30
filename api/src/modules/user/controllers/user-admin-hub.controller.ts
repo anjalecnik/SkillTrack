@@ -13,6 +13,9 @@ import { UserPaginationFilterRequest } from "../dtos/request/user-pagination-fil
 import { UserInvitationListResponse } from "../dtos/response/user-invitation-list.response"
 import { UserInvitationListRequest } from "../dtos/request/user-invitation-list.request"
 import { UserPatchRequest } from "../dtos/request/patch/user-patch.request"
+import { UserWorkOverviewListHalResponse } from "../dtos/response/user-work-overview-list.hal.response"
+import { UserWorkOverviewListFilterRequest } from "../dtos/request/user-work-overview-list-filter.request"
+import { UserWorkOverviewMapper } from "../mappers/user-work-overview.mapper"
 
 @Controller(`/${ROUTE_ADMIN_HUB}/${ROUTE_USERS}`)
 @ApiTags(`${API_TAG_WORKSPACE} ${API_TAG_USER}`)
@@ -36,6 +39,18 @@ export class UserAdminHubController {
 	async geteUserList(@Query() filter: UserPaginationFilterRequest): Promise<UserListResponse> {
 		const entities = await this.userService.getUserList({ ...filter })
 		return UserMapper.mapUserPaginationList(entities.data, entities.meta)
+	}
+
+	@Get("/work/work-overview")
+	@ApiOperation({ summary: "Returns report of work overview", description: `Returns report of work overview` })
+	@ApiOkResponse({ description: "Returns report of work overview", type: UserWorkOverviewListHalResponse })
+	async getUserWorkOverview(@Query() filter: UserWorkOverviewListFilterRequest): Promise<UserWorkOverviewListHalResponse> {
+		const workPositions = await this.userService.getOverview({
+			...filter
+		})
+
+		const workingDays = await this.userService.getWorkingDays(workPositions, { ...filter })
+		return UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays)
 	}
 
 	@Post("invite")

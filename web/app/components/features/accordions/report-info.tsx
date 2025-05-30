@@ -8,25 +8,19 @@ import { IReport, IWorkspaceProject } from "~/types";
 
 interface IReportInfo {
   report: IReport;
-  setIsExportDialogOpen: Dispatch<SetStateAction<boolean>>;
-  onExport: () => Promise<void>;
 }
 
 const userProjectsToString = (projects: {
-  workspaceProject: IWorkspaceProject[];
+  project: IWorkspaceProject[];
 }): string | null => {
-  if (projects.workspaceProject.length === 0) return null;
-  return projects.workspaceProject
+  if (projects.project.length === 0) return null;
+  return projects.project
     .map((project) => project._embedded?.name)
     .filter((name): name is string => !!name)
     .join(", ");
 };
 
-export function ReportInfo({
-  report,
-  setIsExportDialogOpen,
-  onExport,
-}: IReportInfo) {
+export function ReportInfo({ report }: IReportInfo) {
   const [openAccordionKeys, setOpenAccordionKeys] = useState<number[]>([]);
 
   const params = useParams();
@@ -55,12 +49,12 @@ export function ReportInfo({
         </FlexColumn>
       </Flex>
       <Divider />
-      {report.workspaceUsers && (
+      {report.users && (
         <FlexColumn>
-          {report.workspaceUsers.map((user, index) => (
+          {report.users.map((user, index) => (
             <Accordion
               key={index}
-              title={`${user._embedded.workspaceUser.firstName} ${user._embedded.workspaceUser.lastName}`}
+              title={`${user._embedded.user.firstName} ${user._embedded.user.lastName}`}
               desc={
                 userProjectsToString(user.projects) ?? t("error.notPresent")
               }
@@ -72,11 +66,6 @@ export function ReportInfo({
               onAccordionClick={() => {
                 setOpenAccordionKeys([...openAccordionKeys, index]);
               }}
-              onAccordionTitleClick={() =>
-                navigate(
-                  `/workspace-hub/${params.workspaceId}/employees/${user._embedded.workspaceUser.workspaceUserId}`
-                )
-              }
               onCancelClick={() => {
                 setOpenAccordionKeys(
                   openAccordionKeys.filter((key) => key !== index)
@@ -84,7 +73,7 @@ export function ReportInfo({
               }}
             >
               <>
-                {user.projects.workspaceProject.map((project, projectIndex) => (
+                {user.projects.project.map((project, projectIndex) => (
                   <FlexColumn
                     gap="25%"
                     padding="10px 40px 0px 40px"
@@ -97,7 +86,37 @@ export function ReportInfo({
                     >
                       {project._embedded?.name}
                     </Typography>
-                    <Grid container paddingTop="5px" paddingBottom="10px">
+                    <Grid
+                      container
+                      justifyContent="space-between"
+                      paddingY="5px"
+                    >
+                      <Grid item xs={4}>
+                        <Typography>
+                          {project.daysOnProject ?? t("error.notPresent")}
+                          <Typography color="grey.500">
+                            {t("workspaceReports.daysOnProject")}
+                          </Typography>
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Typography>
+                          {project.daysOffProject ?? t("error.notPresent")}
+                        </Typography>
+                        <Typography color="grey.500">
+                          {t("workspaceReports.daysOffProject")}
+                        </Typography>
+                      </Grid>
+                      <Grid item xs={4}>
+                        <Typography>
+                          {project.businessTripsCount ?? t("error.notPresent")}
+                        </Typography>
+                        <Typography color="grey.500">
+                          {t("workspaceReports.businessTripsCount")}
+                        </Typography>
+                      </Grid>
+                    </Grid>
+                    {/* <Grid container paddingTop="5px" paddingBottom="10px">
                       <Grid item xs={4}>
                         <Typography>
                           {project.daysOnProject ?? t("error.notPresent")}
@@ -114,7 +133,7 @@ export function ReportInfo({
                           {t("workspaceReports.daysOffProject")}
                         </Typography>
                       </Grid>
-                    </Grid>
+                    </Grid> */}
                     <Divider />
                   </FlexColumn>
                 ))}
@@ -159,21 +178,6 @@ export function ReportInfo({
           ))}
         </FlexColumn>
       )}
-
-      <MiniButton
-        name="export"
-        type="button"
-        size="extraSmall"
-        variant="contained"
-        sx={{ float: "right", margin: "10px 20px 10px 0px" }}
-        onClick={(e) => {
-          e.stopPropagation();
-          setIsExportDialogOpen(true);
-          onExport();
-        }}
-      >
-        {t("common.export")}
-      </MiniButton>
     </Box>
   );
 }

@@ -1,7 +1,6 @@
 import dayjs, { Dayjs } from "dayjs";
 import { t } from "i18next";
-import { Form, useSearchParams } from "@remix-run/react";
-import { parseWithZod } from "@conform-to/zod";
+import { useSearchParams } from "@remix-run/react";
 import { Divider, Typography, Box, Chip } from "@mui/material";
 import {
   SelectWithChips,
@@ -10,64 +9,49 @@ import {
   Flex,
   FlexColumn,
 } from "~/components/common";
-import { FormProvider, SubmissionResult, useForm } from "@conform-to/react";
-import { IProject, IWorkspace, IWorkspaceUserResponse } from "~/types";
-import { reportFormSchema as schema } from "~/schemas";
+import { FormId, useFormMetadata } from "@conform-to/react";
+import { IProject, IUserResponse } from "~/types";
+import { ReportFormSchema } from "~/schemas";
 import { Dispatch, SetStateAction } from "react";
-import { formatDate } from "~/util";
 import { DEFAULT_PROJECT_DATE_FORMAT } from "~/constants";
 
 export interface IReportFormProps {
-  lastResult?: SubmissionResult<string[]> | null;
-  workspace: IWorkspace;
-  employees: IWorkspaceUserResponse[];
+  formId: FormId;
+  employees: IUserResponse[];
   projects: IProject[];
   reportFilters: {
     employeeIds: number[];
     projectIds: number[];
-    dateStart: string | undefined;
-    dateEnd: string | undefined;
+    controlledFromDateStart: Dayjs | null;
+    controlledToDateEnd: Dayjs | null;
   };
   setReportFilters: Dispatch<
     SetStateAction<{
       employeeIds: number[];
       projectIds: number[];
-      dateStart: string | undefined;
-      dateEnd: string | undefined;
+      controlledFromDateStart: Dayjs | null;
+      controlledToDateEnd: Dayjs | null;
     }>
   >;
 }
 export function ReportForm({
-  lastResult,
-  workspace,
+  formId,
   employees,
   projects,
   reportFilters,
   setReportFilters,
 }: IReportFormProps) {
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [form, fields] = useForm({
-    lastResult,
-    onValidate({ formData }) {
-      return parseWithZod(formData, { schema });
-    },
-    defaultValue: {
-      intent: "generate",
-      employeeIds: searchParams.get("employeeIds") || "",
-      projectIds: searchParams.get("projectIds") || "",
-    },
-    shouldValidate: "onSubmit",
-    id: `reports-form`,
-  });
+  const form = useFormMetadata<ReportFormSchema>(formId);
+  const fields = form.getFieldset();
 
-  const transformToParmaIds = (
-    array: IWorkspaceUserResponse[] | IProject[]
-  ): string => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const transformToParmaIds = (array: IUserResponse[] | IProject[]): string => {
     return array.map((e) => e.id).toString();
   };
 
   const handleOnSelectedChange = (
-    value: IWorkspaceUserResponse[] | IProject[],
+    value: IUserResponse[] | IProject[],
     paramsName: string
   ) => {
     if (!value.length) {
@@ -80,162 +64,159 @@ export function ReportForm({
     setSearchParams(searchParams, { replace: true });
   };
 
-  const handleFormatDate = (date: Dayjs | null): string | undefined => {
-    return date
-      ? formatDate(date, undefined, DEFAULT_PROJECT_DATE_FORMAT)
-      : undefined;
-  };
-
   const nothingSelected =
-    !searchParams.get("employeeIds")?.length &&
-    !searchParams.get("projectIds")?.length;
+    !reportFilters.employeeIds.length && !reportFilters.projectIds.length;
 
   return (
-    <Form method="post" id={form.id}>
-      <FormProvider context={form.context}>
-        <FlexColumn padding="20px">
-          <FlexColumn gap="20px" paddingX="20px">
+    <>
+      <FlexColumn padding="20px">
+        <FlexColumn gap="20px" paddingX="20px">
+          <SelectWithChips
+            name={fields.employeeIds.name}
+            defaultValue={employees.filter((emp) =>
+              reportFilters.employeeIds.includes(emp.id)
+            )}
+            options={employees}
+            multiple={true}
+            label={t("common.employees")}
+            placeholder={t("workspaceReports.selectEmployees")}
+            avatarImage={(option) => option.name ?? ""}
+            labelExtractor={(option) => `${option.name} ${option.surname}`}
+            valueExtractor={(option) => option.id}
+            onChange={(value) => {
+              handleOnSelectedChange(value, "employeeIds");
+              setReportFilters({
+                ...reportFilters,
+                employeeIds: value.map((e) => e.id),
+              });
+            }}
+          />
+          <Box>
             <SelectWithChips
-              name={fields.employeeIds.name}
-              defaultValue={employees.filter((emp) =>
-                reportFilters.employeeIds.includes(emp.id)
+              name={fields.projectIds.name}
+              defaultValue={projects.filter((proj) =>
+                reportFilters.projectIds.includes(proj.id)
               )}
-              options={employees}
+              options={projects}
               multiple={true}
-              label={t("common.employees")}
-              placeholder={t("workspaceReports.selectEmployees")}
+              label={t("common.projects")}
+              placeholder={t("workspaceReports.selectProjects")}
               avatarImage={(option) => option.name ?? ""}
-              labelExtractor={(option) => `${option.name} ${option.surname}`}
+              labelExtractor={(option) => `${option.name}`}
               valueExtractor={(option) => option.id}
               onChange={(value) => {
-                handleOnSelectedChange(value, "employeeIds");
-                setReportFilters((prevFilters) => ({
-                  ...prevFilters,
-                  employeeIds: value.map((e) => e.id),
-                }));
+                handleOnSelectedChange(value, "projectIds");
+                setReportFilters({
+                  ...reportFilters,
+                  projectIds: value.map((e) => e.id),
+                });
               }}
             />
-            <Box>
-              <SelectWithChips
-                name={fields.projectIds.name}
-                defaultValue={projects.filter((proj) =>
-                  reportFilters.projectIds.includes(proj.id)
-                )}
-                options={projects}
-                multiple={true}
-                label={t("common.projects")}
-                placeholder={t("workspaceReports.selectProjects")}
-                avatarImage={(option) => option.name ?? ""}
-                labelExtractor={(option) => `${option.name}`}
-                valueExtractor={(option) => option.id}
-                onChange={(value) => {
-                  handleOnSelectedChange(value, "projectIds");
-                  setReportFilters((prevFilters) => ({
-                    ...prevFilters,
-                    projectIds: value.map((e) => e.id),
-                  }));
-                }}
-              />
-              {fields.projectIds.errors && (
-                <Typography color="red">
-                  {t(fields.projectIds.errors[0])}
-                </Typography>
-              )}
-            </Box>
-          </FlexColumn>
-          <Flex gap="20px" paddingX="20px">
-            <DateInput
-              name={fields.fromDateStart.name}
-              value={
-                reportFilters.dateStart
-                  ? dayjs(reportFilters.dateStart, DEFAULT_PROJECT_DATE_FORMAT)
-                  : null
-              }
-              onChange={(date) =>
-                setReportFilters((prevFilters) => ({
-                  ...prevFilters,
-                  dateStart: handleFormatDate(date),
-                }))
-              }
-              label={t("common.from")}
-              format={DEFAULT_PROJECT_DATE_FORMAT}
-            />
-
-            <DateInput
-              name={fields.toDateEnd.name}
-              value={
-                reportFilters.dateEnd
-                  ? dayjs(reportFilters.dateEnd, DEFAULT_PROJECT_DATE_FORMAT)
-                  : null
-              }
-              onChange={(date) =>
-                setReportFilters((prevFilters) => ({
-                  ...prevFilters,
-                  dateEnd: handleFormatDate(date),
-                }))
-              }
-              label={t("common.to")}
-              format={DEFAULT_PROJECT_DATE_FORMAT}
-            />
-          </Flex>
-          <Flex gap="8px" paddingX="20px">
-            <Chip
-              label={t("common.thisMonth")}
-              onClick={() =>
-                setReportFilters((prevFilters) => ({
-                  ...prevFilters,
-                  dateStart: handleFormatDate(dayjs().startOf("month")),
-                  dateEnd: handleFormatDate(dayjs().endOf("month")),
-                }))
-              }
-            />
-
-            <Chip
-              label={t("common.previousMonth")}
-              onClick={() =>
-                setReportFilters((prevFilters) => ({
-                  ...prevFilters,
-                  dateStart: handleFormatDate(
-                    dayjs().subtract(1, "month").startOf("month")
-                  ),
-                  dateEnd: handleFormatDate(
-                    dayjs().subtract(1, "month").endOf("month")
-                  ),
-                }))
-              }
-            />
-
-            <Chip
-              label={t("workspaceReports.yearly")}
-              onClick={() =>
-                setReportFilters((prevFilters) => ({
-                  ...prevFilters,
-                  dateStart: handleFormatDate(dayjs().startOf("year")),
-                  dateEnd: handleFormatDate(dayjs().endOf("year")),
-                }))
-              }
-            />
-          </Flex>
-
-          {fields.toDateEnd.errors && (
-            <Typography paddingX="20px" color="red">
-              {t(fields.toDateEnd.errors[0])}
-            </Typography>
-          )}
+            {fields.projectIds.errors && (
+              <Typography color="red">
+                {t(fields.projectIds.errors[0])}
+              </Typography>
+            )}
+          </Box>
         </FlexColumn>
-        <Divider />
-        <Flex justifyContent="end" gap="20px" padding="10px 16px">
-          <Button
-            type="submit"
-            variant="contained"
-            name="intent"
-            value="generate"
-            disabled={nothingSelected}
-          >
-            {t("workspaceReports.generate")}
-          </Button>
+        <Flex gap="20px" paddingX="20px">
+          <input
+            type="hidden"
+            name={fields.fromDateStart.name}
+            value={reportFilters.controlledFromDateStart?.format(
+              DEFAULT_PROJECT_DATE_FORMAT
+            )}
+          />
+          <DateInput
+            name="controlledFromDateStart"
+            value={reportFilters.controlledFromDateStart}
+            onChange={(date) =>
+              setReportFilters({
+                ...reportFilters,
+                controlledFromDateStart: date,
+              })
+            }
+            label={t("common.from")}
+            format={DEFAULT_PROJECT_DATE_FORMAT}
+          />
+
+          <input
+            type="hidden"
+            name={fields.toDateEnd.name}
+            value={reportFilters.controlledToDateEnd?.format(
+              DEFAULT_PROJECT_DATE_FORMAT
+            )}
+          />
+          <DateInput
+            name="controlledToDateEnd"
+            value={reportFilters.controlledToDateEnd}
+            onChange={(date) =>
+              setReportFilters({
+                ...reportFilters,
+                controlledToDateEnd: date,
+              })
+            }
+            label={t("common.to")}
+            format={DEFAULT_PROJECT_DATE_FORMAT}
+          />
         </Flex>
-      </FormProvider>
-    </Form>
+        <Flex gap="8px" paddingX="20px">
+          <Chip
+            label={t("common.thisMonth")}
+            onClick={() =>
+              setReportFilters({
+                ...reportFilters,
+                controlledFromDateStart: dayjs().startOf("month"),
+                controlledToDateEnd: dayjs().endOf("month"),
+              })
+            }
+          />
+
+          <Chip
+            label={t("common.previousMonth")}
+            onClick={() =>
+              setReportFilters({
+                ...reportFilters,
+                controlledFromDateStart: dayjs()
+                  .subtract(1, "month")
+                  .startOf("month"),
+                controlledToDateEnd: dayjs()
+                  .subtract(1, "month")
+                  .endOf("month"),
+              })
+            }
+          />
+
+          <Chip
+            label={t("workspaceReports.yearly")}
+            onClick={() =>
+              setReportFilters({
+                ...reportFilters,
+                controlledFromDateStart: dayjs().startOf("year"),
+                controlledToDateEnd: dayjs().endOf("year"),
+              })
+            }
+          />
+        </Flex>
+
+        {fields.toDateEnd.errors && (
+          <Typography paddingX="20px" color="red">
+            {t(fields.toDateEnd.errors[0])}
+          </Typography>
+        )}
+      </FlexColumn>
+      <Divider />
+      <Flex justifyContent="end" gap="20px" padding="10px 16px">
+        <Button
+          type="submit"
+          variant="contained"
+          name="intent"
+          value="generate"
+          disabled={nothingSelected}
+        >
+          {t("workspaceReports.generate")}
+        </Button>
+      </Flex>
+    </>
   );
 }

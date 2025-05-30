@@ -14,7 +14,7 @@ export declare class UtilityService {
     getUserWithProjectsById(userId: number): Promise<UserEntity>;
     getProjectById(projectId: number): Promise<ProjectEntity>;
     getHolidaysOnDateRangeByCountryCode(countryCode: string, dates: Date[]): Promise<HolidayEntity[]>;
-    getHolidaysInDateRange(countryCode: string, dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]>;
+    getHolidaysInDateRange(dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]>;
     getWorkDaysArray(): Promise<number[]>;
     getWorkingDays(dates: Date[]): Promise<IWorkDayMeta[]>;
     isUserSelfSuperior(userId: number): Promise<boolean>;
