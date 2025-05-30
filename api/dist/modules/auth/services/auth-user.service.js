@@ -32,8 +32,8 @@ let AuthUserService = class AuthUserService {
     authRepository;
     authJwtService;
     googleAuth = new google_auth_library_1.OAuth2Client({
-        clientId: config_1.Config.get("GOOGLE_CLIENT_ID"),
-        clientSecret: config_1.Config.get("GOOGLE_CLIENT_SECRET")
+        clientId: process.env.GOOGLE_CLIENT_ID,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET
     });
     constructor(cacheManager, authRepository, authJwtService) {
         this.cacheManager = cacheManager;
@@ -127,6 +127,7 @@ exports.AuthUserService = AuthUserService;
 exports.AuthUserService = AuthUserService = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, common_1.Inject)(cache_manager_1.CACHE_MANAGER)),
-    __metadata("design:paramtypes", [Object, auth_repository_1.AuthRepository, auth_jwt_service_1.AuthJwtService])
+    __metadata("design:paramtypes", [Object, auth_repository_1.AuthRepository,
+        auth_jwt_service_1.AuthJwtService])
 ], AuthUserService);
 //# sourceMappingURL=auth-user.service.js.map

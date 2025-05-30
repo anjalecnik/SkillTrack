@@ -24,11 +24,15 @@ import { AuthUserLocalLoginRequest } from "../dtos/request/auth-user-local-login
 @Injectable()
 export class AuthUserService {
 	private readonly googleAuth: OAuth2Client = new OAuth2Client({
-		clientId: Config.get<string>("GOOGLE_CLIENT_ID"),
-		clientSecret: Config.get<string>("GOOGLE_CLIENT_SECRET")
+		clientId: process.env.GOOGLE_CLIENT_ID,
+		clientSecret: process.env.GOOGLE_CLIENT_SECRET
 	})
 
-	constructor(@Inject(CACHE_MANAGER) private cacheManager: Cache, private readonly authRepository: AuthRepository, private readonly authJwtService: AuthJwtService) {}
+	constructor(
+		@Inject(CACHE_MANAGER) private cacheManager: Cache,
+		private readonly authRepository: AuthRepository,
+		private readonly authJwtService: AuthJwtService
+	) {}
 
 	async googleLogin({ idToken }: AuthUserGoogleLoginRequest): Promise<AuthSignedJwtResponse> {
 		const authResponse = await this.googleAuth.verifyIdToken({ idToken }).catch(() => {
