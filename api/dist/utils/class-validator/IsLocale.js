@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsLocale = void 0;
+exports.IsLocale = IsLocale;
 const class_validator_1 = require("class-validator");
 function IsLocale(validationOptions) {
     return function (object, propertyName) {
@@ -42,5 +42,4 @@ function IsLocale(validationOptions) {
         });
     };
 }
-exports.IsLocale = IsLocale;
 //# sourceMappingURL=IsLocale.js.map

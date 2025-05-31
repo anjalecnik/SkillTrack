@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsSortingDir = void 0;
+exports.IsSortingDir = IsSortingDir;
 const class_validator_1 = require("class-validator");
 function IsSortingDir(validationOptions) {
     return function (object, propertyName) {
@@ -26,5 +26,4 @@ function IsSortingDir(validationOptions) {
         });
     };
 }
-exports.IsSortingDir = IsSortingDir;
 //# sourceMappingURL=IsSortingDir.js.map

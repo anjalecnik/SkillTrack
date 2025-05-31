@@ -1,6 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsBooleanString = exports.isBooleanString = exports.booleanMapper = void 0;
+exports.booleanMapper = void 0;
+exports.isBooleanString = isBooleanString;
+exports.IsBooleanString = IsBooleanString;
 const class_validator_1 = require("class-validator");
 exports.booleanMapper = new Map([
     ["true", true],
@@ -9,7 +11,6 @@ exports.booleanMapper = new Map([
 function isBooleanString(value) {
     return exports.booleanMapper.get(value.toLowerCase()) !== undefined;
 }
-exports.isBooleanString = isBooleanString;
 function IsBooleanString() {
     return function (object, propertyName) {
         (0, class_validator_1.registerDecorator)({
@@ -27,5 +28,4 @@ function IsBooleanString() {
         });
     };
 }
-exports.IsBooleanString = IsBooleanString;
 //# sourceMappingURL=IsBooleanString.js.map

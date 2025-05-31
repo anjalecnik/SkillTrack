@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsRegion = void 0;
+exports.IsRegion = IsRegion;
 const class_validator_1 = require("class-validator");
 const date_holidays_1 = __importDefault(require("date-holidays"));
 function IsRegion(countryCodeProperty, stateProperty) {
@@ -34,5 +34,4 @@ function IsRegion(countryCodeProperty, stateProperty) {
         });
     };
 }
-exports.IsRegion = IsRegion;
 //# sourceMappingURL=IsRegion.js.map

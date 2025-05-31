@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsCountryCode = void 0;
+exports.IsCountryCode = IsCountryCode;
 const class_validator_1 = require("class-validator");
 function IsCountryCode(validationOptions) {
     return function (object, propertyName) {
@@ -30,5 +30,4 @@ function IsCountryCode(validationOptions) {
         });
     };
 }
-exports.IsCountryCode = IsCountryCode;
 //# sourceMappingURL=IsCountryCode.js.map

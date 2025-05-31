@@ -3,7 +3,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.IsoDateObjectToUtcDate = exports.validateIsoDate = void 0;
+exports.IsoDateObjectToUtcDate = void 0;
+exports.validateIsoDate = validateIsoDate;
 const common_1 = require("@nestjs/common");
 const class_transformer_1 = require("class-transformer");
 const class_validator_1 = require("class-validator");
@@ -16,7 +17,6 @@ function validateIsoDate(date, key, dateLength) {
         throw new common_1.BadRequestException(`${key} length must be equal to 10`);
     }
 }
-exports.validateIsoDate = validateIsoDate;
 function validateIsoTime(time, key) {
     if (!(0, class_validator_1.isMilitaryTime)(time)) {
         throw new common_1.BadRequestException(`${key} must be a valid Military time MM:HH`);
