@@ -30,7 +30,6 @@ export interface IWorkspaceUserUpdateReq {
   nationality?: string | null;
   birthDate?: string | null;
   phone?: string | null;
-  teamId?: number;
   workPositionId?: number | null;
   managerId?: number | null;
   addresses?: IAddress[];
