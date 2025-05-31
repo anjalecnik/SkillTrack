@@ -7,7 +7,7 @@ import {
   alpha,
   Box,
 } from "@mui/material";
-import { Link, useLocation, useParams } from "@remix-run/react";
+import { Link, useLocation } from "@remix-run/react";
 import { useTranslation } from "react-i18next";
 import { Flex, FlexColumn, PaginatedTable, Avatar } from "~/components/common";
 import { YEAR_PERFORMANCE_REVIEW_QUARTALS } from "~/constants";
@@ -128,46 +128,13 @@ export function PerformanceReviewTable({
                       );
                     }}
                   >
-                    {scoresMap[quartal] ? (
-                      Object.entries({
-                        "Top Pay": scoresMap[quartal]?.answer1,
-                        "Keep on Team": scoresMap[quartal]?.answer2,
-                        "Performance Risk": scoresMap[quartal]?.answer3
-                          ? "Yes"
-                          : "No",
-                        "Promotion Ready": scoresMap[quartal]?.answer4
-                          ? "Yes"
-                          : "No",
-                      }).map(([label, value], index) => (
-                        <Box display="flex" key={index}>
-                          <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            display="block"
-                            key={index}
-                          >
-                            {label}:&nbsp;
-                          </Typography>
-                          <Typography
-                            variant="caption"
-                            color="text.secondary"
-                            display="block"
-                            sx={{ textTransform: "capitalize" }}
-                            key={index}
-                          >
-                            {value}
-                          </Typography>
-                        </Box>
-                      ))
-                    ) : (
-                      <Typography
+                   <Typography
                         variant="caption"
                         color="text.secondary"
                         key={index}
                       >
-                        /
+                        { scoresMap[quartal] ? `${scoresMap[quartal].score} %` :"/"}
                       </Typography>
-                    )}
                   </TableCell>
                 </Tooltip>
               );

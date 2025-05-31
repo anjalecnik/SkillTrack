@@ -9,6 +9,7 @@ import {
   BulbOutlined,
   TableOutlined,
   LineChartOutlined,
+  SolutionOutlined,
 } from "@ant-design/icons";
 import i18next from "../../config/i18next";
 
@@ -49,12 +50,20 @@ export const menuItemsList: NavItemType[] = [
     icon: FileTextOutlined,
   },
   {
+    id: "performanceReviews",
+    title: i18next.t("menu.performanceReviews"),
+    type: "item",
+    url: "/performance-reviews",
+    icon: SolutionOutlined,
+  },
+  {
     id: "reports",
     title: i18next.t("menu.reports"),
     type: "item",
     url: "/reports",
     icon: LineChartOutlined,
   },
+
   {
     id: "jira",
     title: i18next.t("menu.jira"),

@@ -24,12 +24,6 @@ interface SickLeave {
   countDays: number;
 }
 
-interface WorkspaceTeam {
-  id: number;
-  name: string;
-  description: string;
-}
-
 interface WorkspaceWorkPosition {
   id: number;
   name: string;
@@ -87,7 +81,6 @@ export interface IWorkspaceUser {
   projects?: IProjectUserResponse[];
   activityStatistic?: ActivityStatistic;
   assignedVacations: AssignedVacations[] | [];
-  workspaceTeam: WorkspaceTeam;
   workspaceWorkPosition: WorkspaceWorkPosition;
   isSupervisor: boolean;
 }
@@ -109,7 +102,6 @@ export interface IUserResponse {
   activityStatistic: ActivityStatistic;
   assignedVacations: AssignedVacations[];
   vacation: IVacation;
-  workspaceTeam: WorkspaceTeam;
   workspaceWorkPosition: WorkspaceWorkPosition;
   averageScore?: number;
   isSupervisor: boolean;

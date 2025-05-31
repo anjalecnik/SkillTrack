@@ -142,7 +142,6 @@ export const clientAction = async (actionArgs: ClientActionFunctionArgs) => {
           case Accordions.WorkPosition: {
             workspaceUser = {
               workPositionId: submission.value.workspaceWorkPositionId ?? null,
-              teamId: submission.value.workspaceTeamId,
               managerId: submission.value.managerId ?? null,
             };
             break;

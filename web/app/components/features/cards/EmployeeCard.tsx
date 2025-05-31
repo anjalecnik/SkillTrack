@@ -5,7 +5,6 @@ import {
   EmployeeDetailsView,
   IActivity,
   IActivityMoreToReportForm,
-  IActivityParams,
   IActivityTableItem,
   IPositionResponse,
   IProject,
@@ -25,7 +24,7 @@ import {
 } from "~/components/features";
 import { SubmissionResult } from "@conform-to/react";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
-import { buildUrlWithParams, formatDate, handleAxiosError } from "~/util";
+import { buildUrlWithParams, formatDate } from "~/util";
 import { useNavigate, useParams, useSearchParams } from "@remix-run/react";
 import dayjs from "dayjs";
 import { useMobile } from "~/hooks";
