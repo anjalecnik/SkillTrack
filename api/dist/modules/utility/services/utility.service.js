@@ -9,22 +9,11 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.UtilityService = exports.SLOVENIAN_HOLIDAYS = void 0;
+exports.UtilityService = void 0;
 const common_1 = require("@nestjs/common");
 const utility_repository_1 = require("../repository/utility.repository");
-const date_helper_1 = require("../../../utils/helpers/date.helper");
+const work_day_helper_1 = require("../../../utils/helpers/work-day.helper");
 const SLOVENIA_WORKING_DAYS = [1, 2, 3, 4, 5];
-exports.SLOVENIAN_HOLIDAYS = [
-    { name: "New Year's Day", date: new Date("2025-01-01") },
-    { name: "Preseren Day", date: new Date("2025-02-08") },
-    { name: "Easter Monday", date: new Date("2025-04-21") },
-    { name: "May Day", date: new Date("2025-05-01") },
-    { name: "Statehood Day", date: new Date("2025-06-25") },
-    { name: "Assumption Day", date: new Date("2025-08-15") },
-    { name: "All Saints Day", date: new Date("2025-11-01") },
-    { name: "Christmas Day", date: new Date("2025-12-25") },
-    { name: "Independence and Unity Day", date: new Date("2025-12-26") }
-];
 let UtilityService = class UtilityService {
     utilityRepository;
     constructor(utilityRepository) {
@@ -52,43 +41,16 @@ let UtilityService = class UtilityService {
         return this.utilityRepository.getHolidaysOnDates(countryCode, dates);
     }
     async getHolidaysInDateRange(dateStart, dateEnd) {
-        const holidays = exports.SLOVENIAN_HOLIDAYS.filter(holiday => holiday.date >= dateStart && holiday.date <= dateEnd).map((holiday, index) => ({
-            ...holiday,
-            id: index + 1,
-            countryCode: "SI",
-            createdAt: new Date(),
-            updatedAt: new Date(),
-            state: null,
-            region: null
-        }));
-        return holidays;
+        return this.utilityRepository.getHolidaysInDateRange(dateStart, dateEnd);
     }
     async getWorkDaysArray() {
         const workingDays = [1, 2, 3, 4, 5];
         return Promise.resolve(workingDays);
     }
     async getWorkingDays(dates) {
-        return dates.map(date => {
-            const matchedHolidays = exports.SLOVENIAN_HOLIDAYS.filter(holiday => date_helper_1.DateHelper.isSameDay(date, holiday.date)).map((holiday, index) => ({
-                ...holiday,
-                id: index + 1,
-                countryCode: "SI",
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                state: null,
-                region: null
-            }));
-            const isHoliday = matchedHolidays.length > 0;
-            const isWeekend = !SLOVENIA_WORKING_DAYS.includes(date.getDay());
-            const isWorkingDay = !isHoliday && !isWeekend;
-            return {
-                date,
-                isHoliday,
-                isWorkFreeDay: isHoliday || isWeekend,
-                isWorkingDay,
-                holidays: matchedHolidays
-            };
-        });
+        const holidays = await this.getHolidaysOnDateRangeByCountryCode("SI", dates);
+        const workingDays = SLOVENIA_WORKING_DAYS;
+        return work_day_helper_1.WorkDayHelper.getWorkingDays(dates, { holidays, workingDays });
     }
     async isUserSelfSuperior(userId) {
         const userEntity = await this.getUserById(userId);

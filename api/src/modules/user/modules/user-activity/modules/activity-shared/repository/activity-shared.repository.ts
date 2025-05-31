@@ -1,6 +1,6 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { And, EntityManager, FindOneOptions, FindOptionsRelations, FindOptionsWhere, In, LessThanOrEqual, MoreThanOrEqual, Not, Repository } from "typeorm"
+import { And, Between, EntityManager, FindOneOptions, FindOptionsRelations, FindOptionsWhere, In, LessThanOrEqual, MoreThanOrEqual, Not, Repository } from "typeorm"
 import {
 	IActivitySharedCancelDBRequest,
 	IActivitySharedFilterDB,
@@ -16,7 +16,6 @@ import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserEntity } from "src/libs/db/entities/user.entity"
 import { DateHelper } from "src/utils/helpers/date.helper"
 import { TypeHelper } from "src/utils/helpers/type.helper"
-import { SLOVENIAN_HOLIDAYS } from "src/modules/utility/services/utility.service"
 
 const LOAD_RELATIONS: FindOptionsRelations<UserActivityRequestEntity> = {
 	userActivities: { project: true },
@@ -134,14 +133,6 @@ export class ActivitySharedRepository {
 	}
 
 	async getHolidays(dateRange: IActivitySharedGetDatesActivity): Promise<HolidayEntity[]> {
-		const holidays: HolidayEntity[] = SLOVENIAN_HOLIDAYS.filter(holiday => holiday.date >= dateRange.dateStart && holiday.date <= dateRange.dateEnd).map((holiday, index) => ({
-			...holiday,
-			countryCode: "",
-			id: index + 1,
-			createdAt: new Date(),
-			updatedAt: new Date()
-		}))
-
-		return holidays
+		return this.holidayRepository.find({ where: { countryCode: "SI", date: Between(dateRange.dateStart, dateRange.dateEnd) } })
 	}
 }

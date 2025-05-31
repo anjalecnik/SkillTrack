@@ -52,10 +52,10 @@ export class UtilityRepository {
 		return this.holidayRepository.find({ where: orWhereCondition })
 	}
 
-	async getHolidaysInDateRange(countryCode: string, dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]> {
+	async getHolidaysInDateRange(dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]> {
 		return this.holidayRepository.find({
 			where: {
-				countryCode: countryCode,
+				countryCode: "SI",
 				date: Between(dateStart, dateEnd)
 			}
 		})

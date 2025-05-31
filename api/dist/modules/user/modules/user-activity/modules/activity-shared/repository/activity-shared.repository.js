@@ -23,7 +23,6 @@ const user_activity_entity_1 = require("../../../../../../../libs/db/entities/us
 const user_entity_1 = require("../../../../../../../libs/db/entities/user.entity");
 const date_helper_1 = require("../../../../../../../utils/helpers/date.helper");
 const type_helper_1 = require("../../../../../../../utils/helpers/type.helper");
-const utility_service_1 = require("../../../../../../utility/services/utility.service");
 const LOAD_RELATIONS = {
     userActivities: { project: true },
     project: true,
@@ -138,14 +137,7 @@ let ActivitySharedRepository = class ActivitySharedRepository {
         });
     }
     async getHolidays(dateRange) {
-        const holidays = utility_service_1.SLOVENIAN_HOLIDAYS.filter(holiday => holiday.date >= dateRange.dateStart && holiday.date <= dateRange.dateEnd).map((holiday, index) => ({
-            ...holiday,
-            countryCode: "",
-            id: index + 1,
-            createdAt: new Date(),
-            updatedAt: new Date()
-        }));
-        return holidays;
+        return this.holidayRepository.find({ where: { countryCode: "SI", date: (0, typeorm_2.Between)(dateRange.dateStart, dateRange.dateEnd) } });
     }
 };
 exports.ActivitySharedRepository = ActivitySharedRepository;

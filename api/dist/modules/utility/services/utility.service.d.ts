@@ -3,10 +3,6 @@ import { UserEntity } from "src/libs/db/entities/user.entity";
 import { ProjectEntity } from "src/libs/db/entities/project.entity";
 import { HolidayEntity } from "src/libs/db/entities/holiday.entity";
 import { IWorkDayMeta } from "src/utils/types/interfaces";
-export declare const SLOVENIAN_HOLIDAYS: {
-    name: string;
-    date: Date;
-}[];
 export declare class UtilityService {
     private readonly utilityRepository;
     constructor(utilityRepository: UtilityRepository);

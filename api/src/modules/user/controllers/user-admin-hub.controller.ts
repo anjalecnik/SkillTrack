@@ -16,12 +16,13 @@ import { UserPatchRequest } from "../dtos/request/patch/user-patch.request"
 import { UserWorkOverviewListHalResponse } from "../dtos/response/user-work-overview-list.hal.response"
 import { UserWorkOverviewListFilterRequest } from "../dtos/request/user-work-overview-list-filter.request"
 import { UserWorkOverviewMapper } from "../mappers/user-work-overview.mapper"
+import { UtilityService } from "src/modules/utility/services/utility.service"
 
 @Controller(`/${ROUTE_ADMIN_HUB}/${ROUTE_USERS}`)
 @ApiTags(`${API_TAG_WORKSPACE} ${API_TAG_USER}`)
 @UseGuards(UserGuard(UserRole.Admin, UserRole.Owner))
 export class UserAdminHubController {
-	constructor(private userService: UserService) {}
+	constructor(private userService: UserService, private readonly utilityService: UtilityService) {}
 
 	@Get("/:userId")
 	@ApiBearerAuth()
@@ -49,8 +50,11 @@ export class UserAdminHubController {
 			...filter
 		})
 
-		const workingDays = await this.userService.getWorkingDays(workPositions, { ...filter })
-		return UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays)
+		const workingDays = await this.userService.getWorkingDays(workPositions, filter)
+		const holidays = await this.utilityService.getHolidaysInDateRange(filter.fromDateStart || new Date(), filter.toDateEnd || new Date())
+		
+		return UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays, holidays)
+		
 	}
 
 	@Post("invite")

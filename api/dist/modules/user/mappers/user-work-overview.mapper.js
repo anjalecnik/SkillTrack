@@ -5,12 +5,12 @@ const hal_helper_1 = require("../../../utils/helpers/hal.helper");
 const date_helper_1 = require("../../../utils/helpers/date.helper");
 const user_activity_enum_1 = require("../../../utils/types/enums/user-activity.enum");
 class UserWorkOverviewMapper {
-    static mapWorkOverview(data, filter, workingDays) {
+    static mapWorkOverview(data, filter, workingDays, holidays) {
         const users = [];
         const allTotalUserCounts = [];
         for (const user of data.usersWithProjects) {
             const perProjectCounts = this.getUserPerProjectCounts(data, user);
-            const totalUserCounts = this.getTotalUserCounts(data, user);
+            const totalUserCounts = this.getTotalUserCounts(data, user, holidays);
             allTotalUserCounts.push(totalUserCounts);
             users.push(this.addUserToResponse(user, perProjectCounts, totalUserCounts));
         }
@@ -81,7 +81,7 @@ class UserWorkOverviewMapper {
         totals.workDays = workingDays;
         return totals;
     }
-    static getTotalUserCounts(rawData, userWithProject) {
+    static getTotalUserCounts(rawData, userWithProject, holidays) {
         const userCounts = {
             projectId: 0,
             name: userWithProject.user.name,
@@ -89,7 +89,7 @@ class UserWorkOverviewMapper {
             daysOffProject: 0,
             businessTripsCount: 0,
             dailyActivityCount: 0,
-            publicHolidayCount: 0,
+            publicHolidayCount: holidays.length,
             sickLeaveCount: 0,
             vacationCount: 0
         };
@@ -190,9 +190,6 @@ class UserWorkOverviewMapper {
         switch (activityType) {
             case user_activity_enum_1.UserActivityType.BusinessTrip:
                 projectData.businessTripsCount++;
-                break;
-            case user_activity_enum_1.UserActivityType.PublicHoliday:
-                projectData.publicHolidayCount++;
                 break;
             case user_activity_enum_1.UserActivityType.SickLeave:
                 projectData.sickLeaveCount++;

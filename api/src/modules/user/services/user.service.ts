@@ -79,7 +79,6 @@ export class UserService {
 		const { dateStart, dateEnd } = this.getDateRange(filter, data)
 
 		let holidaysWithoutWeekends = (await this.utilityService.getHolidaysInDateRange(dateStart, dateEnd)).filter(holiday => !DateHelper.isWeekend(holiday.date))
-
 		holidaysWithoutWeekends = _.uniqBy(holidaysWithoutWeekends, holiday => DateHelper.formatIso8601DayString(holiday.date))
 
 		const weekendsCount = this.countWeekendsInDateRange(dateStart, dateEnd)

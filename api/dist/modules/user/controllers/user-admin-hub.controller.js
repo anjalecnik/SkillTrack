@@ -30,10 +30,13 @@ const user_patch_request_1 = require("../dtos/request/patch/user-patch.request")
 const user_work_overview_list_hal_response_1 = require("../dtos/response/user-work-overview-list.hal.response");
 const user_work_overview_list_filter_request_1 = require("../dtos/request/user-work-overview-list-filter.request");
 const user_work_overview_mapper_1 = require("../mappers/user-work-overview.mapper");
+const utility_service_1 = require("../../utility/services/utility.service");
 let UserAdminHubController = class UserAdminHubController {
     userService;
-    constructor(userService) {
+    utilityService;
+    constructor(userService, utilityService) {
         this.userService = userService;
+        this.utilityService = utilityService;
     }
     async getUser(authPassport, userId) {
         const userDetails = await this.userService.getUser({ id: userId, authPassport });
@@ -47,8 +50,9 @@ let UserAdminHubController = class UserAdminHubController {
         const workPositions = await this.userService.getOverview({
             ...filter
         });
-        const workingDays = await this.userService.getWorkingDays(workPositions, { ...filter });
-        return user_work_overview_mapper_1.UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays);
+        const workingDays = await this.userService.getWorkingDays(workPositions, filter);
+        const holidays = await this.utilityService.getHolidaysInDateRange(filter.fromDateStart || new Date(), filter.toDateEnd || new Date());
+        return user_work_overview_mapper_1.UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays, holidays);
     }
     async invite(authPassport, userInvitations) {
         const userEntities = await this.userService.invite({
@@ -125,6 +129,6 @@ exports.UserAdminHubController = UserAdminHubController = __decorate([
     (0, common_1.Controller)(`/${constants_1.ROUTE_ADMIN_HUB}/${constants_1.ROUTE_USERS}`),
     (0, swagger_1.ApiTags)(`${constants_1.API_TAG_WORKSPACE} ${constants_1.API_TAG_USER}`),
     (0, common_1.UseGuards)((0, guards_1.UserGuard)(user_role_enum_1.UserRole.Admin, user_role_enum_1.UserRole.Owner)),
-    __metadata("design:paramtypes", [user_service_1.UserService])
+    __metadata("design:paramtypes", [user_service_1.UserService, utility_service_1.UtilityService])
 ], UserAdminHubController);
 //# sourceMappingURL=user-admin-hub.controller.js.map
