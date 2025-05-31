@@ -127,8 +127,9 @@ __decorate([
 ], UserAdminHubController.prototype, "updateUser", null);
 exports.UserAdminHubController = UserAdminHubController = __decorate([
     (0, common_1.Controller)(`/${constants_1.ROUTE_ADMIN_HUB}/${constants_1.ROUTE_USERS}`),
-    (0, swagger_1.ApiTags)(`${constants_1.API_TAG_WORKSPACE} ${constants_1.API_TAG_USER}`),
+    (0, swagger_1.ApiTags)(`${constants_1.API_TAG_USER}`),
     (0, common_1.UseGuards)((0, guards_1.UserGuard)(user_role_enum_1.UserRole.Admin, user_role_enum_1.UserRole.Owner)),
-    __metadata("design:paramtypes", [user_service_1.UserService, utility_service_1.UtilityService])
+    __metadata("design:paramtypes", [user_service_1.UserService,
+        utility_service_1.UtilityService])
 ], UserAdminHubController);
 //# sourceMappingURL=user-admin-hub.controller.js.map

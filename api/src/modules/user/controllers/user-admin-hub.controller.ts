@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, ParseIntPipe, Patch, Post, Query, UseGuards } from "@nestjs/common"
 import { ApiBearerAuth, ApiNotFoundResponse, ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { ROUTE_ADMIN_HUB, API_TAG_WORKSPACE, API_TAG_USER, ROUTE_USERS } from "src/utils/constants"
+import { ROUTE_ADMIN_HUB, API_TAG_USER, ROUTE_USERS } from "src/utils/constants"
 import { UserGuard } from "src/utils/guards"
 import { UserRole } from "src/utils/types/enums/user-role.enum"
 import { UserService } from "../services/user.service"
@@ -19,10 +19,13 @@ import { UserWorkOverviewMapper } from "../mappers/user-work-overview.mapper"
 import { UtilityService } from "src/modules/utility/services/utility.service"
 
 @Controller(`/${ROUTE_ADMIN_HUB}/${ROUTE_USERS}`)
-@ApiTags(`${API_TAG_WORKSPACE} ${API_TAG_USER}`)
+@ApiTags(`${API_TAG_USER}`)
 @UseGuards(UserGuard(UserRole.Admin, UserRole.Owner))
 export class UserAdminHubController {
-	constructor(private userService: UserService, private readonly utilityService: UtilityService) {}
+	constructor(
+		private userService: UserService,
+		private readonly utilityService: UtilityService
+	) {}
 
 	@Get("/:userId")
 	@ApiBearerAuth()
@@ -52,9 +55,8 @@ export class UserAdminHubController {
 
 		const workingDays = await this.userService.getWorkingDays(workPositions, filter)
 		const holidays = await this.utilityService.getHolidaysInDateRange(filter.fromDateStart || new Date(), filter.toDateEnd || new Date())
-		
+
 		return UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays, holidays)
-		
 	}
 
 	@Post("invite")

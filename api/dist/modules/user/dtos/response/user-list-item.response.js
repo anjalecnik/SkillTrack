@@ -11,7 +11,6 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserListItemResponse = void 0;
 const swagger_1 = require("@nestjs/swagger");
-const team_details_response_1 = require("../../../team/dtos/team-details.response");
 const work_position_list_item_response_1 = require("../../../work-position/dtos/response/work-position-list-item.response");
 const user_role_enum_1 = require("../../../../utils/types/enums/user-role.enum");
 const user_status_enum_1 = require("../../../../utils/types/enums/user-status.enum");
@@ -25,7 +24,6 @@ class UserListItemResponse {
     surname;
     averageScore;
     vacation;
-    team;
     workPosition;
 }
 exports.UserListItemResponse = UserListItemResponse;
@@ -61,10 +59,6 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: user_vacation_statistic_response_1.UserVacationStatisticResponse }),
     __metadata("design:type", user_vacation_statistic_response_1.UserVacationStatisticResponse)
 ], UserListItemResponse.prototype, "vacation", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: team_details_response_1.TeamDetailsResponse }),
-    __metadata("design:type", team_details_response_1.TeamDetailsResponse)
-], UserListItemResponse.prototype, "team", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: work_position_list_item_response_1.WorkPositionListItemResponse }),
     __metadata("design:type", work_position_list_item_response_1.WorkPositionListItemResponse)

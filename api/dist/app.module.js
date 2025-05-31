@@ -9,7 +9,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.AppModule = void 0;
 const common_1 = require("@nestjs/common");
 const auth_module_1 = require("./modules/auth/auth.module");
-const team_module_1 = require("./modules/team/team.module");
 const user_module_1 = require("./modules/user/user.module");
 const utility_module_1 = require("./modules/utility/utility.module");
 const db_module_1 = require("./libs/db/db.module");
@@ -20,6 +19,7 @@ const work_position_module_1 = require("./modules/work-position/work-position.mo
 const project_module_1 = require("./modules/project/project.module");
 const user_working_hours_module_1 = require("./modules/user/modules/user-working-hours/user-working-hours.module");
 const jira_module_1 = require("./modules/jira/jira.module");
+const activity_overview_module_1 = require("./modules/activity-overview/activity-overview.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -35,8 +35,8 @@ exports.AppModule = AppModule = __decorate([
             db_module_1.DbModule,
             app_config_module_1.AppConfigModule,
             auth_module_1.AuthModule,
-            team_module_1.TeamModule,
             user_module_1.UserModule,
+            activity_overview_module_1.ActivityOverviewModule,
             utility_module_1.UtilityModule,
             jira_module_1.JiraModule,
             work_position_module_1.WorkPositionModule,

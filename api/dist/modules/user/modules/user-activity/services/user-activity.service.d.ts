@@ -24,7 +24,6 @@ export declare class UserActivityService {
     private readonly activityDailyService;
     private readonly activityPerformanceReviewService;
     constructor(userActivityFactoryWorkerService: UserActivityFactoryWorkerService, userActivityRepository: UserActivityRepository, activityVirtualService: ActivityVirtualService, activitySharedService: ActivitySharedService, utilityService: UtilityService, activityDailyService: ActivityDailyService, activityPerformanceReviewService: ActivityPerformanceReviewService);
-    private readonly logger;
     handleCreateActivity(userInvoker: IInvokerMetadata, activityRequestCreate: IUserActivityRequestCreate, activityCommonParams: IUserActivityCommonParams): Promise<IUserActivityRequestEnriched>;
     handleUpdateActivity(userInvoker: IInvokerMetadata, activityRequestUpdate: IUserActivityRequestUpdate, activitySharedRequestUpdate: IActivitySharedRequestUpdateRequest): Promise<IUserActivityRequestEnriched>;
     handleCancelActivity(userInvoker: IInvokerMetadata, activityRequestCancel: IActivitySharedRequestCancelRequest): Promise<IUserActivityRequestEnriched>;
@@ -47,16 +46,4 @@ export declare class UserActivityService {
     private getRequestOverviewPagination;
     private getActivityRequestOrThrow;
     private validateUserActive;
-    private alreadyHasWorkingHours;
-    private separateWorkingAndBreakEntries;
-    private assignNewWorkingHourDeleteOld;
-    private assignWorkingHoursToActivities;
-    private createDefaultWorkingHoursEntry;
-    private createDefaultMultipleWorkingHoursEntry;
-    private createExistingMultipleWorkingHoursEntry;
-    private splitWorkingHours;
-    private formatTime;
-    private mergeWorkingHours;
-    private handleLunchActivities;
-    private handleNoProjectDaily;
 }

@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable, Logger, NotFoundException } from "@nestjs/common"
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common"
 import { FindOptionsWhere } from "typeorm"
 import {
 	IUserActivityCommonParams,
@@ -26,7 +26,6 @@ import { ActivityPerformanceReviewService } from "../modules/activity-performanc
 import { ActivityPerformanceReviewResponse } from "../modules/activity-performance-review/dtos/response/activity-performance-review.response"
 import _ from "lodash"
 import { UserHelper } from "src/utils/helpers/user.helper"
-import { UserWorkingHoursEntity } from "src/libs/db/entities/user-working-hours.entity"
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { DateHelper } from "src/utils/helpers/date.helper"
 import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-request.entity"
@@ -48,7 +47,6 @@ export class UserActivityService {
 		private readonly activityDailyService: ActivityDailyService,
 		private readonly activityPerformanceReviewService: ActivityPerformanceReviewService
 	) {}
-	private readonly logger = new Logger(UserActivityService.name)
 
 	async handleCreateActivity(
 		userInvoker: IInvokerMetadata,
@@ -68,11 +66,6 @@ export class UserActivityService {
 		activityRequestUpdate: IUserActivityRequestUpdate,
 		activitySharedRequestUpdate: IActivitySharedRequestUpdateRequest
 	): Promise<IUserActivityRequestEnriched> {
-		const activityRequest = await this.getActivityRequestOrThrow({
-			id: activitySharedRequestUpdate.id,
-			userId: activitySharedRequestUpdate.userId
-		})
-
 		await this.validateUserActive(activitySharedRequestUpdate.userId)
 
 		return this.userActivityFactoryWorkerService.updateActivityRequest(userInvoker, { ...activityRequestUpdate, ...activitySharedRequestUpdate })
@@ -272,118 +265,5 @@ export class UserActivityService {
 	private async validateUserActive(userId: number) {
 		const user = await this.activitySharedService.getUserById(userId)
 		UserHelper.validateActive(user)
-	}
-
-	private alreadyHasWorkingHours(activitiesOnDate: UserActivityEntity[]): boolean {
-		if (activitiesOnDate.every(activity => activity.workingHours)) return true
-
-		return false
-	}
-
-	private separateWorkingAndBreakEntries(entries: UserWorkingHoursEntity[]): {
-		workingEntries: UserWorkingHoursEntity[]
-		breakEntries: UserWorkingHoursEntity[]
-	} {
-		const workingEntries = entries.filter(entry => entry.type === "Work")
-		const breakEntries = entries.filter(entry => entry.type === "Break")
-
-		return { workingEntries, breakEntries }
-	}
-
-	private async assignNewWorkingHourDeleteOld(activity: UserActivityEntity, workingHour: UserWorkingHoursEntity, oldWorkingHours: UserWorkingHoursEntity[]) {
-		await this.activityDailyService.assignNewWorkingHourDeleteOld(activity, workingHour, oldWorkingHours)
-	}
-
-	private async assignWorkingHoursToActivities(activities: UserActivityEntity[], workingHours: UserWorkingHoursEntity[]) {
-		await this.activityDailyService.assignWorkingHoursToActivities(activities, workingHours)
-	}
-
-	private async createDefaultWorkingHoursEntry(activities: UserActivityEntity[]) {
-		//CREATE ONE WORKING HOUR AND ASSIGN IT
-		const defaultTimeRange = {
-			fromTimeStart: "08:00",
-			toTimeEnd: "16:00"
-		}
-
-		const workingHours = await this.activityDailyService.addWorkingHours(activities, [defaultTimeRange])
-		await this.activityDailyService.assignWorkingHoursResponseToActivities(activities, workingHours)
-	}
-
-	private async createDefaultMultipleWorkingHoursEntry(activities: UserActivityEntity[]) {
-		//CREATE N WORKING HOURS AND ASSIGN IT
-
-		const baseDate = new Date(activities[0].date)
-		const year = baseDate.getFullYear()
-		const month = baseDate.getMonth()
-		const day = baseDate.getDate()
-		const defaultTimeRange = {
-			fromTimeStart: new Date(year, month, day, 8, 0, 0), // 08:00 AM
-			toTimeEnd: new Date(year, month, day, 16, 0, 0) // 16:00 PM
-		}
-
-		const timeRanges = await this.splitWorkingHours(defaultTimeRange, activities.length)
-
-		const workingHours = await this.activityDailyService.addWorkingHours(activities, timeRanges)
-		await this.activityDailyService.assignWorkingHoursResponseToActivities(activities, workingHours)
-	}
-
-	private async createExistingMultipleWorkingHoursEntry(activities: UserActivityEntity[], workingHour: UserWorkingHoursEntity) {
-		//CREATE N WORKING HOURS AND ASSIGN IT
-
-		const timeRange = { fromTimeStart: workingHour.fromDateStart, toTimeEnd: workingHour.toDateEnd ?? DateHelper.add(workingHour.fromDateStart, 8, "hour") }
-		const timeRanges = await this.splitWorkingHours(timeRange, activities.length)
-
-		const workingHours = await this.activityDailyService.addWorkingHours(activities, timeRanges)
-		await this.activityDailyService.assignWorkingHoursResponseToActivities(activities, workingHours)
-	}
-
-	private splitWorkingHours(timeRange: { fromTimeStart: Date; toTimeEnd: Date }, numberOfSplits: number): { fromTimeStart: string; toTimeEnd: string }[] {
-		const totalMinutes = Math.round((timeRange.toTimeEnd.getTime() - timeRange.fromTimeStart.getTime()) / 60000)
-		const splitDuration = Math.round(totalMinutes / numberOfSplits)
-
-		const result: { fromTimeStart: string; toTimeEnd: string }[] = []
-
-		for (let i = 0; i < numberOfSplits; i++) {
-			const start = new Date(timeRange.fromTimeStart.getTime() + i * splitDuration * 60000)
-			const end = new Date(timeRange.fromTimeStart.getTime() + (i + 1) * splitDuration * 60000)
-
-			result.push({
-				fromTimeStart: this.formatTime(start),
-				toTimeEnd: this.formatTime(end)
-			})
-		}
-		return result
-	}
-
-	private formatTime(date: Date): string {
-		const hours = date.getHours().toString().padStart(2, "0")
-		const minutes = date.getMinutes().toString().padStart(2, "0")
-		return `${hours}:${minutes}`
-	}
-
-	private mergeWorkingHours(entities: UserWorkingHoursEntity[]): UserWorkingHoursEntity {
-		const minFromDate = new Date(Math.min(...entities.map(e => e.fromDateStart.getTime())))
-		const maxToDate = new Date(Math.max(...entities.map(e => (e.toDateEnd ? e.toDateEnd.getTime() : e.fromDateStart.getTime()))))
-
-		return {
-			id: 1,
-			userId: entities[0].userId,
-			type: entities[0].type,
-			fromDateStart: minFromDate,
-			toDateEnd: maxToDate
-		}
-	}
-
-	private async handleLunchActivities(activities: UserActivityEntity[], breakEntries: UserWorkingHoursEntity[]) {
-		if (breakEntries.length === 0) return
-
-		await this.activityDailyService.handleLunchActivities(activities[0], breakEntries)
-	}
-
-	private handleNoProjectDaily(activities: UserActivityEntity[]) {
-		if (activities.some(activity => !activity.projectId || activity.projectId === null)) {
-			return true
-		}
-		return false
 	}
 }

@@ -2,7 +2,6 @@ import { Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, ManyToO
 import { UserStatus } from "../../../utils/types/enums/user-status.enum"
 import { DB_VARCHAR_LENGTH_128, DB_VARCHAR_LENGTH_16, DB_VARCHAR_LENGTH_256, DB_VARCHAR_LENGTH_512 } from "../../../utils/constants"
 import { UserRole } from "../../../utils/types/enums/user-role.enum"
-import { TeamEntity } from "./team.entity"
 import { WorkPositionEntity } from "./work-position.entity"
 import { IDatesAllEntity } from "./interfaces/date.interface.entity"
 import { IDeletedByUserIdEntity, IUpdatedByUserIdEntity, IInvitedByUserIdEntity } from "./interfaces/user-id.interface.entity"
@@ -85,13 +84,6 @@ export class UserEntity implements IDatesAllEntity, IDeletedByUserIdEntity, IUpd
 
 	@Column({
 		type: "integer",
-		comment: "Quick reference to the team",
-		nullable: true
-	})
-	teamId?: number | null
-
-	@Column({
-		type: "integer",
 		comment: "Quick reference to the work position",
 		nullable: true
 	})
@@ -124,11 +116,6 @@ export class UserEntity implements IDatesAllEntity, IDeletedByUserIdEntity, IUpd
 		nullable: true
 	})
 	deletedByUserId?: number | null
-
-	// Relations
-	@ManyToOne(() => TeamEntity, team => team.user)
-	@JoinColumn({ name: "teamId" })
-	team?: TeamEntity
 
 	@ManyToOne(() => WorkPositionEntity, position => position.user)
 	@JoinColumn({ name: "workPositionId" })

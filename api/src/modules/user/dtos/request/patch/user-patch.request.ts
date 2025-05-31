@@ -34,12 +34,6 @@ export class UserPatchRequest {
 	@IsPhoneNumber()
 	phone?: string
 
-	@ApiPropertyOptional({ example: 2 })
-	@IsInt()
-	@IsPositive()
-	@IsOptional()
-	teamId?: number
-
 	@ApiPropertyOptional({ example: 3 })
 	@IsInt()
 	@IsPositive()

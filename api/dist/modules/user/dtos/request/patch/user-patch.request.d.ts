@@ -7,7 +7,6 @@ export declare class UserPatchRequest {
     surname?: string;
     birthDate?: Date;
     phone?: string;
-    teamId?: number;
     workPositionId?: number;
     managerId?: number;
     addresses?: UserAddressPatchRequest[];

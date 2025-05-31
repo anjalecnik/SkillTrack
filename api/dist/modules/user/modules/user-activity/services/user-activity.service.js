@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-var UserActivityService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserActivityService = void 0;
 const common_1 = require("@nestjs/common");
@@ -23,7 +22,7 @@ const date_helper_1 = require("../../../../../utils/helpers/date.helper");
 const utility_service_1 = require("../../../../utility/services/utility.service");
 const user_activity_enum_1 = require("../../../../../utils/types/enums/user-activity.enum");
 const user_activity_status_enum_1 = require("../../../../../utils/types/enums/user-activity-status.enum");
-let UserActivityService = UserActivityService_1 = class UserActivityService {
+let UserActivityService = class UserActivityService {
     userActivityFactoryWorkerService;
     userActivityRepository;
     activityVirtualService;
@@ -40,7 +39,6 @@ let UserActivityService = UserActivityService_1 = class UserActivityService {
         this.activityDailyService = activityDailyService;
         this.activityPerformanceReviewService = activityPerformanceReviewService;
     }
-    logger = new common_1.Logger(UserActivityService_1.name);
     async handleCreateActivity(userInvoker, activityRequestCreate, activityCommonParams) {
         const dateStart = "date" in activityRequestCreate ? activityRequestCreate.date : activityRequestCreate.dateStart;
         const dateEnd = "date" in activityRequestCreate ? activityRequestCreate.date : activityRequestCreate.dateEnd;
@@ -48,10 +46,6 @@ let UserActivityService = UserActivityService_1 = class UserActivityService {
         return this.userActivityFactoryWorkerService.createActivityRequest(userInvoker, { ...activityRequestCreate, dateStart, dateEnd, ...activityCommonParams });
     }
     async handleUpdateActivity(userInvoker, activityRequestUpdate, activitySharedRequestUpdate) {
-        const activityRequest = await this.getActivityRequestOrThrow({
-            id: activitySharedRequestUpdate.id,
-            userId: activitySharedRequestUpdate.userId
-        });
         await this.validateUserActive(activitySharedRequestUpdate.userId);
         return this.userActivityFactoryWorkerService.updateActivityRequest(userInvoker, { ...activityRequestUpdate, ...activitySharedRequestUpdate });
     }
@@ -189,93 +183,9 @@ let UserActivityService = UserActivityService_1 = class UserActivityService {
         const user = await this.activitySharedService.getUserById(userId);
         user_helper_1.UserHelper.validateActive(user);
     }
-    alreadyHasWorkingHours(activitiesOnDate) {
-        if (activitiesOnDate.every(activity => activity.workingHours))
-            return true;
-        return false;
-    }
-    separateWorkingAndBreakEntries(entries) {
-        const workingEntries = entries.filter(entry => entry.type === "Work");
-        const breakEntries = entries.filter(entry => entry.type === "Break");
-        return { workingEntries, breakEntries };
-    }
-    async assignNewWorkingHourDeleteOld(activity, workingHour, oldWorkingHours) {
-        await this.activityDailyService.assignNewWorkingHourDeleteOld(activity, workingHour, oldWorkingHours);
-    }
-    async assignWorkingHoursToActivities(activities, workingHours) {
-        await this.activityDailyService.assignWorkingHoursToActivities(activities, workingHours);
-    }
-    async createDefaultWorkingHoursEntry(activities) {
-        const defaultTimeRange = {
-            fromTimeStart: "08:00",
-            toTimeEnd: "16:00"
-        };
-        const workingHours = await this.activityDailyService.addWorkingHours(activities, [defaultTimeRange]);
-        await this.activityDailyService.assignWorkingHoursResponseToActivities(activities, workingHours);
-    }
-    async createDefaultMultipleWorkingHoursEntry(activities) {
-        const baseDate = new Date(activities[0].date);
-        const year = baseDate.getFullYear();
-        const month = baseDate.getMonth();
-        const day = baseDate.getDate();
-        const defaultTimeRange = {
-            fromTimeStart: new Date(year, month, day, 8, 0, 0),
-            toTimeEnd: new Date(year, month, day, 16, 0, 0)
-        };
-        const timeRanges = await this.splitWorkingHours(defaultTimeRange, activities.length);
-        const workingHours = await this.activityDailyService.addWorkingHours(activities, timeRanges);
-        await this.activityDailyService.assignWorkingHoursResponseToActivities(activities, workingHours);
-    }
-    async createExistingMultipleWorkingHoursEntry(activities, workingHour) {
-        const timeRange = { fromTimeStart: workingHour.fromDateStart, toTimeEnd: workingHour.toDateEnd ?? date_helper_1.DateHelper.add(workingHour.fromDateStart, 8, "hour") };
-        const timeRanges = await this.splitWorkingHours(timeRange, activities.length);
-        const workingHours = await this.activityDailyService.addWorkingHours(activities, timeRanges);
-        await this.activityDailyService.assignWorkingHoursResponseToActivities(activities, workingHours);
-    }
-    splitWorkingHours(timeRange, numberOfSplits) {
-        const totalMinutes = Math.round((timeRange.toTimeEnd.getTime() - timeRange.fromTimeStart.getTime()) / 60000);
-        const splitDuration = Math.round(totalMinutes / numberOfSplits);
-        const result = [];
-        for (let i = 0; i < numberOfSplits; i++) {
-            const start = new Date(timeRange.fromTimeStart.getTime() + i * splitDuration * 60000);
-            const end = new Date(timeRange.fromTimeStart.getTime() + (i + 1) * splitDuration * 60000);
-            result.push({
-                fromTimeStart: this.formatTime(start),
-                toTimeEnd: this.formatTime(end)
-            });
-        }
-        return result;
-    }
-    formatTime(date) {
-        const hours = date.getHours().toString().padStart(2, "0");
-        const minutes = date.getMinutes().toString().padStart(2, "0");
-        return `${hours}:${minutes}`;
-    }
-    mergeWorkingHours(entities) {
-        const minFromDate = new Date(Math.min(...entities.map(e => e.fromDateStart.getTime())));
-        const maxToDate = new Date(Math.max(...entities.map(e => (e.toDateEnd ? e.toDateEnd.getTime() : e.fromDateStart.getTime()))));
-        return {
-            id: 1,
-            userId: entities[0].userId,
-            type: entities[0].type,
-            fromDateStart: minFromDate,
-            toDateEnd: maxToDate
-        };
-    }
-    async handleLunchActivities(activities, breakEntries) {
-        if (breakEntries.length === 0)
-            return;
-        await this.activityDailyService.handleLunchActivities(activities[0], breakEntries);
-    }
-    handleNoProjectDaily(activities) {
-        if (activities.some(activity => !activity.projectId || activity.projectId === null)) {
-            return true;
-        }
-        return false;
-    }
 };
 exports.UserActivityService = UserActivityService;
-exports.UserActivityService = UserActivityService = UserActivityService_1 = __decorate([
+exports.UserActivityService = UserActivityService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [user_activity_factory_worker_service_1.UserActivityFactoryWorkerService,
         user_activity_repository_1.UserActivityRepository,

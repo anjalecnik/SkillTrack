@@ -14,7 +14,6 @@ const typeorm_1 = require("typeorm");
 const user_status_enum_1 = require("../../../utils/types/enums/user-status.enum");
 const constants_1 = require("../../../utils/constants");
 const user_role_enum_1 = require("../../../utils/types/enums/user-role.enum");
-const team_entity_1 = require("./team.entity");
 const work_position_entity_1 = require("./work-position.entity");
 const user_activity_entity_1 = require("./user-activity.entity");
 const project_user_entity_1 = require("./project-user.entity");
@@ -38,13 +37,11 @@ let UserEntity = class UserEntity {
     createdAt;
     updatedAt;
     deletedAt;
-    teamId;
     workPositionId;
     managerId;
     invitedByUserId;
     updatedByUserId;
     deletedByUserId;
-    team;
     workPosition;
     workPositionCreatedBy;
     workPositionUpdatedBy;
@@ -157,14 +154,6 @@ __decorate([
 __decorate([
     (0, typeorm_1.Column)({
         type: "integer",
-        comment: "Quick reference to the team",
-        nullable: true
-    }),
-    __metadata("design:type", Object)
-], UserEntity.prototype, "teamId", void 0);
-__decorate([
-    (0, typeorm_1.Column)({
-        type: "integer",
         comment: "Quick reference to the work position",
         nullable: true
     }),
@@ -202,11 +191,6 @@ __decorate([
     }),
     __metadata("design:type", Object)
 ], UserEntity.prototype, "deletedByUserId", void 0);
-__decorate([
-    (0, typeorm_1.ManyToOne)(() => team_entity_1.TeamEntity, team => team.user),
-    (0, typeorm_1.JoinColumn)({ name: "teamId" }),
-    __metadata("design:type", team_entity_1.TeamEntity)
-], UserEntity.prototype, "team", void 0);
 __decorate([
     (0, typeorm_1.ManyToOne)(() => work_position_entity_1.WorkPositionEntity, position => position.user),
     (0, typeorm_1.JoinColumn)({ name: "workPositionId" }),
