@@ -25,7 +25,6 @@ const user_activity_entity_1 = require("../../../libs/db/entities/user-activity.
 const user_activity_enum_1 = require("../../../utils/types/enums/user-activity.enum");
 const user_activity_status_enum_1 = require("../../../utils/types/enums/user-activity-status.enum");
 const LOAD_RELATIONS = {
-    team: true,
     workPosition: { parentWorkPosition: true },
     manager: true,
     notifications: true,
@@ -54,7 +53,6 @@ let UserRepository = class UserRepository {
             .createQueryBuilder(alias)
             .leftJoinAndSelect(`${alias}.workPosition`, "workPosition")
             .leftJoinAndSelect(`${alias}.projects`, "projects")
-            .leftJoinAndSelect(`${alias}.team`, "team")
             .leftJoinAndSelect(`${alias}.performanceReviews`, "performanceReviews")
             .skip(skip)
             .take(take);

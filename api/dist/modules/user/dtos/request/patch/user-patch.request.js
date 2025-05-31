@@ -23,7 +23,6 @@ class UserPatchRequest {
     surname;
     birthDate;
     phone;
-    teamId;
     workPositionId;
     managerId;
     addresses;
@@ -62,13 +61,6 @@ __decorate([
     (0, class_validator_1.IsPhoneNumber)(),
     __metadata("design:type", String)
 ], UserPatchRequest.prototype, "phone", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ example: 2 }),
-    (0, class_validator_1.IsInt)(),
-    (0, class_validator_1.IsPositive)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Number)
-], UserPatchRequest.prototype, "teamId", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: 3 }),
     (0, class_validator_1.IsInt)(),

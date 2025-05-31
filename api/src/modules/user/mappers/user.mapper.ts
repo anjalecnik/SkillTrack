@@ -5,7 +5,6 @@ import { UserListItemResponse } from "../dtos/response/user-list-item.response"
 import { IUserPaginationItemResponse } from "../interfaces/user-pagination-item-response.interface"
 import { IUserDetailsResponse } from "../interfaces/details-response.interface"
 import { UserDetailsResponse } from "../dtos/response/user-details.response"
-import { TeamMapper } from "src/modules/team/mappers/team.mapper"
 import { UserEntity } from "src/libs/db/entities/user.entity"
 import { UserBaseResponse } from "../dtos/response/user-base.response"
 import { DateHelper } from "src/utils/helpers/date.helper"
@@ -42,7 +41,6 @@ export abstract class UserMapper {
 			name: userDetails.name,
 			surname: userDetails.surname,
 
-			team: userDetails.team ? TeamMapper.mapTeamListItem(userDetails.team) : undefined,
 			workPosition: userDetails.workPosition ? WorkPositionMapper.mapWorkPositionListItem(userDetails.workPosition) : undefined,
 			vacation: vacation,
 			averageScore: avgScore ? Number(avgScore.toFixed(2)) : undefined
@@ -53,7 +51,6 @@ export abstract class UserMapper {
 		return {
 			...this.mapUserBase(userEntity),
 
-			team: userEntity.team ? TeamMapper.mapTeamDetails(userEntity.team) : undefined,
 			workPosition: userEntity.workPosition ? WorkPositionMapper.mapWorkPositionListItem(userEntity.workPosition) : undefined,
 			manager: this.mapUserManagerShort(userEntity.manager),
 			projects: userEntity.projects?.map(project => this.mapUserProjectsShort(project)),

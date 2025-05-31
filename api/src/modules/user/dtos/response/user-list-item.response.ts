@@ -1,5 +1,4 @@
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger"
-import { TeamDetailsResponse } from "src/modules/team/dtos/team-details.response"
 import { WorkPositionListItemResponse } from "src/modules/work-position/dtos/response/work-position-list-item.response"
 import { UserRole } from "src/utils/types/enums/user-role.enum"
 import { UserStatus } from "src/utils/types/enums/user-status.enum"
@@ -29,9 +28,6 @@ export class UserListItemResponse {
 
 	@ApiPropertyOptional({ type: UserVacationStatisticResponse })
 	vacation?: UserVacationStatisticResponse
-
-	@ApiPropertyOptional({ type: TeamDetailsResponse })
-	team?: TeamDetailsResponse
 
 	@ApiPropertyOptional({ type: WorkPositionListItemResponse })
 	workPosition?: WorkPositionListItemResponse

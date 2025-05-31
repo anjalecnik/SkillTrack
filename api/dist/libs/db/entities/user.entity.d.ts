@@ -1,6 +1,5 @@
 import { UserStatus } from "../../../utils/types/enums/user-status.enum";
 import { UserRole } from "../../../utils/types/enums/user-role.enum";
-import { TeamEntity } from "./team.entity";
 import { WorkPositionEntity } from "./work-position.entity";
 import { IDatesAllEntity } from "./interfaces/date.interface.entity";
 import { IDeletedByUserIdEntity, IUpdatedByUserIdEntity, IInvitedByUserIdEntity } from "./interfaces/user-id.interface.entity";
@@ -26,13 +25,11 @@ export declare class UserEntity implements IDatesAllEntity, IDeletedByUserIdEnti
     createdAt: Date;
     updatedAt: Date;
     deletedAt?: Date | null;
-    teamId?: number | null;
     workPositionId?: number | null;
     managerId?: number | null;
     invitedByUserId?: number | null;
     updatedByUserId?: number | null;
     deletedByUserId?: number | null;
-    team?: TeamEntity;
     workPosition?: WorkPositionEntity;
     workPositionCreatedBy?: WorkPositionEntity[];
     workPositionUpdatedBy?: WorkPositionEntity[];

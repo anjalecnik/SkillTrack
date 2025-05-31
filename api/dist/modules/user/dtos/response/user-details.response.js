@@ -15,12 +15,10 @@ const user_base_response_1 = require("./user-base.response");
 const user_activity_statistic_response_1 = require("./activity/user-activity-statistic.response");
 const user_manager_short_response_1 = require("./user-manager-short.response");
 const user_projects_short_response_1 = require("./user-projects-short.response");
-const team_details_response_1 = require("../../../team/dtos/team-details.response");
 const work_position_list_item_response_1 = require("../../../work-position/dtos/response/work-position-list-item.response");
 const user_address_details_response_1 = require("../../modules/user-address/dtos/response/user-address-details.response");
 const user_assigned_vacation_details_response_1 = require("../../modules/user-assigned-vacation/dtos/response/user-assigned-vacation-details.response");
 class UserDetailsResponse extends user_base_response_1.UserBaseResponse {
-    team;
     workPosition;
     manager;
     projects;
@@ -30,10 +28,6 @@ class UserDetailsResponse extends user_base_response_1.UserBaseResponse {
     isSupervisor;
 }
 exports.UserDetailsResponse = UserDetailsResponse;
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)({ type: team_details_response_1.TeamDetailsResponse }),
-    __metadata("design:type", team_details_response_1.TeamDetailsResponse)
-], UserDetailsResponse.prototype, "team", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ type: work_position_list_item_response_1.WorkPositionListItemResponse }),
     __metadata("design:type", work_position_list_item_response_1.WorkPositionListItemResponse)

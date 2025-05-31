@@ -16,7 +16,6 @@ import { IUserWorkOverviewListFilter } from "../interfaces/user-work-overview-li
 import { UserActivityStatus } from "src/utils/types/enums/user-activity-status.enum"
 
 const LOAD_RELATIONS: FindOptionsRelations<UserEntity> = {
-	team: true,
 	workPosition: { parentWorkPosition: true },
 	manager: true,
 	notifications: true,
@@ -49,7 +48,6 @@ export class UserRepository {
 			.createQueryBuilder(alias)
 			.leftJoinAndSelect(`${alias}.workPosition`, "workPosition")
 			.leftJoinAndSelect(`${alias}.projects`, "projects")
-			.leftJoinAndSelect(`${alias}.team`, "team")
 			.leftJoinAndSelect(`${alias}.performanceReviews`, "performanceReviews")
 			.skip(skip)
 			.take(take)

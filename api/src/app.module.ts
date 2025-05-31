@@ -1,6 +1,5 @@
 import { Module } from "@nestjs/common"
 import { AuthModule } from "./modules/auth/auth.module"
-import { TeamModule } from "./modules/team/team.module"
 import { UserModule } from "./modules/user/user.module"
 import { UtilityModule } from "./modules/utility/utility.module"
 import { DbModule } from "./libs/db/db.module"
@@ -11,6 +10,7 @@ import { WorkPositionModule } from "./modules/work-position/work-position.module
 import { ProjectModule } from "./modules/project/project.module"
 import { UserWorkingHoursModule } from "./modules/user/modules/user-working-hours/user-working-hours.module"
 import { JiraModule } from "./modules/jira/jira.module"
+import { ActivityOverviewModule } from "./modules/activity-overview/activity-overview.module"
 
 @Module({
 	imports: [
@@ -23,8 +23,8 @@ import { JiraModule } from "./modules/jira/jira.module"
 		DbModule,
 		AppConfigModule,
 		AuthModule,
-		TeamModule,
 		UserModule,
+		ActivityOverviewModule,
 		UtilityModule,
 		JiraModule,
 		WorkPositionModule,

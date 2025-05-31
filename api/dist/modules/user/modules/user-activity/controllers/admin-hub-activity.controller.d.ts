@@ -28,7 +28,7 @@ export declare class AdminHubActivityController {
     getActivityList(userId: number, filter: UserActivityListFilterRequest): Promise<UserActivityListHalResponse>;
     getLastDailyActivityRequest(authPassport: IAuthJwtPassportUserRequest, userId: number, filter: ActivityRequestLastDailyRequestFilterRequest): Promise<UserActivityLastDailyRequestResponse | void>;
     getPrefillDailyActivityRequest(authPassport: IAuthJwtPassportUserRequest, userId: number, filter: ActivityRequestLastDailyRequestFilterRequest): Promise<UserActivityLastDailyRequestResponse | void>;
-    getUserActivityRequest(authPassport: IAuthJwtPassportUserRequest, userId: number, userActivityRequestId: number): Promise<ActivityRequestBusinessTripListItemHalResponse | ActivityRequestDailyListItemHalResponse | ActivityRequestPerformanceReviewListItemHalResponse | ActivityRequestSickLeaveListItemHalResponse | ActivityRequestVacationListItemHalResponse>;
+    getUserActivityRequest(authPassport: IAuthJwtPassportUserRequest, userId: number, userActivityRequestId: number): Promise<ActivityRequestBusinessTripListItemHalResponse | ActivityRequestDailyListItemHalResponse | ActivityRequestSickLeaveListItemHalResponse | ActivityRequestVacationListItemHalResponse | ActivityRequestPerformanceReviewListItemHalResponse>;
     getActivityRequestList(authPassport: IAuthJwtPassportUserRequest, userId: number, filter: UserActivityRequestListFilterRequest): Promise<UserActivityRequestListHalResponse>;
     getActivityRequestPagination(authPassport: IAuthJwtPassportUserRequest, userId: number, filter: UserActivityRequestPaginationFilterRequest): Promise<UserActivityRequestPaginationHalResponse>;
     getPerformanceReviewList(userId: number): Promise<ActivityPerformanceReviewResponse[]>;

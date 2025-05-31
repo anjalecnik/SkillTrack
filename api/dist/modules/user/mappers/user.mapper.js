@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.UserMapper = void 0;
 const common_1 = require("@nestjs/common");
-const team_mapper_1 = require("../../team/mappers/team.mapper");
 const date_helper_1 = require("../../../utils/helpers/date.helper");
 const work_position_mapper_1 = require("../../work-position/mappers/work-position.mapper");
 const user_address_mapper_1 = require("../modules/user-address/mappers/user-address.mapper");
@@ -32,7 +31,6 @@ let UserMapper = class UserMapper {
             role: userDetails.role,
             name: userDetails.name,
             surname: userDetails.surname,
-            team: userDetails.team ? team_mapper_1.TeamMapper.mapTeamListItem(userDetails.team) : undefined,
             workPosition: userDetails.workPosition ? work_position_mapper_1.WorkPositionMapper.mapWorkPositionListItem(userDetails.workPosition) : undefined,
             vacation: vacation,
             averageScore: avgScore ? Number(avgScore.toFixed(2)) : undefined
@@ -41,7 +39,6 @@ let UserMapper = class UserMapper {
     static mapUserDetails({ userEntity, ...statistic }) {
         return {
             ...this.mapUserBase(userEntity),
-            team: userEntity.team ? team_mapper_1.TeamMapper.mapTeamDetails(userEntity.team) : undefined,
             workPosition: userEntity.workPosition ? work_position_mapper_1.WorkPositionMapper.mapWorkPositionListItem(userEntity.workPosition) : undefined,
             manager: this.mapUserManagerShort(userEntity.manager),
             projects: userEntity.projects?.map(project => this.mapUserProjectsShort(project)),
