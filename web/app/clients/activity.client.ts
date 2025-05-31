@@ -205,23 +205,31 @@ export class ActivityClient {
     limit: number = 0
   ): Promise<PaginatedResponse<IUsersPerformanceReviews>> {
     const params = new URLSearchParams(loaderArgs.request.url.split("?")[1]);
+
     const year = params.get(SearchParam.Year) ?? dayjs().year();
     const query = params.get(SearchParam.Sort);
+
     const [field, direction] = query?.split(":") ?? [];
+
     const search = params.get(SearchParam.Search);
     const page = params.get(SearchParam.Page);
+
     const { data } = await privateClient.get<
       PaginatedResponse<IUsersPerformanceReviews>
-    >(`/activities/workspace-performance-reviews`, {
-      params: {
-        sortingDir: direction,
-        sort: field,
-        fullName: search,
-        page: page ? parseInt(page) : undefined,
-        limit,
-        year,
-      },
-    });
+    >(
+      `/activities/performance-reviews`,
+      {
+        params: {
+          sortingDir: direction,
+          sort: field,
+          fullName: search,
+          page: page ? parseInt(page) : undefined,
+          limit,
+          year,
+        },
+      }
+    );
+
     return data;
   }
 
