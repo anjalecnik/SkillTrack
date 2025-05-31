@@ -8,9 +8,11 @@ import { UserInvitationListRequest } from "../dtos/request/user-invitation-list.
 import { UserPatchRequest } from "../dtos/request/patch/user-patch.request";
 import { UserWorkOverviewListHalResponse } from "../dtos/response/user-work-overview-list.hal.response";
 import { UserWorkOverviewListFilterRequest } from "../dtos/request/user-work-overview-list-filter.request";
+import { UtilityService } from "src/modules/utility/services/utility.service";
 export declare class UserAdminHubController {
     private userService;
-    constructor(userService: UserService);
+    private readonly utilityService;
+    constructor(userService: UserService, utilityService: UtilityService);
     getUser(authPassport: IAuthJwtPassportUserRequest, userId: number): Promise<UserDetailsResponse>;
     geteUserList(filter: UserPaginationFilterRequest): Promise<UserListResponse>;
     getUserWorkOverview(filter: UserWorkOverviewListFilterRequest): Promise<UserWorkOverviewListHalResponse>;

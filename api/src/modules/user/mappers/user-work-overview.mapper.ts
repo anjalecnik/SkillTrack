@@ -8,15 +8,22 @@ import { DateHelper } from "src/utils/helpers/date.helper"
 import { ProjectEntity } from "src/libs/db/entities/project.entity"
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserActivityType } from "src/utils/types/enums/user-activity.enum"
+import { HolidayEntity } from "src/libs/db/entities/holiday.entity"
 
 export abstract class UserWorkOverviewMapper {
-	static mapWorkOverview(data: IRawData, filter: UserWorkOverviewListFilterRequest, workingDays: number): UserWorkOverviewListHalResponse {
+	static mapWorkOverview(
+		data: IRawData,
+		filter: UserWorkOverviewListFilterRequest,
+		workingDays: number,
+		holidays: HolidayEntity[]
+	  ): UserWorkOverviewListHalResponse
+	   {
 		const users: IUserStatistics[] = []
 		const allTotalUserCounts: ProjectUserCounts[] = []
 		for (const user of data.usersWithProjects) {
 			const perProjectCounts = this.getUserPerProjectCounts(data, user)
 
-			const totalUserCounts = this.getTotalUserCounts(data, user)
+			const totalUserCounts = this.getTotalUserCounts(data, user, holidays)
 			allTotalUserCounts.push(totalUserCounts)
 
 			users.push(this.addUserToResponse(user, perProjectCounts, totalUserCounts))
@@ -95,7 +102,8 @@ export abstract class UserWorkOverviewMapper {
 		return totals
 	}
 
-	private static getTotalUserCounts(rawData: IRawData, userWithProject: UserWithProject): ProjectUserCounts {
+	private static getTotalUserCounts(rawData: IRawData, userWithProject: UserWithProject, holidays: HolidayEntity[]): ProjectUserCounts
+ {
 		const userCounts: ProjectUserCounts = {
 			projectId: 0,
 			name: userWithProject.user.name,
@@ -103,7 +111,7 @@ export abstract class UserWorkOverviewMapper {
 			daysOffProject: 0,
 			businessTripsCount: 0,
 			dailyActivityCount: 0,
-			publicHolidayCount: 0,
+			publicHolidayCount: holidays.length,
 			sickLeaveCount: 0,
 			vacationCount: 0
 		}
@@ -227,9 +235,6 @@ export abstract class UserWorkOverviewMapper {
 		switch (activityType) {
 			case UserActivityType.BusinessTrip:
 				projectData.businessTripsCount++
-				break
-			case UserActivityType.PublicHoliday:
-				projectData.publicHolidayCount++
 				break
 			case UserActivityType.SickLeave:
 				projectData.sickLeaveCount++

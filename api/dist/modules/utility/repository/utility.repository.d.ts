@@ -14,6 +14,6 @@ export declare class UtilityRepository {
     getUserWithProjects(id: number): Promise<UserEntity | undefined>;
     getProject(id: number): Promise<ProjectEntity | undefined>;
     getHolidaysOnDates(countryCode: string, dates: Date[]): Promise<HolidayEntity[]>;
-    getHolidaysInDateRange(countryCode: string, dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]>;
+    getHolidaysInDateRange(dateStart: Date, dateEnd: Date): Promise<HolidayEntity[]>;
     getSubordinates(filter: IUserCommon): Promise<UserEntity[]>;
 }

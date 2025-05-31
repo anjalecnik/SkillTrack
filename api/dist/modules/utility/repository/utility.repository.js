@@ -57,10 +57,10 @@ let UtilityRepository = class UtilityRepository {
         const orWhereCondition = dateConditions.map((dateCondition) => ({ countryCode, date: dateCondition }));
         return this.holidayRepository.find({ where: orWhereCondition });
     }
-    async getHolidaysInDateRange(countryCode, dateStart, dateEnd) {
+    async getHolidaysInDateRange(dateStart, dateEnd) {
         return this.holidayRepository.find({
             where: {
-                countryCode: countryCode,
+                countryCode: "SI",
                 date: (0, typeorm_2.Between)(dateStart, dateEnd)
             }
         });
