@@ -49,12 +49,10 @@ export const MenuProvider = ({
     const isUserHub = pathname.includes(USER_HUB_PATH);
     const workspaceHubFilteredItems = [
       "projects",
-      "settings",
       "employees",
       "positions",
       "requests",
       "reports",
-      "activityDashboard",
       "performanceReviews",
       "jira",
     ];
@@ -63,13 +61,7 @@ export const MenuProvider = ({
       "requests",
       isSupervisor && "performanceReviews",
       isSupervisor && "jira",
-      searchParams.get(SearchParam.SupervisorView) &&
-        isSupervisor &&
-        "teamMembers",
-      searchParams.get(SearchParam.SupervisorView) && isSupervisor && "reports",
-      searchParams.get(SearchParam.SupervisorView) &&
-        isSupervisor &&
-        "activityDashboard",
+      isSupervisor && "teamMembers",
     ];
 
     const menu = menuItemsList
@@ -87,8 +79,8 @@ export const MenuProvider = ({
         url: isWorkspaceHub
           ? `${WORKSPACE_HUB_PATH}${item.url}`
           : isUserHub
-            ? `${USER_HUB_PATH}${item.url}`
-            : item.url,
+          ? `${USER_HUB_PATH}${item.url}`
+          : item.url,
       }));
 
     setMenuItems(menu);
