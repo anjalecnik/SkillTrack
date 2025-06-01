@@ -11,6 +11,7 @@ import { ProjectModule } from "./modules/project/project.module"
 import { UserWorkingHoursModule } from "./modules/user/modules/user-working-hours/user-working-hours.module"
 import { JiraModule } from "./modules/jira/jira.module"
 import { ActivityOverviewModule } from "./modules/activity-overview/activity-overview.module"
+import { MailModule } from "./modules/mail/mail.module"
 
 @Module({
 	imports: [
@@ -22,6 +23,7 @@ import { ActivityOverviewModule } from "./modules/activity-overview/activity-ove
 		}),
 		DbModule,
 		AppConfigModule,
+		MailModule,
 		AuthModule,
 		UserModule,
 		ActivityOverviewModule,

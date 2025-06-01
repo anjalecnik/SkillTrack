@@ -10,10 +10,11 @@ import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserEntity } from "src/libs/db/entities/user.entity"
 import { UserVacationAssignedEntity } from "src/libs/db/entities/user-vacation-assigned.entity"
 import { MasterDataSource } from "src/libs/db/master-data-source.service"
+import { MailService } from "src/modules/mail/services/mail.service"
 
 @Module({
 	imports: [TypeOrmModule.forFeature([UserEntity, UserActivityEntity, UserActivityRequestEntity, UserVacationAssignedEntity]), ActivitySharedModule, UserAssignedVacationModule],
-	providers: [ActivityVacationService, ActivityVacationValidationService, ActivityVacationRepository, MasterDataSource],
+	providers: [ActivityVacationService, ActivityVacationValidationService, ActivityVacationRepository, MasterDataSource, MailService],
 	exports: [ActivityVacationService, ActivityVacationValidationService]
 })
 export class ActivityVacationModule {}

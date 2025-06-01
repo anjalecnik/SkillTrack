@@ -33,7 +33,10 @@ export class ActivitySharedRepository {
 	) {}
 
 	async getUserById(id: number) {
-		return this.userRepository.findOneOrFail({ where: { id } })
+		return this.userRepository.findOneOrFail({
+			where: { id },
+			relations: ["manager"]
+		})
 	}
 
 	async getUserByIdOrThrow(id: number) {

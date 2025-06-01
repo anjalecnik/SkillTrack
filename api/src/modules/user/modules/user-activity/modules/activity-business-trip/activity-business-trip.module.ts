@@ -8,10 +8,11 @@ import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-re
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserEntity } from "src/libs/db/entities/user.entity"
 import { MasterDataSource } from "src/libs/db/master-data-source.service"
+import { MailService } from "src/modules/mail/services/mail.service"
 
 @Module({
 	imports: [TypeOrmModule.forFeature([UserEntity, UserActivityEntity, UserActivityRequestEntity]), ActivitySharedModule],
-	providers: [ActivityBusinessTripService, ActivityBusinessTripValidationService, ActivityBusinessTripRepository, MasterDataSource],
+	providers: [ActivityBusinessTripService, ActivityBusinessTripValidationService, ActivityBusinessTripRepository, MasterDataSource, MailService],
 	exports: [ActivityBusinessTripService]
 })
 export class ActivityBusinessTripModule {}
