@@ -5,6 +5,9 @@ import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-re
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { MasterDataSource } from "src/libs/db/master-data-source.service"
 import { UserActivityStatus } from "src/utils/types/enums/user-activity-status.enum"
+import { MailService } from "src/modules/mail/services/mail.service"
+import { UserActivityType } from "src/utils/types/enums/user-activity.enum"
+import { ActivitySharedService } from "../../activity-shared/services/activity-shared.service"
 
 const LOAD_RELATIONS: FindOptionsRelations<UserActivityRequestEntity> = {
 	userActivities: true,
@@ -14,7 +17,11 @@ const LOAD_RELATIONS: FindOptionsRelations<UserActivityRequestEntity> = {
 
 @Injectable()
 export class ActivityBusinessTripRepository {
-	constructor(private readonly masterDataSource: MasterDataSource) {}
+	constructor(
+		private readonly masterDataSource: MasterDataSource,
+		private readonly mailerService: MailService,
+		private readonly activitySharedService: ActivitySharedService
+	) {}
 
 	async createActivityRequest(
 		createBusinessTrip: IActivityRequestBusinessTripCreateDBRequest,
@@ -27,6 +34,8 @@ export class ActivityBusinessTripRepository {
 			const newActivityRequest = await activityRequestRepository.save({ ...createBusinessTrip })
 			await activityRepository.save(createBusinessTripActivities.map(activity => ({ ...activity, activityRequestId: newActivityRequest.id })))
 
+			const user = await this.activitySharedService.getUserById(newActivityRequest.userId)
+			await this.mailerService.sendMail(`${user.name} ${user.surname}`, UserActivityType.BusinessTrip, user.manager?.email)
 			return activityRequestRepository.findOneOrFail({ where: { id: newActivityRequest.id }, relations: LOAD_RELATIONS })
 		})
 	}
