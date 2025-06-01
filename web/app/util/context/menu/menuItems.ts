@@ -36,6 +36,13 @@ export const menuItemsList: NavItemType[] = [
     icon: TeamOutlined,
   },
   {
+    id: "teamMembers",
+    title: i18next.t("menu.teamMembers"),
+    type: "item",
+    url: "/employees",
+    icon: TeamOutlined,
+  },
+  {
     id: "positions",
     title: i18next.t("menu.positions"),
     type: "item",
