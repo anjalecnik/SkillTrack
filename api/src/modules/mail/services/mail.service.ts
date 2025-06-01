@@ -9,7 +9,7 @@ export class MailService {
 	async sendMail(requestor: string, activityType: UserActivityType, receiverEmail?: string) {
 		try {
 			await this.mailerService.sendMail({
-				to: receiverEmail ?? "anjas.lecnik@gmail.com",
+				to: receiverEmail ?? process.env.MAIL_USER,
 				from: '"Activity request" <linux@over.windows>',
 				subject: `${activityType} Request`,
 				text: `User ${requestor} requested ${activityType}. Please confirm it in the app https://skilltrack-web.vercel.app/`,

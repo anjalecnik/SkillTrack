@@ -1,0 +1,36 @@
+import { UserActivityStatus } from "../../../utils/types/enums/user-activity-status.enum";
+import { UserActivityType } from "../../../utils/types/enums/user-activity.enum";
+import { ICreatedAtEntity, IUpdatedAtEntity } from "./interfaces/date.interface.entity";
+import { IReportedByUserIdEntity, IReviewedByUserIdEntity } from "./interfaces/user-id.interface.entity";
+import { UserEntity } from "./user.entity";
+import { ProjectEntity } from "./project.entity";
+import { UserActivityEntity } from "./user-activity.entity";
+import { NotificationEntity } from "./notification.entity";
+export declare class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEntity, IReportedByUserIdEntity, IReviewedByUserIdEntity {
+    id: number;
+    status: UserActivityStatus;
+    activityType: UserActivityType;
+    description?: string | null;
+    hours?: number | null;
+    dateStart: Date;
+    dateEnd?: Date | null;
+    location?: string | null;
+    distanceInKM?: number | null;
+    valueInEuro?: number | null;
+    isPaidWithCompanyCard?: boolean | null;
+    accommodationCost?: number | null;
+    foodCost?: number | null;
+    otherCost?: number | null;
+    userId: number;
+    reportedByUserId: number;
+    reviewedByUserId?: number | null;
+    projectId?: number | null;
+    user?: UserEntity;
+    reportedByUser?: UserEntity;
+    reviewedByUser?: UserEntity;
+    project?: ProjectEntity;
+    userActivities?: UserActivityEntity[];
+    notifications?: NotificationEntity[];
+    updatedAt: Date;
+    createdAt: Date;
+}
