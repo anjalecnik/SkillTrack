@@ -1,7 +1,7 @@
 import {
   IPositionResponse,
   IWorkspaceEmployeeFormCommonProps,
-  IWorkspaceUserResponse,
+  IUserResponse,
 } from "~/types";
 import { workPositionFormSchema as schema } from "~/schemas";
 import { useTranslation } from "react-i18next";
@@ -16,7 +16,7 @@ import {
 export interface IWorkPositionFormProps
   extends IWorkspaceEmployeeFormCommonProps {
   workspacePositions: IPositionResponse[];
-  workspaceUsers: IWorkspaceUserResponse[];
+  workspaceUsers: IUserResponse[];
 }
 
 export function EmployeeWorkPositionForm({
@@ -34,8 +34,8 @@ export function EmployeeWorkPositionForm({
   const { t } = useTranslation();
 
   const description =
-    workspaceUser.workspaceWorkPosition?.name && workspaceUser.manager?.name
-      ? `${workspaceUser.workspaceWorkPosition.name} - ${fullNameFormatter(
+    workspaceUser.workPosition?.name && workspaceUser.manager?.name
+      ? `${workspaceUser.workPosition.name} - ${fullNameFormatter(
           workspaceUser.manager
         )}`
       : t("workspaceEmployees.workPositionSubtitle");
@@ -63,17 +63,17 @@ export function EmployeeWorkPositionForm({
             label={t("workspaceEmployees.jobTitle")}
             options={workspacePositions}
             defaultValue={
-              workspaceUser.workspaceWorkPosition as unknown as IPositionResponse
+              workspaceUser.workPosition as unknown as IPositionResponse
             }
             getOptionLabel={(option) => option?.name ?? ""}
           />
-          <FormAutocompleteInput<IWorkspaceUserResponse>
+          <FormAutocompleteInput<IUserResponse>
             fieldName="managerId"
             label={t("workspaceEmployees.supervisor")}
             options={workspaceUsers}
-            defaultValue={workspaceUser.manager as IWorkspaceUserResponse}
+            defaultValue={workspaceUser.manager as IUserResponse}
             getOptionLabel={(user) =>
-              fullNameFormatter(user as IWorkspaceUserResponse) ?? ""
+              fullNameFormatter(user as IUserResponse) ?? ""
             }
           />
         </PaddedFlexColumn>

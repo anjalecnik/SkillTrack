@@ -101,7 +101,7 @@ export function ProjectParticipantsEditForm({
             lineHeight: "20px",
           }}
         >
-          {workspaceUser?.workspaceWorkPosition?.name}
+          {workspaceUser?.workPosition?.name}
         </Typography>
       </FlexColumn>
       {projects.map((project, index) => {
