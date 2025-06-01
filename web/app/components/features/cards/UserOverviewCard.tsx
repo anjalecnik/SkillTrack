@@ -31,8 +31,8 @@ export function UserOverviewCard({
 
     const subtitle = [];
 
-    if (workspaceUser.workspaceWorkPosition?.name) {
-      subtitle.push(workspaceUser.workspaceWorkPosition.name);
+    if (workspaceUser.workPosition?.name) {
+      subtitle.push(workspaceUser.workPosition.name);
     }
     let userAddress = workspaceUser?.addresses?.find(
       ({ type }) => type === EmployeeAddressType.Temporary

@@ -61,7 +61,6 @@ interface Manager {
   email: string;
   name: string;
   surname: string;
-  middleName: string;
 }
 
 export interface IWorkspaceUser {
@@ -81,7 +80,7 @@ export interface IWorkspaceUser {
   projects?: IProjectUserResponse[];
   activityStatistic?: ActivityStatistic;
   assignedVacations: AssignedVacations[] | [];
-  workspaceWorkPosition: WorkspaceWorkPosition;
+  workPosition: WorkspaceWorkPosition;
   isSupervisor: boolean;
 }
 
@@ -102,7 +101,7 @@ export interface IUserResponse {
   activityStatistic: ActivityStatistic;
   assignedVacations: AssignedVacations[];
   vacation: IVacation;
-  workspaceWorkPosition: WorkspaceWorkPosition;
+  workPosition: WorkspaceWorkPosition;
   averageScore?: number;
   isSupervisor: boolean;
 }

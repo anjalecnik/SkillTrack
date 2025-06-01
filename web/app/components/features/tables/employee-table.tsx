@@ -121,7 +121,7 @@ export function EmployeeTable({
                   </FlexColumn>
                 </Flex>
               </TableCell>
-              <TableCell>{item?.workspaceWorkPosition?.name ?? "/"}</TableCell>
+              <TableCell>{item?.workPosition?.name ?? "/"}</TableCell>
               <TableCell>
                 {item?.averageScore ? `${item.averageScore} %` : "/"}
               </TableCell>
