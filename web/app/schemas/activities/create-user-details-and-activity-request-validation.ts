@@ -36,31 +36,47 @@ export const createUserDetailsAndActivityRequestValidation = (
         deleteSchema,
         employeeStatusFormSchema,
       ])
-      .refine(
-        (data) => {
-          switch (data.intent) {
-            case Dialogs.PlanAbsence: {
-              const { dateStart, dateEnd } = data as PlanAbsenceSubmissionType;
-              return isEndDateGreaterOrEqualToStartDate(
+      .superRefine((data, ctx) => {
+        switch (data.intent) {
+          case Dialogs.PlanAbsence: {
+            const { dateStart, dateEnd } = data as PlanAbsenceSubmissionType;
+            if (
+              !isEndDateGreaterOrEqualToStartDate(
                 dateStart,
                 dateEnd,
                 "DD.MM.YYYY"
-              );
+              )
+            ) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "error.endDateBeforeStartDate",
+                path: ["dateEnd"],
+              });
             }
+            break;
+          }
 
-            case Dialogs.BusinessTrip: {
-              const { dateStart, dateEnd } = data as BusinessTripSubmissionType;
-              return isEndDateGreaterOrEqualToStartDate(
+          case Dialogs.BusinessTrip: {
+            const { dateStart, dateEnd } = data as BusinessTripSubmissionType;
+            if (
+              !isEndDateGreaterOrEqualToStartDate(
                 dateStart,
                 dateEnd,
-                "DD.MM.YYYY HH:mm"
-              );
+                "DD.MM.YYYY"
+              )
+            ) {
+              ctx.addIssue({
+                code: z.ZodIssueCode.custom,
+                message: "error.endDateBeforeStartDate",
+                path: ["dateEnd"],
+              });
             }
-            default:
-              return true;
+            break;
           }
-        },
-        { message: "error.endDateBeforeStartDate", path: ["dateEnd"] }
-      ),
+
+          default:
+            break;
+        }
+      }),
   });
 };
