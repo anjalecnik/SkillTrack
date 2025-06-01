@@ -36,12 +36,12 @@ exports.AppModule = AppModule = __decorate([
             app_config_module_1.AppConfigModule,
             auth_module_1.AuthModule,
             user_module_1.UserModule,
-            activity_overview_module_1.ActivityOverviewModule,
             utility_module_1.UtilityModule,
             jira_module_1.JiraModule,
             work_position_module_1.WorkPositionModule,
             project_module_1.ProjectModule,
-            user_working_hours_module_1.UserWorkingHoursModule
+            user_working_hours_module_1.UserWorkingHoursModule,
+            activity_overview_module_1.ActivityOverviewModule
         ]
     })
 ], AppModule);
