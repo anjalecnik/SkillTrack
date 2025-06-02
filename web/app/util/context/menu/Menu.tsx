@@ -1,12 +1,6 @@
-import {
-  createContext,
-  ReactNode,
-  useContext,
-  useEffect,
-  useState,
-} from "react";
-import { NavItemType, SearchParam } from "~/types";
-import { useLocation, useParams, useSearchParams } from "@remix-run/react";
+import { createContext, ReactNode, useContext, useMemo, useState } from "react";
+import { NavItemType } from "~/types";
+import { useLocation } from "@remix-run/react";
 import { USER_HUB_PATH, WORKSPACE_HUB_PATH } from "~/constants";
 import { LocalStorageService } from "~/util/services";
 import { useMenuItemsList, useBottomMenuItemsList } from "./menuItems";
@@ -40,13 +34,11 @@ export const MenuProvider = ({
     isMenuOpened: !!LocalStorageService.get("isMenuOpened") || false,
   };
   const [menuState, setMenuState] = useState(initialState);
-  const [menuItems, setMenuItems] = useState<NavItemType[]>([]);
   const { pathname } = useLocation();
-  const [searchParams] = useSearchParams();
   const fullMenuItemsList = useMenuItemsList();
   const fullBottomMenuItemsList = useBottomMenuItemsList();
 
-  useEffect(() => {
+  const menuItems = useMemo(() => {
     const isWorkspaceHub = pathname.includes(WORKSPACE_HUB_PATH);
     const isUserHub = pathname.includes(USER_HUB_PATH);
 
@@ -65,9 +57,9 @@ export const MenuProvider = ({
       isSupervisor && "performanceReviews",
       isSupervisor && "jira",
       isSupervisor && "teamMembers",
-    ].filter(Boolean); // filter out false values
+    ].filter(Boolean);
 
-    const menu = fullMenuItemsList
+    return fullMenuItemsList
       .filter((item) => {
         if (isWorkspaceHub) {
           return workspaceHubFilteredItems.includes(item.id);
@@ -84,8 +76,6 @@ export const MenuProvider = ({
           ? `${USER_HUB_PATH}${item.url}`
           : item.url,
       }));
-
-    setMenuItems(menu);
   }, [pathname, isSupervisor, fullMenuItemsList]);
 
   const handlerActiveItem = (openedItem: string) => {
