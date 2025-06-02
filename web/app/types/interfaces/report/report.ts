@@ -5,13 +5,8 @@ export interface ITotalSum {
   daysOffProjectSum: number;
   businessTripsSum: number;
   dailyActivitySum: number;
-  onCallsSum: number;
-  overtimeSum: number;
-  unassignedAcitivitySum: number;
   publicHolidaySum: number;
-  schoolObligationsSum: number;
   sickLeaveSum: number;
-  specialLeaveSum: number;
   vacationSum: number;
   workDays: number;
   workspaceUsersCount: number;
@@ -19,16 +14,10 @@ export interface ITotalSum {
 export interface ITotalCount {
   daysOnProject: number;
   daysOffProject: number;
-  tripToOfficeCount: number;
   businessTripsCount: number;
   dailyActivityCount: number;
-  onCallsCount: number;
-  overtimeCount: number;
-  unassignedAcitivityCount: number;
   publicHolidayCount: number;
-  schoolObligationsCount: number;
   sickLeaveCount: number;
-  specialLeaveCount: number;
   vacationCount: number;
 }
 

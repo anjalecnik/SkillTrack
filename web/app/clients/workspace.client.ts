@@ -6,39 +6,13 @@ import {
   IWorkspaceUserCreateReq,
   IWorkspacePatchReq,
   IWorkspaceExportReq,
-  IWorkspaceCreateReq,
 } from "~/types";
 import { privateClient } from "~/util/api";
-import { menuItemsList } from "~/util";
-import parsePhoneNum from "libphonenumber-js";
 
 export class WorkspaceClient {
   static async getWorkspaceOverview(): Promise<IWorkspaceOverview[]> {
     const { data } = await privateClient.get<IWorkspaceOverview[]>(
       `${WORKSPACE_URL}/overview`
-    );
-    return data;
-  }
-
-  static async getWorkspaceById(id: number): Promise<IWorkspace> {
-    const { data } = await privateClient.get<IWorkspace>(
-      `${WORKSPACE_URL}/${id}`
-    );
-
-    data.menuItems = menuItemsList.map((item) => item.id!);
-    data.countryPhoneCode = parsePhoneNum(data.phone ?? "")?.countryCallingCode;
-    data.fullPhone = data.phone;
-    data.phone = parsePhoneNum(data.phone ?? "")?.nationalNumber;
-
-    return data;
-  }
-
-  static async createWorkspace(
-    workspaceCreateReq: IWorkspaceCreateReq
-  ): Promise<IWorkspace> {
-    const { data } = await privateClient.post<IWorkspace>(
-      `${WORKSPACE_URL}`,
-      workspaceCreateReq
     );
     return data;
   }

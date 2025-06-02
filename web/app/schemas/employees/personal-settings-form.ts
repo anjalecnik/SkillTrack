@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EmployeeSettingsAccordions, WorkspaceUserGender } from "~/types";
+import { EmployeeSettingsAccordions } from "~/types";
 
 export const personalSettingsFormSchema = z.object({
   intent: z.literal(EmployeeSettingsAccordions.PersonalSettings),

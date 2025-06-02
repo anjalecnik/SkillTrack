@@ -65,13 +65,7 @@ export function VerifyDataForm({ userData }: IVerifyDataFormProps) {
             value={userData?.workspaceUserSurname}
             containerProps={{ width: "100%" }}
           />
-          <Button
-            variant="contained"
-            name="continue"
-            type="submit"
-            fullWidth
-            data-testid="createWorkspaceContinueBtn"
-          >
+          <Button variant="contained" name="continue" type="submit" fullWidth>
             {t("common.continue")}
           </Button>
           <Typography variant="body2">

@@ -5,6 +5,5 @@ export * from "./delete-schema";
 export * from "./projects";
 export * from "./multiple-delete-schema";
 export * from "./activities";
-export * from "./reservations";
 export * from "./requests";
 export * from "./reports";

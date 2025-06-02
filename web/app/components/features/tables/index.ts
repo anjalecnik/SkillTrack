@@ -1,4 +1,3 @@
-export * from "./offices-table";
 export * from "./work-positions-table";
 export * from "./projects-table";
 export * from "./requests-table";

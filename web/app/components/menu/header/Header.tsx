@@ -1,5 +1,9 @@
 import {
   AppBar,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
   Switch,
   Toolbar,
   Tooltip,
@@ -17,15 +21,11 @@ import { MenuFoldOutlined, MenuUnfoldOutlined } from "@ant-design/icons";
 import { Flex, Avatar, IconButton } from "~/components/common";
 import { displaySuccess, fullNameFormatter, useMenu } from "~/util";
 import { AuthClient } from "~/clients";
-import {
-  useLocation,
-  useNavigate,
-  useParams,
-  useRouteLoaderData,
-} from "@remix-run/react";
+import { useLocation, useNavigate, useRouteLoaderData } from "@remix-run/react";
 import { IWorkspaceRoot, UserRoles } from "~/types";
-import { t } from "i18next";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
+import { LanguageSelect } from "./LanguageSelect";
 
 interface WorkspaceUser {
   name: string;
@@ -45,6 +45,8 @@ export function Header({ children }: { children?: React.ReactNode }) {
   const [disableButton, setDisableButton] = useState(false);
   const workspaceUserRole = AuthClient.getUserRole();
   const isInWorkspaceHub = pathname.includes(WORKSPACE_HUB_PATH);
+
+  const { i18n, t } = useTranslation();
 
   const handleCheckedChange = (checked: boolean) => {
     setDisableButton(true);
@@ -118,6 +120,7 @@ export function Header({ children }: { children?: React.ReactNode }) {
             </Flex>
           )}
           {children}
+
           <Avatar
             avatarId={user.id}
             size="32px"
@@ -132,6 +135,10 @@ export function Header({ children }: { children?: React.ReactNode }) {
           >
             {fullNameFormatter(user)}
           </Typography>
+          <LanguageSelect
+            currentLang={i18n.language}
+            onChangeLang={(code) => i18n.changeLanguage(code)}
+          />
         </Flex>
       </Toolbar>
     </AppBar>
