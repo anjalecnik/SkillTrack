@@ -11,83 +11,90 @@ import {
   LineChartOutlined,
   SolutionOutlined,
 } from "@ant-design/icons";
-import i18next from "../../config/i18next";
+import { useTranslation } from "react-i18next";
 
-export const menuItemsList: NavItemType[] = [
-  {
-    id: "dashboard",
-    title: i18next.t("menu.dashboard"),
-    type: "item",
-    url: "/dashboard",
-    icon: DashboardOutlined,
-  },
-  {
-    id: "requests",
-    title: i18next.t("menu.requests"),
-    type: "item",
-    url: "/requests",
-    icon: BulbOutlined,
-  },
-  {
-    id: "employees",
-    title: i18next.t("menu.employees"),
-    type: "item",
-    url: "/employees",
-    icon: TeamOutlined,
-  },
-  {
-    id: "teamMembers",
-    title: i18next.t("menu.teamMembers"),
-    type: "item",
-    url: "/employees",
-    icon: TeamOutlined,
-  },
-  {
-    id: "positions",
-    title: i18next.t("menu.positions"),
-    type: "item",
-    url: "/positions",
-    icon: PaperClipOutlined,
-  },
-  {
-    id: "projects",
-    title: i18next.t("menu.projects"),
-    type: "item",
-    url: "/projects",
-    icon: FileTextOutlined,
-  },
-  {
-    id: "performanceReviews",
-    title: i18next.t("menu.performanceReviews"),
-    type: "item",
-    url: "/performance-reviews",
-    icon: SolutionOutlined,
-  },
-  {
-    id: "reports",
-    title: i18next.t("menu.reports"),
-    type: "item",
-    url: "/reports",
-    icon: LineChartOutlined,
-  },
+export const useMenuItemsList = (): NavItemType[] => {
+  const { t } = useTranslation();
 
-  {
-    id: "jira",
-    title: i18next.t("menu.jira"),
-    type: "item",
-    url: "/jira",
-    icon: TableOutlined,
-  },
-];
+  return [
+    {
+      id: "dashboard",
+      title: t("menu.dashboard"),
+      type: "item",
+      url: "/dashboard",
+      icon: DashboardOutlined,
+    },
+    {
+      id: "requests",
+      title: t("menu.requests"),
+      type: "item",
+      url: "/requests",
+      icon: BulbOutlined,
+    },
+    {
+      id: "employees",
+      title: t("menu.employees"),
+      type: "item",
+      url: "/employees",
+      icon: TeamOutlined,
+    },
+    {
+      id: "teamMembers",
+      title: t("menu.teamMembers"),
+      type: "item",
+      url: "/employees",
+      icon: TeamOutlined,
+    },
+    {
+      id: "positions",
+      title: t("menu.positions"),
+      type: "item",
+      url: "/positions",
+      icon: PaperClipOutlined,
+    },
+    {
+      id: "projects",
+      title: t("menu.projects"),
+      type: "item",
+      url: "/projects",
+      icon: FileTextOutlined,
+    },
+    {
+      id: "performanceReviews",
+      title: t("menu.performanceReviews"),
+      type: "item",
+      url: "/performance-reviews",
+      icon: SolutionOutlined,
+    },
+    {
+      id: "reports",
+      title: t("menu.reports"),
+      type: "item",
+      url: "/reports",
+      icon: LineChartOutlined,
+    },
+    {
+      id: "jira",
+      title: t("menu.jira"),
+      type: "item",
+      url: "/jira",
+      icon: TableOutlined,
+    },
+  ];
+};
 
-export const bottomMenuItemsList: NavItemType[] = [
-  {
-    id: "logout",
-    title: i18next.t("menu.logout"),
-    type: "item",
-    url: "/logout",
-    icon: LogoutOutlined,
-    secondaryIcon: RightOutlined,
-    divider: true,
-  },
-];
+export const useBottomMenuItemsList = (): NavItemType[] => {
+  const { t } = useTranslation();
+
+  return [
+    {
+      id: "logout",
+      title: t("menu.logout"),
+      type: "item",
+      url: "/logout",
+      icon: LogoutOutlined,
+      secondaryIcon: RightOutlined,
+      divider: true,
+    },
+  ];
+};
