@@ -1,4 +1,3 @@
-export { default as CreateWorkspaceGraphic } from "./CreateWorkspaceGraphic.svg";
 export { default as LandingGraphic } from "./LandingGraphic.svg";
 export { default as PhotoIcon } from "./PhotoIcon.svg";
 export { default as ErrorPage404Graphic } from "./404ErrorPage.svg";

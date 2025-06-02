@@ -1,3 +1,4 @@
+import "./util/config/i18n";
 import {
   ClientLoaderFunctionArgs,
   json,

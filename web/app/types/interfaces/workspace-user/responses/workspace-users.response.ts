@@ -3,7 +3,6 @@ import {
   IProjectUserResponse,
   IUser,
   WorkspaceUserEmploymentType,
-  WorkspaceUserGender,
   UserStatus,
 } from "~/types";
 

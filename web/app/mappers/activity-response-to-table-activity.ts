@@ -100,7 +100,7 @@ export function mapActivityResponseToTableActivities(
 export function addGhostActivitiesForOverlaps(
   activitiesWithDatesJoined: IActivityTableItem[]
 ): IActivityTableItem[] {
-  // Group BusinessTrip and TripToOffice activities by date
+  // Group BusinessTrip activities by date
   const groupedByDate: Record<string, IActivity[]> = {};
   for (const day of activitiesWithDatesJoined) {
     for (const activity of day.activities) {

@@ -3,7 +3,6 @@ export * from "./project-participants-form";
 export * from "./additional-addresses-form";
 export * from "./basic-info-form";
 export * from "./invitation-text-form";
-export * from "./monthly-export-form";
 export * from "./set-time-form";
 export * from "./tax-info-form";
 export * from "./user-management-form";
