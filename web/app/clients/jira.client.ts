@@ -23,6 +23,13 @@ export class JiraClient {
     return data;
   }
 
+  static async getOpenAISuggestion(projectKey: string, ticketId: string) {
+    const { data } = await privateClient.get<any>(
+      `/jira/openai/${projectKey}/${ticketId}`
+    );
+    return data;
+  }
+
   static async assignTicketToUser(ticketId: string, assignee: string) {
     const { data } = await privateClient.post<JiraStats>(
       `/jira/${ticketId}/${assignee}`
