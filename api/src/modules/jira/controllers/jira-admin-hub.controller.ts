@@ -5,6 +5,7 @@ import { JiraProjectsResponse } from "src/modules/jira/dtos/response/jira-projec
 import { JiraProjectUnassignedIssuesResponse } from "src/modules/jira/dtos/response/jira-project-unassigned-issues.response"
 import { JiraStatisticsResponse } from "src/modules/jira/dtos/response/jira-statistics.response"
 import { JiraService } from "../services/jira.service"
+import { JiraOpenAISuggestionResponse } from "../dtos/response/jira-openai-suggestion.response"
 
 @Controller(`/${ROUTE_ADMIN_HUB}/${ROUTE_JIRA}`)
 @ApiTags(`${API_TAG_JIRA}`)
@@ -39,6 +40,16 @@ export class JiraAdminHubController {
 	@ApiOkResponse({ description: "Jira statistics", type: JiraStatisticsResponse })
 	async getJiraProjectParticipants(@Param("projectKey") projectKey: string): Promise<JiraStatisticsResponse[]> {
 		return this.jiraService.getJiraProjectParticipantsAvailability(projectKey)
+	}
+
+	@Get("/openai/:projectKey/:ticketId")
+	@UseGuards()
+	@ApiOperation({
+		summary: "Return OpenAI suggestion for assignee"
+	})
+	@ApiOkResponse({ description: "OpenAI suggestion", type: JiraOpenAISuggestionResponse })
+	async getOpenAISuggestionForAsignee(@Param("projectKey") projectKey: string, @Param("ticketId") ticketId: string): Promise<JiraOpenAISuggestionResponse> {
+		return this.jiraService.suggestBestAssigneeWithOpenAI(projectKey, ticketId)
 	}
 
 	@Post("/:ticketId/:assigneId")

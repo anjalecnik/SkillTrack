@@ -20,6 +20,7 @@ const jira_projects_response_1 = require("../dtos/response/jira-projects.respons
 const jira_project_unassigned_issues_response_1 = require("../dtos/response/jira-project-unassigned-issues.response");
 const jira_statistics_response_1 = require("../dtos/response/jira-statistics.response");
 const jira_service_1 = require("../services/jira.service");
+const jira_openai_suggestion_response_1 = require("../dtos/response/jira-openai-suggestion.response");
 let JiraAdminHubController = class JiraAdminHubController {
     jiraService;
     constructor(jiraService) {
@@ -33,6 +34,9 @@ let JiraAdminHubController = class JiraAdminHubController {
     }
     async getJiraProjectParticipants(projectKey) {
         return this.jiraService.getJiraProjectParticipantsAvailability(projectKey);
+    }
+    async getOpenAISuggestionForAsignee(projectKey, ticketId) {
+        return this.jiraService.suggestBestAssigneeWithOpenAI(projectKey, ticketId);
     }
     async assignJiraTicket(ticketId, assigneId) {
         return this.jiraService.assignTicketToUser(ticketId, assigneId);
@@ -74,6 +78,19 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], JiraAdminHubController.prototype, "getJiraProjectParticipants", null);
+__decorate([
+    (0, common_1.Get)("/openai/:projectKey/:ticketId"),
+    (0, common_1.UseGuards)(),
+    (0, swagger_1.ApiOperation)({
+        summary: "Return OpenAI suggestion for assignee"
+    }),
+    (0, swagger_1.ApiOkResponse)({ description: "OpenAI suggestion", type: jira_openai_suggestion_response_1.JiraOpenAISuggestionResponse }),
+    __param(0, (0, common_1.Param)("projectKey")),
+    __param(1, (0, common_1.Param)("ticketId")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String, String]),
+    __metadata("design:returntype", Promise)
+], JiraAdminHubController.prototype, "getOpenAISuggestionForAsignee", null);
 __decorate([
     (0, common_1.Post)("/:ticketId/:assigneId"),
     (0, common_1.UseGuards)(),
