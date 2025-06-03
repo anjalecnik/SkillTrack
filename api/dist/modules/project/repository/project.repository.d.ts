@@ -20,6 +20,7 @@ export declare class ProjectRepository {
     getProjectLeads(projectId: number): Promise<UserEntity[]>;
     getProjectParticipants(projectId: number): Promise<UserEntity[]>;
     calculateProjectTotalHours(projectId: number): Promise<number>;
+    getTotalProjects(): Promise<number>;
     private getProjectDetails;
     private getStatusesQuery;
     private setOrder;

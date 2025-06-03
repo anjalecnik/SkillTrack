@@ -187,4 +187,31 @@ export class JiraService {
 
 		return { name, reason }
 	}
+
+	async getTaskProgress(): Promise<number> {
+		const projects = await this.getJiraProjects()
+
+		let totalUnassigned = 0
+		let totalCompleted = 0
+
+		for (const project of projects) {
+			const unassignedIssues = await this.getJiraProjectUnassignedIssues(project.key)
+			totalUnassigned += unassignedIssues.length
+
+			const jql = `project = "${project.key}" AND statusCategory = Done`
+			const doneIssues = await this.jira.searchJira(jql, {
+				fields: [],
+				maxResults: 1000
+			})
+
+			totalCompleted += doneIssues.issues.length
+		}
+
+		const total = totalUnassigned + totalCompleted
+
+		if (total === 0) return 0
+
+		const percentage = (totalCompleted / total) * 100
+		return parseFloat(percentage.toFixed(1))
+	}
 }

@@ -187,6 +187,37 @@ let UserActivityRepository = class UserActivityRepository {
             meta: pagination_helper_1.PaginationHelper.generatePaginationMetadata(filters.page, filters.limit, count)
         };
     }
+    async getMonthlyUserProductivity() {
+        const thisYear = new Date().getFullYear();
+        const lastYear = thisYear - 1;
+        const results = await this.userActivityRepository
+            .createQueryBuilder("activity")
+            .select(["EXTRACT(YEAR FROM activity.date) AS year", "EXTRACT(MONTH FROM activity.date) AS month", "SUM(activity.hours) AS total"])
+            .where("activity.activityType IN (:...activityTypes)", { activityTypes: [user_activity_enum_1.UserActivityType.Daily, user_activity_enum_1.UserActivityType.BusinessTrip] })
+            .andWhere("activity.status IN (:...statusFilter)", { statusFilter: [user_activity_status_enum_1.UserActivityStatus.Approved, user_activity_status_enum_1.UserActivityStatus.PendingApproval] })
+            .andWhere("EXTRACT(YEAR FROM activity.date) IN (:...years)", { years: [thisYear, lastYear] })
+            .andWhere("activity.hours IS NOT NULL")
+            .groupBy("year, month")
+            .orderBy("year, month")
+            .getRawMany();
+        const thisYearHours = Array(12).fill(0);
+        const lastYearHours = Array(12).fill(0);
+        for (const row of results) {
+            const year = Number(row.year);
+            const month = Number(row.month);
+            const hours = Number(row.total);
+            if (year === thisYear) {
+                thisYearHours[month - 1] = hours;
+            }
+            else if (year === lastYear) {
+                lastYearHours[month - 1] = hours;
+            }
+        }
+        return {
+            thisYear: thisYearHours,
+            lastYear: lastYearHours
+        };
+    }
     getActivityRequestOrder(filters) {
         const sortingDir = filters.sortingDir.toUpperCase();
         switch (filters.sort) {

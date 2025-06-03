@@ -135,6 +135,9 @@ let ProjectRepository = class ProjectRepository {
             .getRawOne();
         return result["total_hours"] ? parseInt(result["total_hours"]) : 0;
     }
+    async getTotalProjects() {
+        return this.projectRepository.count();
+    }
     async getProjectDetails(entityManager, projectEntity) {
         const projectUserRepository = entityManager.getRepository(project_user_entity_1.ProjectUserEntity);
         const userActivityRepository = entityManager.getRepository(user_activity_entity_1.UserActivityEntity);

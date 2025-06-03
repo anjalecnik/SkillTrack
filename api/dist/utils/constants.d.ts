@@ -24,6 +24,7 @@ export declare const ROUTE_ACTIVITY = "activities";
 export declare const ROUTE_REQUEST = "requests";
 export declare const ROUTE_REVIEW = "review";
 export declare const ROUTE_PERFORMANCE_REVIEWS = "performance-reviews";
+export declare const ROUTE_OVERVIEW = "overview";
 export declare const API_TAG_USER = "User";
 export declare const API_TAG_JIRA = "Jira";
 export declare const API_TAG_WORK_POSITION = "Work Positions";

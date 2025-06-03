@@ -167,6 +167,26 @@ let JiraService = class JiraService {
         const reason = reasonMatch?.[1]?.trim() || "";
         return { name, reason };
     }
+    async getTaskProgress() {
+        const projects = await this.getJiraProjects();
+        let totalUnassigned = 0;
+        let totalCompleted = 0;
+        for (const project of projects) {
+            const unassignedIssues = await this.getJiraProjectUnassignedIssues(project.key);
+            totalUnassigned += unassignedIssues.length;
+            const jql = `project = "${project.key}" AND statusCategory = Done`;
+            const doneIssues = await this.jira.searchJira(jql, {
+                fields: [],
+                maxResults: 1000
+            });
+            totalCompleted += doneIssues.issues.length;
+        }
+        const total = totalUnassigned + totalCompleted;
+        if (total === 0)
+            return 0;
+        const percentage = (totalCompleted / total) * 100;
+        return parseFloat(percentage.toFixed(1));
+    }
 };
 exports.JiraService = JiraService;
 exports.JiraService = JiraService = __decorate([
