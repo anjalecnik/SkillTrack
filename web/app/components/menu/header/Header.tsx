@@ -52,7 +52,7 @@ export function Header({ children }: { children?: React.ReactNode }) {
     setDisableButton(true);
     if (checked) {
       displaySuccess(t("common.successfullyChangedToAdmin"));
-      return navigate(`${WORKSPACE_HUB_PATH}/requests`);
+      return navigate(`${WORKSPACE_HUB_PATH}/dashboard`);
     }
     displaySuccess(t("common.successfullyChangedToUser"));
     navigate(`${USER_HUB_PATH}/dashboard`);

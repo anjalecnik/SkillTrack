@@ -70,7 +70,6 @@ export async function clientLoader(actionArgs: ClientLoaderFunctionArgs) {
 }
 
 export function shouldRevalidate({
-  nextParams,
   currentParams,
   nextUrl,
   currentUrl,
