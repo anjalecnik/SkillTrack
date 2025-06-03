@@ -1,6 +1,6 @@
 # SkillTrack 🥇
 **SkillTrack** je napreden sistem za **celovito upravljanje zaposlenih, projektov in znanj**, zasnovan za podjetja, ki želijo povečati učinkovitost svojih ekip, pametno dodeljevati naloge in slediti razvoju svojih članov.
-<br/>
+<br/><br/>
 
 ## Vizija 🌟
 SkillTrack povezuje evidenco delovnega časa, znanj in projektnih nalog v enoten sistem, ki podjetjem omogoča:
