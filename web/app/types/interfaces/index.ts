@@ -18,3 +18,4 @@ export * from "./workspace-user";
 export * from "./breadcrumbs";
 export * from "./settings";
 export * from "./loader-data";
+export * from "./dashboard";

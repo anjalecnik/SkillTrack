@@ -1,12 +1,11 @@
 import { ClientLoaderFunctionArgs } from "@remix-run/react";
-import { ActivityClient, RequestClient, WorkspaceClient } from "~/clients";
+import { ActivityClient, RequestClient } from "~/clients";
 import {
   IActivity,
   IActivityTableItem,
   IAddress,
   IWorkspaceData,
   IWorkspaceModuleActivity,
-  ReportingModuleType,
 } from "~/types";
 import { mapActivityResponseToTableActivities } from "~/mappers";
 import { handleAxiosError } from "~/util";
