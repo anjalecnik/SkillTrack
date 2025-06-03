@@ -2,7 +2,7 @@ import { styled, Typography } from "@mui/material";
 import { Button, Flex, FlexColumn } from "~/components/common";
 import { t } from "i18next";
 import { LandingGraphic } from "~/assets";
-import { useNavigate, useSearchParams } from "@remix-run/react";
+import { useNavigate } from "@remix-run/react";
 import { Trans } from "react-i18next";
 import { AuthClient } from "~/clients";
 import { CardLayout } from "~/components/layout";
@@ -51,10 +51,9 @@ const Layout = styled(CardLayout)`
 
 export function LandingPage() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
   const isMobile = useMobile();
 
-  async function handleGoogleSignIn(redirect: string) {
+  async function handleGoogleSignIn() {
     const token = await AuthClient.signInWithGoogleProvider();
     if (!token) return;
     await AuthClient.signInWithGoogle(token);
@@ -141,7 +140,7 @@ export function LandingPage() {
                   name="redirectTo"
                   value="selectWorkspace"
                   type="submit"
-                  onClick={() => handleGoogleSignIn("selectWorkspace")}
+                  onClick={() => handleGoogleSignIn()}
                 >
                   <Typography variant="body1">{t("common.signIn")}</Typography>
                 </Button>
