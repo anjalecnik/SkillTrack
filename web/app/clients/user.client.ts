@@ -25,6 +25,7 @@ export class UserClient {
     loaderArgs: ClientLoaderFunctionArgs,
     limit: number = 0
   ): Promise<PaginatedResponse<IUserResponse>> {
+    console.log(privateClient);
     const params = new URLSearchParams(loaderArgs.request.url.split("?")[1]);
 
     const query = params.get(SearchParam.Sort);
