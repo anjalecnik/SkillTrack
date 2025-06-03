@@ -522,5 +522,14 @@
     "analyze": "Analyze Workload",
     "selectProject": "Select Project",
     "workloadSummary": "Workload Summary"
+  },
+
+  "dashboard": {
+    "dashboard": "Dashboard",
+    "members": "Members",
+    "projects": "Projects",
+    "sinceLastMonth": "Since last month",
+    "workingHours": "Monthly User Productivity (Hours)",
+    "positionsStats": "Employee Distribution by Position"
   }
 }

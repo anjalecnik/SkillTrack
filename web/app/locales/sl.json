@@ -522,5 +522,14 @@
     "analyze": "Analiziraj obremenitev",
     "selectProject": "Izberi projekt",
     "workloadSummary": "Povzetek obremenitve"
+  },
+
+  "dashboard": {
+    "dashboard": "Nadzorna plošča",
+    "members": "Zaposleni",
+    "projects": "Projekti",
+    "sinceLastMonth": "Od prejšnjega meseca",
+    "workingHours": "Mesečna produktivnost uporabnikov (ure)",
+    "positionsStats": "Razporeditev zaposlenih po delovnih mestih"
   }
 }

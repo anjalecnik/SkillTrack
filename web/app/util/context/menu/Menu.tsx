@@ -43,6 +43,7 @@ export const MenuProvider = ({
     const isUserHub = pathname.includes(USER_HUB_PATH);
 
     const workspaceHubFilteredItems = [
+      "dashboard",
       "projects",
       "employees",
       "positions",

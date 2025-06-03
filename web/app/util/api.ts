@@ -75,10 +75,15 @@ const privateClientRequestInterceptor = (
       localStorage.getItem("currentBaseRoute") ?? USER_HUB_BASE_PATH;
     const endpointSegments = config.url?.split("workspaces");
 
-    if (
-      endpointSegments &&
-      endpointSegments[endpointSegments?.length - 1] === "/overview"
-    ) {
+    if (config.url?.startsWith("/overview")) {
+      const currentBaseRoute =
+        localStorage.getItem("currentBaseRoute") ?? USER_HUB_BASE_PATH;
+
+      config.url =
+        currentBaseRoute === ADMIN_HUB_BASE_PATH
+          ? `${ADMIN_WORKSPACE_URL}${config.url}`
+          : `${USER_WORKSPACE_URL}${config.url}`;
+
       return config;
     }
 
