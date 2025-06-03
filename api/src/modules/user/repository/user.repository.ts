@@ -210,6 +210,14 @@ export class UserRepository {
 		})
 	}
 
+	async getTotalEmployees(): Promise<number> {
+		return this.userRepository.count()
+	}
+
+	async getTotalUsersWithPositon(id: number): Promise<number> {
+		return await this.userRepository.count({ where: { workPositionId: id } })
+	}
+
 	private setUserAddresses(userPatchRequest: IUserPatchDBRequest): DeepPartial<UserAddressEntity>[] | undefined {
 		if (!userPatchRequest.addresses) return undefined
 

@@ -12,6 +12,7 @@ import { UserWorkingHoursModule } from "./modules/user/modules/user-working-hour
 import { JiraModule } from "./modules/jira/jira.module"
 import { ActivityOverviewModule } from "./modules/activity-overview/activity-overview.module"
 import { MailModule } from "./modules/mail/mail.module"
+import { OverviewModule } from "./modules/overview/overview.module"
 
 @Module({
 	imports: [
@@ -31,7 +32,8 @@ import { MailModule } from "./modules/mail/mail.module"
 		JiraModule,
 		WorkPositionModule,
 		ProjectModule,
-		UserWorkingHoursModule
+		UserWorkingHoursModule,
+		OverviewModule
 	]
 })
 export class AppModule {}

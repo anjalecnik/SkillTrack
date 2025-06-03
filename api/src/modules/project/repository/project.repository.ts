@@ -150,6 +150,10 @@ export class ProjectRepository {
 		return result["total_hours"] ? parseInt(result["total_hours"]) : 0
 	}
 
+	async getTotalProjects(): Promise<number> {
+		return this.projectRepository.count()
+	}
+
 	private async getProjectDetails(entityManager: EntityManager, projectEntity: ProjectEntity) {
 		const projectUserRepository = entityManager.getRepository(ProjectUserEntity)
 		const userActivityRepository = entityManager.getRepository(UserActivityEntity)

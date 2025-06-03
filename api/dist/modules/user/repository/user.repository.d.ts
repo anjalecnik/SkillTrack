@@ -24,6 +24,8 @@ export declare class UserRepository {
     getAssiggnedProjectParticipants(projectIds: number[]): Promise<UserEntity[]>;
     getActivitiesWithoutProject(filter: IUserWorkOverviewListFilter): Promise<UserActivityEntity[]>;
     getActivitiesWithProject(filter: IUserWorkOverviewListFilter): Promise<UserActivityEntity[]>;
+    getTotalEmployees(): Promise<number>;
+    getTotalUsersWithPositon(id: number): Promise<number>;
     private setUserAddresses;
     private setUserAssignedVacations;
     private setUserProjects;

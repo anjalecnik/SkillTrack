@@ -191,6 +191,12 @@ let UserRepository = class UserRepository {
             }
         });
     }
+    async getTotalEmployees() {
+        return this.userRepository.count();
+    }
+    async getTotalUsersWithPositon(id) {
+        return await this.userRepository.count({ where: { workPositionId: id } });
+    }
     setUserAddresses(userPatchRequest) {
         if (!userPatchRequest.addresses)
             return undefined;

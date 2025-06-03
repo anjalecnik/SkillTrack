@@ -6,6 +6,7 @@ import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-re
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity";
 import { UserEntity } from "src/libs/db/entities/user.entity";
 import { IPaginatedResponse, IUserCommon } from "src/utils/types/interfaces";
+import { OverviewMonthlyProductivityResponse } from "src/modules/overview/dtos/response/overview-monthly-productivity.response";
 export declare class UserActivityRepository {
     private readonly userActivityRepository;
     private readonly userActivityRequestRepository;
@@ -21,6 +22,7 @@ export declare class UserActivityRepository {
     getUserActivityRequestByIdOrThrow({ userId }: IUserCommon, id: number): Promise<UserActivityRequestEntity>;
     getUserActivityRequestList(filters: IUserActivityRequestListFilterDBRequest): Promise<UserActivityRequestEntity[]>;
     getUserActivityRequestListPagination(filters: IUserActivityRequestPaginationFilterDBRequest): Promise<IPaginatedResponse<UserActivityRequestEntity>>;
+    getMonthlyUserProductivity(): Promise<OverviewMonthlyProductivityResponse>;
     private getActivityRequestOrder;
     getAllUsers(): Promise<UserEntity[]>;
     getManagerOfManagerSentNotifications(activityRequestIds: number[]): Promise<NotificationEntity[]>;

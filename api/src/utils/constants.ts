@@ -27,6 +27,7 @@ export const ROUTE_ACTIVITY = "activities"
 export const ROUTE_REQUEST = "requests"
 export const ROUTE_REVIEW = "review"
 export const ROUTE_PERFORMANCE_REVIEWS = "performance-reviews"
+export const ROUTE_OVERVIEW = "overview"
 
 export const API_TAG_USER = "User"
 export const API_TAG_JIRA = "Jira"

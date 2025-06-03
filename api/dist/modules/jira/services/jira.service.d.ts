@@ -12,4 +12,5 @@ export declare class JiraService {
     getUserTicketHistory(projectKey: string): Promise<UserTicketHistory[]>;
     getTicketDetails(ticketId: string): Promise<Ticket>;
     suggestBestAssigneeWithOpenAI(projectKey: string, ticketId: string): Promise<JiraOpenAISuggestionResponse>;
+    getTaskProgress(): Promise<number>;
 }
