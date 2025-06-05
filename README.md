@@ -74,6 +74,14 @@ SkillTrack se povezuje z zunanjimi storitvami za izboljšano uporabniško izkuš
      ```
 <br/>
 
+## 📚 API Dokumentacija (Swagger)
+SkillTrack vključuje interaktivno Swagger dokumentacijo za testiranje in razumevanje API-ja.
+
+📄 Lokalno: [Swagger dokumentacija](http://localhost:8080/api)
+
+🌐 Na strežniku (Render): [Swagger dokumentacija (na Render)](https://skilltrack-iq7r.onrender.com/api)
+<br/><br/>
+
 ## `.env` datoteke 🔐
 Backend `.env` (`api/.env`)
   ```bash
