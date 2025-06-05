@@ -521,7 +521,15 @@
     "ticketId": "Ticket ID",
     "analyze": "Analyze Workload",
     "selectProject": "Select Project",
-    "workloadSummary": "Workload Summary"
+    "workloadSummary": "Workload Summary",
+    "jiraWorkload": "Jira Workload",
+    "unassignedTicket": "Unassigned Ticket",
+    "employeeName": "Employee name",
+    "totalDone": "Total Done",
+    "totalAssigned": "Total Assigned",
+    "suggestedAssignee": "Suggested Assignee",
+    "assignTicket": "Assign Ticket",
+    "askAI": "Ask AI"
   },
 
   "dashboard": {
@@ -530,6 +538,7 @@
     "projects": "Projects",
     "sinceLastMonth": "Since last month",
     "workingHours": "Monthly User Productivity (Hours)",
-    "positionsStats": "Employee Distribution by Position"
+    "positionsStats": "Employee Distribution by Position",
+    "taskProgress": "Task progress"
   }
 }

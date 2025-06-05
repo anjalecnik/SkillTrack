@@ -7,6 +7,7 @@ import LinearProgress from "@mui/material/LinearProgress";
 import Stack from "@mui/material/Stack";
 import type { SxProps } from "@mui/material/styles";
 import Typography from "@mui/material/Typography";
+import { t } from "i18next";
 
 export interface TasksProgressProps {
   sx?: SxProps;
@@ -30,7 +31,7 @@ export function TasksProgress({ value, sx, isLoading }: TasksProgressProps) {
                 gutterBottom
                 variant="overline"
               >
-                Task Progress
+                {t("dashboard.taskProgress")}
               </Typography>
               {isLoading ? (
                 <CircularProgress size={28} />

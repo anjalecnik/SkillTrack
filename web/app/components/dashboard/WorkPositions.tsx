@@ -32,6 +32,7 @@ const iconMapping = {
 export interface WorkPositionsProps {
   chartSeries: number[];
   labels: string[];
+  total: number;
   sx?: SxProps;
   isLoading: boolean;
 }
@@ -39,6 +40,7 @@ export interface WorkPositionsProps {
 export function WorkPositions({
   chartSeries,
   labels,
+  total,
   sx,
   isLoading,
 }: WorkPositionsProps): React.JSX.Element {
@@ -89,7 +91,7 @@ export function WorkPositions({
                         {label.split(" ")[0]}
                       </Typography>
                       <Typography color="text.secondary" variant="subtitle1">
-                        {item}%
+                        {(item / total) * 100}%
                       </Typography>
                     </Stack>
                   );

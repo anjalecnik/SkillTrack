@@ -521,7 +521,15 @@
     "ticketId": "ID zahtevka",
     "analyze": "Analiziraj obremenitev",
     "selectProject": "Izberi projekt",
-    "workloadSummary": "Povzetek obremenitve"
+    "workloadSummary": "Povzetek obremenitve",
+    "jiraWorkload": "Razporeditev dela v Jiri",
+    "unassignedTicket": "Naloga brez dodeljene osebe",
+    "employeeName": "Ime zaposlenega",
+    "totalDone": "Skupaj opravljeno",
+    "totalAssigned": "Skupaj dodeljeno",
+    "suggestedAssignee": "Predlagani izvajalec",
+    "assignTicket": "Dodeli zahtevek",
+    "askAI": "Vprašaj AI"
   },
 
   "dashboard": {
@@ -530,6 +538,7 @@
     "projects": "Projekti",
     "sinceLastMonth": "Od prejšnjega meseca",
     "workingHours": "Mesečna produktivnost uporabnikov (ure)",
-    "positionsStats": "Razporeditev zaposlenih po delovnih mestih"
+    "positionsStats": "Razporeditev zaposlenih po delovnih mestih",
+    "taskProgress": "Napredek nalog"
   }
 }

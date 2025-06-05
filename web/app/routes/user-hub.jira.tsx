@@ -21,6 +21,7 @@ import { JiraClient } from "~/clients/jira.client";
 import { useEffect, useState } from "react";
 import { JiraStats, JiraUnassignedIssues } from "~/types/jira";
 import { RocketOutlined } from "@ant-design/icons";
+import { t } from "i18next";
 
 export const clientLoader = async () => {
   const projects = await JiraClient.getProjects();
@@ -234,7 +235,9 @@ export default function UserHubJira() {
       </style>
 
       <AppHeaderBreadcrumbs
-        list={[{ text: "Jira Workload", variant: BreadcrumbVariant.Current }]}
+        list={[
+          { text: t("jira.jiraWorkload"), variant: BreadcrumbVariant.Current },
+        ]}
       />
       <Card sx={{ padding: "20px" }}>
         <FormProvider context={form.context}>
@@ -259,7 +262,10 @@ export default function UserHubJira() {
                       options={projects.map((p) => p.key)}
                       sx={{ mt: 1, mb: 3, width: 600 }}
                       renderInput={(params) => (
-                        <TextField {...params} label="Project" />
+                        <TextField
+                          {...params}
+                          label={t("workspaceReports.project")}
+                        />
                       )}
                     />
 
@@ -271,7 +277,7 @@ export default function UserHubJira() {
                       renderInput={(params) => (
                         <TextField
                           {...params}
-                          label="Unassigned Ticket"
+                          label={t("jira.unassignedTicket")}
                           required
                         />
                       )}
@@ -323,7 +329,7 @@ export default function UserHubJira() {
                     }}
                   >
                     <RocketOutlined />
-                    <span>Ask AI</span>
+                    <span> {t("jira.askAI")}</span>
                   </Button>
                 )}
               </Box>
@@ -407,7 +413,7 @@ export default function UserHubJira() {
                           style={{ fontSize: "34px", marginBottom: "8px" }}
                         />
                         <br />
-                        Suggested Assignee
+                        {t("jira.suggestedAssignee")}
                         <Box
                           sx={{
                             fontSize: "15px",
@@ -436,12 +442,12 @@ export default function UserHubJira() {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>User</TableCell>
-                  <TableCell>To Do</TableCell>
-                  <TableCell>In Progress</TableCell>
-                  <TableCell>Done</TableCell>
-                  <TableCell>Total Done</TableCell>
-                  <TableCell>Total Assigned</TableCell>
+                  <TableCell>{t("jira.employeeName")}</TableCell>
+                  <TableCell>TO DO</TableCell>
+                  <TableCell>IN PROGRESS</TableCell>
+                  <TableCell>DONE</TableCell>
+                  <TableCell>{t("jira.totalDone")}</TableCell>
+                  <TableCell>{t("jira.totalAssigned")}</TableCell>
                   <TableCell sx={{ width: 160, textAlign: "center" }} />
                 </TableRow>
               </TableHead>
@@ -464,7 +470,7 @@ export default function UserHubJira() {
                           size="small"
                           onClick={() => handleAssign(s.accountId)}
                         >
-                          Assign Ticket
+                          {t("jira.assignTicket")}
                         </Button>
                       ) : (
                         "—"

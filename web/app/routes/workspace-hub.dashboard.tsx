@@ -150,6 +150,7 @@ export default function WorkspaceHubDashboard() {
                 statistics.positionDistribution.cloud,
                 statistics.positionDistribution.database,
               ]}
+              total={statistics.members}
               labels={[
                 "Other",
                 "Cloud Infrastructure Engineer",
