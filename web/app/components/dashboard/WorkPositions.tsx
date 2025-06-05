@@ -91,7 +91,7 @@ export function WorkPositions({
                         {label.split(" ")[0]}
                       </Typography>
                       <Typography color="text.secondary" variant="subtitle1">
-                        {(item / total) * 100}%
+                        {((item / total) * 100).toFixed(2)}%
                       </Typography>
                     </Stack>
                   );
