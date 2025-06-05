@@ -129,7 +129,7 @@ Frontend `.env` (`web/.env`)
   FIREBASE_MESSAGING_SENDER_ID="firebase-messaging-sender-id"
   FIREBASE_APP_ID="firebase-app-id"
   
-  API_URL=http://localhost:8080
+  API_URL="http://localhost:8080"
   
   GOOGLE_CLIENT_ID="google-client-id"
   GOOGLE_CLIENT_SECRET="google-client-secret"
