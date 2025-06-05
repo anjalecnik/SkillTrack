@@ -13,7 +13,6 @@ import { IReportedByUserIdEntity, IReviewedByUserIdEntity } from "./interfaces/u
 import { UserEntity } from "./user.entity"
 import { ProjectEntity } from "./project.entity"
 import { UserActivityEntity } from "./user-activity.entity"
-import { NotificationEntity } from "./notification.entity"
 
 @Entity("user_activity_request")
 export class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEntity, IReportedByUserIdEntity, IReviewedByUserIdEntity {
@@ -172,9 +171,6 @@ export class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEn
 
 	@OneToMany(() => UserActivityEntity, userActivity => userActivity.activityRequest, { cascade: true })
 	userActivities?: UserActivityEntity[]
-
-	@OneToMany(() => NotificationEntity, notification => notification.userActivityRequest)
-	notifications?: NotificationEntity[]
 	//#endregion relations
 
 	@UpdateDateColumn()

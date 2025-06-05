@@ -11,7 +11,6 @@ import { UserAddressEntity } from "./user-address.entity";
 import { UserVacationAssignedEntity } from "./user-vacation-assigned.entity";
 import { UserWorkingHoursEntity } from "./user-working-hours.entity";
 import { UserPerformanceReviewEntity } from "./user-performance-review.entity";
-import { NotificationEntity } from "./notification.entity";
 export declare class UserEntity implements IDatesAllEntity, IDeletedByUserIdEntity, IUpdatedByUserIdEntity, IInvitedByUserIdEntity {
     id: number;
     email: string;
@@ -44,7 +43,6 @@ export declare class UserEntity implements IDatesAllEntity, IDeletedByUserIdEnti
     userActivity?: UserActivityEntity[];
     reportedByActivity?: UserActivityEntity[];
     reviewedByActivity?: UserActivityEntity[];
-    notifications?: NotificationEntity[];
     projects?: ProjectUserEntity[];
     createdProjects?: ProjectEntity[];
     updatedProjects?: ProjectEntity[];

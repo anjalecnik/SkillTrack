@@ -22,19 +22,9 @@ import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserAddressEntity } from "src/libs/db/entities/user-address.entity"
 import { UserWorkingHoursEntity } from "src/libs/db/entities/user-working-hours.entity"
 import { UserEntity } from "src/libs/db/entities/user.entity"
-import { NotificationEntity } from "src/libs/db/entities/notification.entity"
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([
-			UserEntity,
-			UserActivityEntity,
-			UserActivityRequestEntity,
-			UserWorkingHoursEntity,
-			ProjectEntity,
-			HolidayEntity,
-			UserAddressEntity,
-			NotificationEntity
-		]),
+		TypeOrmModule.forFeature([UserEntity, UserActivityEntity, UserActivityRequestEntity, UserWorkingHoursEntity, ProjectEntity, HolidayEntity, UserAddressEntity]),
 		ActivitySharedModule,
 		ActivityDailyModule,
 		ActivityBusinessTripModule,

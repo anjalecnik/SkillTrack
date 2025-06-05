@@ -31,23 +31,13 @@ const user_activity_entity_1 = require("../../../../../libs/db/entities/user-act
 const user_address_entity_1 = require("../../../../../libs/db/entities/user-address.entity");
 const user_working_hours_entity_1 = require("../../../../../libs/db/entities/user-working-hours.entity");
 const user_entity_1 = require("../../../../../libs/db/entities/user.entity");
-const notification_entity_1 = require("../../../../../libs/db/entities/notification.entity");
 let UserActivityModule = class UserActivityModule {
 };
 exports.UserActivityModule = UserActivityModule;
 exports.UserActivityModule = UserActivityModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([
-                user_entity_1.UserEntity,
-                user_activity_entity_1.UserActivityEntity,
-                user_activity_request_entity_1.UserActivityRequestEntity,
-                user_working_hours_entity_1.UserWorkingHoursEntity,
-                project_entity_1.ProjectEntity,
-                holiday_entity_1.HolidayEntity,
-                user_address_entity_1.UserAddressEntity,
-                notification_entity_1.NotificationEntity
-            ]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, user_activity_entity_1.UserActivityEntity, user_activity_request_entity_1.UserActivityRequestEntity, user_working_hours_entity_1.UserWorkingHoursEntity, project_entity_1.ProjectEntity, holiday_entity_1.HolidayEntity, user_address_entity_1.UserAddressEntity]),
             activity_shared_module_1.ActivitySharedModule,
             activity_daily_module_1.ActivityDailyModule,
             activity_business_trip_module_1.ActivityBusinessTripModule,

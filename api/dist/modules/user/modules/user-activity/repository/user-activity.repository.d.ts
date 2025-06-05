@@ -1,7 +1,6 @@
 import { Repository } from "typeorm";
 import { IUserActivityRequestListFilterDBRequest, IUserActivityRequestPaginationFilterDBRequest } from "../interfaces";
 import { IUserActivityListFilterDBRequest } from "../interfaces/db/user-activity-list-filter-db.interface";
-import { NotificationEntity } from "src/libs/db/entities/notification.entity";
 import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-request.entity";
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity";
 import { UserEntity } from "src/libs/db/entities/user.entity";
@@ -10,9 +9,8 @@ import { OverviewMonthlyProductivityResponse } from "src/modules/overview/dtos/r
 export declare class UserActivityRepository {
     private readonly userActivityRepository;
     private readonly userActivityRequestRepository;
-    private readonly notificationRepository;
     private readonly userRepository;
-    constructor(userActivityRepository: Repository<UserActivityEntity>, userActivityRequestRepository: Repository<UserActivityRequestEntity>, notificationRepository: Repository<NotificationEntity>, userRepository: Repository<UserEntity>);
+    constructor(userActivityRepository: Repository<UserActivityEntity>, userActivityRequestRepository: Repository<UserActivityRequestEntity>, userRepository: Repository<UserEntity>);
     getPendingActivityRequests(checkDate: Date): Promise<UserActivityRequestEntity[]>;
     getDistinctPendingUnassignedActivities(checkDate: Date): Promise<UserActivityEntity[]>;
     getUserActivityByIdOrThrow({ userId }: IUserCommon, id: number): Promise<UserActivityEntity>;
@@ -25,6 +23,5 @@ export declare class UserActivityRepository {
     getMonthlyUserProductivity(): Promise<OverviewMonthlyProductivityResponse>;
     private getActivityRequestOrder;
     getAllUsers(): Promise<UserEntity[]>;
-    getManagerOfManagerSentNotifications(activityRequestIds: number[]): Promise<NotificationEntity[]>;
     private getActivityRequestPaginationOrder;
 }

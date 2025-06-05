@@ -21,9 +21,6 @@ export class UserService {
 		private readonly userRepository: UserRepository,
 		private readonly userAddressService: UserAddressService,
 		private readonly userAssignedVacationService: UserAssignedVacationService,
-		// private readonly userStatisticService: UserStatisticService,
-		// private readonly accessTokenEmitter: AccessTokenEmitterService,
-		// private readonly notificationService: NotificationService,
 		private readonly utilityService: UtilityService
 	) {}
 
@@ -31,12 +28,6 @@ export class UserService {
 		const userEntity = await this.utilityService.getUserById(userReadRequest.id)
 
 		const subordinateWorkspaceUserIds = await this.utilityService.getSubordinateIdsRecursively(userReadRequest.id, new Set())
-
-		// const [vacationData, sickLeaveCount, activityRequestCount] = await Promise.all([
-		// 	this.userStatisticService.getVacationDataStatistics(workspaceUserEntity),
-		// 	this.userStatisticService.getSickLeaveUsedStatistics(workspaceUserReadRequest.id, dateRange),
-		// 	this.userStatisticService.getActivityRequestsStatistics(workspaceUserReadRequest.id)
-		// ])
 
 		return {
 			userEntity,
@@ -91,7 +82,6 @@ export class UserService {
 	private async enrichUserData(data: UserEntity[]): Promise<IUserPaginationItemResponse[]> {
 		return await Promise.all(
 			data.map((user): IUserPaginationItemResponse => {
-				//const vacationData = await this.userStatisticService.getVacationDataStatistics(workspaceUser)
 				return {
 					...user,
 					vacation: undefined
@@ -102,12 +92,6 @@ export class UserService {
 
 	async invite(userInvitationRequest: IUserInvitationRequest): Promise<UserEntity[]> {
 		const userEntities = await this.userRepository.invite(userInvitationRequest)
-
-		// await Promise.all(
-		// 	userEntities.map(async userEntity => {
-		// 		//	await this.notificationService.sendWorkspaceUserInvitation(workspaceUserEntity.id, NotificationType.Invitation)
-		// 	})
-		// )
 
 		return userEntities
 	}

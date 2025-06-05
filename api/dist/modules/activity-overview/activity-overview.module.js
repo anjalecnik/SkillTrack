@@ -22,16 +22,12 @@ const user_performance_review_entity_1 = require("../../libs/db/entities/user-pe
 const master_data_source_service_1 = require("../../libs/db/master-data-source.service");
 const utility_module_1 = require("../utility/utility.module");
 const project_user_entity_1 = require("../../libs/db/entities/project-user.entity");
-const notification_entity_1 = require("../../libs/db/entities/notification.entity");
 let ActivityOverviewModule = class ActivityOverviewModule {
 };
 exports.ActivityOverviewModule = ActivityOverviewModule;
 exports.ActivityOverviewModule = ActivityOverviewModule = __decorate([
     (0, common_1.Module)({
-        imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, user_activity_entity_1.UserActivityEntity, project_user_entity_1.ProjectUserEntity, user_activity_request_entity_1.UserActivityRequestEntity, user_performance_review_entity_1.UserPerformanceReviewEntity, notification_entity_1.NotificationEntity]),
-            utility_module_1.UtilityModule
-        ],
+        imports: [typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, user_activity_entity_1.UserActivityEntity, project_user_entity_1.ProjectUserEntity, user_activity_request_entity_1.UserActivityRequestEntity, user_performance_review_entity_1.UserPerformanceReviewEntity]), utility_module_1.UtilityModule],
         controllers: [activity_overview_admin_hub_controller_1.ActivityOverviewAdminHubController, activity_overview_user_hub_controller_1.ActivityOverviewUserHubController],
         providers: [activity_overview_service_1.ActivityOverviewService, activity_overview_repository_1.ActivityOverviewRepository, user_repository_1.UserRepository, user_activity_repository_1.UserActivityRepository, master_data_source_service_1.MasterDataSource]
     })

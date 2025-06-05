@@ -5,7 +5,6 @@ import { IReportedByUserIdEntity, IReviewedByUserIdEntity } from "./interfaces/u
 import { UserEntity } from "./user.entity";
 import { ProjectEntity } from "./project.entity";
 import { UserActivityEntity } from "./user-activity.entity";
-import { NotificationEntity } from "./notification.entity";
 export declare class UserActivityRequestEntity implements ICreatedAtEntity, IUpdatedAtEntity, IReportedByUserIdEntity, IReviewedByUserIdEntity {
     id: number;
     status: UserActivityStatus;
@@ -30,7 +29,6 @@ export declare class UserActivityRequestEntity implements ICreatedAtEntity, IUpd
     reviewedByUser?: UserEntity;
     project?: ProjectEntity;
     userActivities?: UserActivityEntity[];
-    notifications?: NotificationEntity[];
     updatedAt: Date;
     createdAt: Date;
 }

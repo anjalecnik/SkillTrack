@@ -18,7 +18,6 @@ import { UserActivityStatus } from "src/utils/types/enums/user-activity-status.e
 const LOAD_RELATIONS: FindOptionsRelations<UserEntity> = {
 	workPosition: { parentWorkPosition: true },
 	manager: true,
-	notifications: true,
 	projects: { project: true },
 	addresses: true
 }

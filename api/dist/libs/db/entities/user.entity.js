@@ -23,7 +23,6 @@ const user_address_entity_1 = require("./user-address.entity");
 const user_vacation_assigned_entity_1 = require("./user-vacation-assigned.entity");
 const user_working_hours_entity_1 = require("./user-working-hours.entity");
 const user_performance_review_entity_1 = require("./user-performance-review.entity");
-const notification_entity_1 = require("./notification.entity");
 let UserEntity = class UserEntity {
     id;
     email;
@@ -56,7 +55,6 @@ let UserEntity = class UserEntity {
     userActivity;
     reportedByActivity;
     reviewedByActivity;
-    notifications;
     projects;
     createdProjects;
     updatedProjects;
@@ -252,10 +250,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => user_activity_entity_1.UserActivityEntity, userActivity => userActivity.reviewedByUser),
     __metadata("design:type", Array)
 ], UserEntity.prototype, "reviewedByActivity", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => notification_entity_1.NotificationEntity, notification => notification.user),
-    __metadata("design:type", Array)
-], UserEntity.prototype, "notifications", void 0);
 __decorate([
     (0, typeorm_1.OneToMany)(() => project_user_entity_1.ProjectUserEntity, projectUser => projectUser.user, { cascade: true }),
     __metadata("design:type", Array)

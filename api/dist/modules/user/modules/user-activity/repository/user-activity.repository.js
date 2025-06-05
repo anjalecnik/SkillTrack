@@ -16,25 +16,20 @@ exports.UserActivityRepository = void 0;
 const common_1 = require("@nestjs/common");
 const typeorm_1 = require("@nestjs/typeorm");
 const typeorm_2 = require("typeorm");
-const notification_entity_1 = require("../../../../../libs/db/entities/notification.entity");
 const user_activity_request_entity_1 = require("../../../../../libs/db/entities/user-activity-request.entity");
 const user_activity_entity_1 = require("../../../../../libs/db/entities/user-activity.entity");
 const user_entity_1 = require("../../../../../libs/db/entities/user.entity");
 const date_helper_1 = require("../../../../../utils/helpers/date.helper");
 const pagination_helper_1 = require("../../../../../utils/helpers/pagination.helper");
-const notficiation_enum_1 = require("../../../../../utils/types/enums/notficiation.enum");
-const notification_status_enum_1 = require("../../../../../utils/types/enums/notification-status.enum");
 const user_activity_status_enum_1 = require("../../../../../utils/types/enums/user-activity-status.enum");
 const user_activity_enum_1 = require("../../../../../utils/types/enums/user-activity.enum");
 let UserActivityRepository = class UserActivityRepository {
     userActivityRepository;
     userActivityRequestRepository;
-    notificationRepository;
     userRepository;
-    constructor(userActivityRepository, userActivityRequestRepository, notificationRepository, userRepository) {
+    constructor(userActivityRepository, userActivityRequestRepository, userRepository) {
         this.userActivityRepository = userActivityRepository;
         this.userActivityRequestRepository = userActivityRequestRepository;
-        this.notificationRepository = notificationRepository;
         this.userRepository = userRepository;
     }
     async getPendingActivityRequests(checkDate) {
@@ -236,15 +231,6 @@ let UserActivityRepository = class UserActivityRepository {
     async getAllUsers() {
         return this.userRepository.find();
     }
-    async getManagerOfManagerSentNotifications(activityRequestIds) {
-        return this.notificationRepository.find({
-            where: {
-                userActivityRequestId: (0, typeorm_2.In)(activityRequestIds),
-                type: notficiation_enum_1.NotificationType.ActivityRequest,
-                status: notification_status_enum_1.NotificationStatus.Finished
-            }
-        });
-    }
     getActivityRequestPaginationOrder(filters) {
         const sortingDir = filters.sortingDir.toUpperCase();
         switch (filters.sort) {
@@ -266,10 +252,8 @@ exports.UserActivityRepository = UserActivityRepository = __decorate([
     (0, common_1.Injectable)(),
     __param(0, (0, typeorm_1.InjectRepository)(user_activity_entity_1.UserActivityEntity)),
     __param(1, (0, typeorm_1.InjectRepository)(user_activity_request_entity_1.UserActivityRequestEntity)),
-    __param(2, (0, typeorm_1.InjectRepository)(notification_entity_1.NotificationEntity)),
-    __param(3, (0, typeorm_1.InjectRepository)(user_entity_1.UserEntity)),
+    __param(2, (0, typeorm_1.InjectRepository)(user_entity_1.UserEntity)),
     __metadata("design:paramtypes", [typeorm_2.Repository,
-        typeorm_2.Repository,
         typeorm_2.Repository,
         typeorm_2.Repository])
 ], UserActivityRepository);

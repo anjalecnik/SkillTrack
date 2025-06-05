@@ -25,14 +25,13 @@ const project_user_entity_1 = require("../../libs/db/entities/project-user.entit
 const user_activity_entity_1 = require("../../libs/db/entities/user-activity.entity");
 const user_activity_repository_1 = require("../user/modules/user-activity/repository/user-activity.repository");
 const user_activity_request_entity_1 = require("../../libs/db/entities/user-activity-request.entity");
-const notification_entity_1 = require("../../libs/db/entities/notification.entity");
 let OverviewModule = class OverviewModule {
 };
 exports.OverviewModule = OverviewModule;
 exports.OverviewModule = OverviewModule = __decorate([
     (0, common_1.Module)({
         imports: [
-            typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, project_entity_1.ProjectEntity, work_position_entity_1.WorkPositionEntity, project_user_entity_1.ProjectUserEntity, user_activity_entity_1.UserActivityEntity, user_activity_request_entity_1.UserActivityRequestEntity, notification_entity_1.NotificationEntity]),
+            typeorm_1.TypeOrmModule.forFeature([user_entity_1.UserEntity, project_entity_1.ProjectEntity, work_position_entity_1.WorkPositionEntity, project_user_entity_1.ProjectUserEntity, user_activity_entity_1.UserActivityEntity, user_activity_request_entity_1.UserActivityRequestEntity]),
             emitter_module_1.EmitterModule,
             utility_module_1.UtilityModule
         ],

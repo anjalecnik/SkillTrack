@@ -27,7 +27,6 @@ const user_activity_status_enum_1 = require("../../../utils/types/enums/user-act
 const LOAD_RELATIONS = {
     workPosition: { parentWorkPosition: true },
     manager: true,
-    notifications: true,
     projects: { project: true },
     addresses: true
 };

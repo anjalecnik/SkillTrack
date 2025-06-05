@@ -2,6 +2,7 @@ import { ValidationPipe } from "@nestjs/common"
 import { NestFactory } from "@nestjs/core"
 import { AppModule } from "./app.module"
 import { Config } from "./utils/config/config"
+import { SwaggerConfig } from "./utils/swagger.config"
 
 async function bootstrap(): Promise<void> {
 	const app = await NestFactory.create(AppModule, {})
@@ -22,6 +23,8 @@ async function bootstrap(): Promise<void> {
 		origin: Config.get<string[]>("APP_CORS_ORIGIN"),
 		methods: Config.get<string[]>("APP_CORS_METHODS")
 	})
+
+	SwaggerConfig.setupSwagger(app)
 
 	await app.listen(appPort, appHostname)
 }

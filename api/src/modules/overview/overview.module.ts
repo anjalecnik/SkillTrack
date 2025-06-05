@@ -16,11 +16,10 @@ import { ProjectUserEntity } from "src/libs/db/entities/project-user.entity"
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserActivityRepository } from "../user/modules/user-activity/repository/user-activity.repository"
 import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-request.entity"
-import { NotificationEntity } from "src/libs/db/entities/notification.entity"
 
 @Module({
 	imports: [
-		TypeOrmModule.forFeature([UserEntity, ProjectEntity, WorkPositionEntity, ProjectUserEntity, UserActivityEntity, UserActivityRequestEntity, NotificationEntity]),
+		TypeOrmModule.forFeature([UserEntity, ProjectEntity, WorkPositionEntity, ProjectUserEntity, UserActivityEntity, UserActivityRequestEntity]),
 		EmitterModule,
 		UtilityModule
 	],

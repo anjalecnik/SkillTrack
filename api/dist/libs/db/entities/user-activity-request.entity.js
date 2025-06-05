@@ -17,7 +17,6 @@ const typeorm_1 = require("typeorm");
 const user_entity_1 = require("./user.entity");
 const project_entity_1 = require("./project.entity");
 const user_activity_entity_1 = require("./user-activity.entity");
-const notification_entity_1 = require("./notification.entity");
 let UserActivityRequestEntity = class UserActivityRequestEntity {
     id;
     status;
@@ -42,7 +41,6 @@ let UserActivityRequestEntity = class UserActivityRequestEntity {
     reviewedByUser;
     project;
     userActivities;
-    notifications;
     updatedAt;
     createdAt;
 };
@@ -217,10 +215,6 @@ __decorate([
     (0, typeorm_1.OneToMany)(() => user_activity_entity_1.UserActivityEntity, userActivity => userActivity.activityRequest, { cascade: true }),
     __metadata("design:type", Array)
 ], UserActivityRequestEntity.prototype, "userActivities", void 0);
-__decorate([
-    (0, typeorm_1.OneToMany)(() => notification_entity_1.NotificationEntity, notification => notification.userActivityRequest),
-    __metadata("design:type", Array)
-], UserActivityRequestEntity.prototype, "notifications", void 0);
 __decorate([
     (0, typeorm_1.UpdateDateColumn)(),
     __metadata("design:type", Date)

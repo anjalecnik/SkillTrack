@@ -13,7 +13,6 @@ import { UserAddressEntity } from "./user-address.entity"
 import { UserVacationAssignedEntity } from "./user-vacation-assigned.entity"
 import { UserWorkingHoursEntity } from "./user-working-hours.entity"
 import { UserPerformanceReviewEntity } from "./user-performance-review.entity"
-import { NotificationEntity } from "./notification.entity"
 
 @Entity("user")
 @Unique("user_uq", ["email"])
@@ -163,9 +162,6 @@ export class UserEntity implements IDatesAllEntity, IDeletedByUserIdEntity, IUpd
 
 	@OneToMany(() => UserActivityEntity, userActivity => userActivity.reviewedByUser)
 	reviewedByActivity?: UserActivityEntity[]
-
-	@OneToMany(() => NotificationEntity, notification => notification.user)
-	notifications?: NotificationEntity[]
 
 	@OneToMany(() => ProjectUserEntity, projectUser => projectUser.user, { cascade: true })
 	projects?: ProjectUserEntity[]

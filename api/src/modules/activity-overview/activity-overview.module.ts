@@ -13,13 +13,9 @@ import { UserPerformanceReviewEntity } from "src/libs/db/entities/user-performan
 import { MasterDataSource } from "src/libs/db/master-data-source.service"
 import { UtilityModule } from "../utility/utility.module"
 import { ProjectUserEntity } from "src/libs/db/entities/project-user.entity"
-import { NotificationEntity } from "src/libs/db/entities/notification.entity"
 
 @Module({
-	imports: [
-		TypeOrmModule.forFeature([UserEntity, UserActivityEntity, ProjectUserEntity, UserActivityRequestEntity, UserPerformanceReviewEntity, NotificationEntity]),
-		UtilityModule
-	],
+	imports: [TypeOrmModule.forFeature([UserEntity, UserActivityEntity, ProjectUserEntity, UserActivityRequestEntity, UserPerformanceReviewEntity]), UtilityModule],
 	controllers: [ActivityOverviewAdminHubController, ActivityOverviewUserHubController],
 	providers: [ActivityOverviewService, ActivityOverviewRepository, UserRepository, UserActivityRepository, MasterDataSource]
 })

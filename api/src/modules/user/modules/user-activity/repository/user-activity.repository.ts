@@ -1,16 +1,13 @@
 import { Injectable } from "@nestjs/common"
 import { InjectRepository } from "@nestjs/typeorm"
-import { And, FindOperator, FindOptionsOrder, FindOptionsWhere, In, IsNull, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm"
+import { And, FindOperator, FindOptionsOrder, FindOptionsWhere, In, LessThanOrEqual, MoreThanOrEqual, Repository } from "typeorm"
 import { IUserActivityRequestListFilterDBRequest, IUserActivityRequestPaginationFilterDBRequest } from "../interfaces"
 import { IUserActivityListFilterDBRequest } from "../interfaces/db/user-activity-list-filter-db.interface"
-import { NotificationEntity } from "src/libs/db/entities/notification.entity"
 import { UserActivityRequestEntity } from "src/libs/db/entities/user-activity-request.entity"
 import { UserActivityEntity } from "src/libs/db/entities/user-activity.entity"
 import { UserEntity } from "src/libs/db/entities/user.entity"
 import { DateHelper } from "src/utils/helpers/date.helper"
 import { PaginationHelper } from "src/utils/helpers/pagination.helper"
-import { NotificationType } from "src/utils/types/enums/notficiation.enum"
-import { NotificationStatus } from "src/utils/types/enums/notification-status.enum"
 import { IPaginatedResponse, IUserCommon } from "src/utils/types/interfaces"
 import { UserActivityStatus } from "src/utils/types/enums/user-activity-status.enum"
 import { UserActivityType } from "src/utils/types/enums/user-activity.enum"
@@ -23,8 +20,6 @@ export class UserActivityRepository {
 		private readonly userActivityRepository: Repository<UserActivityEntity>,
 		@InjectRepository(UserActivityRequestEntity)
 		private readonly userActivityRequestRepository: Repository<UserActivityRequestEntity>,
-		@InjectRepository(NotificationEntity)
-		private readonly notificationRepository: Repository<NotificationEntity>,
 		@InjectRepository(UserEntity)
 		private readonly userRepository: Repository<UserEntity>
 	) {}
@@ -241,16 +236,6 @@ export class UserActivityRepository {
 
 	async getAllUsers(): Promise<UserEntity[]> {
 		return this.userRepository.find()
-	}
-
-	async getManagerOfManagerSentNotifications(activityRequestIds: number[]): Promise<NotificationEntity[]> {
-		return this.notificationRepository.find({
-			where: {
-				userActivityRequestId: In(activityRequestIds),
-				type: NotificationType.ActivityRequest,
-				status: NotificationStatus.Finished
-			}
-		})
 	}
 
 	private getActivityRequestPaginationOrder(filters: IUserActivityRequestPaginationFilterDBRequest): { [key: string]: "ASC" | "DESC" } {
