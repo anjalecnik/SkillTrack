@@ -3,7 +3,7 @@ import { IsEmail, IsNotEmpty, IsString, Matches, MaxLength, MinLength } from "cl
 import { DB_VARCHAR_LENGTH_4, DB_VARCHAR_LENGTH_64, DB_VARCHAR_LENGTH_8, DB_VARCHAR_LENGTH_32 } from "src/utils/constants"
 
 export class AuthUserLocalLoginRequest {
-	@ApiProperty({ example: "bob.the.builder@inova.si" })
+	@ApiProperty({ example: "bob.the.builder@gmail.com" })
 	@IsEmail()
 	@IsNotEmpty()
 	@MinLength(DB_VARCHAR_LENGTH_4)
