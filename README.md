@@ -42,6 +42,7 @@ SkillTrack se povezuje z zunanjimi storitvami za izboljšano uporabniško izkuš
 | **Google OAuth**                | Avtentikacija uporabnikov – omogoča varno prijavo in upravljanje dostopov. |
 | **Jira REST API**               | Povezava z Jiro za uvoz ticketov, sledenje projektom in dodeljevanje nalog. |
 | **Sistem za pošiljanje e-mailov** | Avtomatsko pošiljanje obvestil.         |
+| **OpenAI API** | Analiza ticketov iz Jire in predlaganje najbolj ustrezne osebe za izvedbo naloge.         |
 <br/>
 
 
