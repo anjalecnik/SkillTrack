@@ -12,7 +12,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.JiraAdminHubController = void 0;
+exports.JiraUserHubController = void 0;
 const common_1 = require("@nestjs/common");
 const swagger_1 = require("@nestjs/swagger");
 const constants_1 = require("../../../utils/constants");
@@ -21,9 +21,8 @@ const jira_project_unassigned_issues_response_1 = require("../dtos/response/jira
 const jira_statistics_response_1 = require("../dtos/response/jira-statistics.response");
 const jira_service_1 = require("../services/jira.service");
 const jira_openai_suggestion_response_1 = require("../dtos/response/jira-openai-suggestion.response");
-const user_guard_1 = require("../../../utils/guards/user.guard");
-const user_role_enum_1 = require("../../../utils/types/enums/user-role.enum");
-let JiraAdminHubController = class JiraAdminHubController {
+const guards_1 = require("../../../utils/guards");
+let JiraUserHubController = class JiraUserHubController {
     jiraService;
     constructor(jiraService) {
         this.jiraService = jiraService;
@@ -44,7 +43,7 @@ let JiraAdminHubController = class JiraAdminHubController {
         return this.jiraService.assignTicketToUser(ticketId, assigneId);
     }
 };
-exports.JiraAdminHubController = JiraAdminHubController;
+exports.JiraUserHubController = JiraUserHubController;
 __decorate([
     (0, common_1.Get)("/projects"),
     (0, common_1.UseGuards)(),
@@ -55,7 +54,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", Promise)
-], JiraAdminHubController.prototype, "getJiraProjects", null);
+], JiraUserHubController.prototype, "getJiraProjects", null);
 __decorate([
     (0, common_1.Get)("/:projectKey/unassigned-issues"),
     (0, common_1.UseGuards)(),
@@ -67,7 +66,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], JiraAdminHubController.prototype, "getJiraProjectUnassignedIssues", null);
+], JiraUserHubController.prototype, "getJiraProjectUnassignedIssues", null);
 __decorate([
     (0, common_1.Get)("/:projectKey"),
     (0, common_1.UseGuards)(),
@@ -79,7 +78,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
-], JiraAdminHubController.prototype, "getJiraProjectParticipants", null);
+], JiraUserHubController.prototype, "getJiraProjectParticipants", null);
 __decorate([
     (0, common_1.Get)("/openai/:projectKey/:ticketId"),
     (0, common_1.UseGuards)(),
@@ -92,7 +91,7 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
-], JiraAdminHubController.prototype, "getOpenAISuggestionForAsignee", null);
+], JiraUserHubController.prototype, "getOpenAISuggestionForAsignee", null);
 __decorate([
     (0, common_1.Post)("/:ticketId/:assigneId"),
     (0, common_1.UseGuards)(),
@@ -105,11 +104,11 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, String]),
     __metadata("design:returntype", Promise)
-], JiraAdminHubController.prototype, "assignJiraTicket", null);
-exports.JiraAdminHubController = JiraAdminHubController = __decorate([
-    (0, common_1.Controller)(`/${constants_1.ROUTE_ADMIN_HUB}/${constants_1.ROUTE_JIRA}`),
+], JiraUserHubController.prototype, "assignJiraTicket", null);
+exports.JiraUserHubController = JiraUserHubController = __decorate([
+    (0, common_1.Controller)(`/${constants_1.ROUTE_USER_HUB}/${constants_1.ROUTE_JIRA}`),
     (0, swagger_1.ApiTags)(`${constants_1.API_TAG_JIRA}`),
-    (0, common_1.UseGuards)((0, user_guard_1.UserGuard)(user_role_enum_1.UserRole.Admin, user_role_enum_1.UserRole.Owner)),
+    (0, common_1.UseGuards)(guards_1.UserGuard),
     __metadata("design:paramtypes", [jira_service_1.JiraService])
-], JiraAdminHubController);
-//# sourceMappingURL=jira-admin-hub.controller.js.map
+], JiraUserHubController);
+//# sourceMappingURL=jira-user-hub.controller.js.map

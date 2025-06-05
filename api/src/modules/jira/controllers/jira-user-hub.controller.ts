@@ -1,18 +1,17 @@
 import { Controller, Get, Param, Post, UseGuards } from "@nestjs/common"
 import { ApiOkResponse, ApiOperation, ApiTags } from "@nestjs/swagger"
-import { ROUTE_ADMIN_HUB, API_TAG_JIRA, ROUTE_JIRA } from "src/utils/constants"
+import { ROUTE_USER_HUB, API_TAG_JIRA, ROUTE_JIRA } from "src/utils/constants"
 import { JiraProjectsResponse } from "src/modules/jira/dtos/response/jira-projects.response"
 import { JiraProjectUnassignedIssuesResponse } from "src/modules/jira/dtos/response/jira-project-unassigned-issues.response"
 import { JiraStatisticsResponse } from "src/modules/jira/dtos/response/jira-statistics.response"
 import { JiraService } from "../services/jira.service"
 import { JiraOpenAISuggestionResponse } from "../dtos/response/jira-openai-suggestion.response"
-import { UserGuard } from "src/utils/guards/user.guard"
-import { UserRole } from "src/utils/types/enums/user-role.enum"
+import { UserGuard } from "src/utils/guards"
 
-@Controller(`/${ROUTE_ADMIN_HUB}/${ROUTE_JIRA}`)
+@Controller(`/${ROUTE_USER_HUB}/${ROUTE_JIRA}`)
 @ApiTags(`${API_TAG_JIRA}`)
-@UseGuards(UserGuard(UserRole.Admin, UserRole.Owner))
-export class JiraAdminHubController {
+@UseGuards(UserGuard)
+export class JiraUserHubController {
 	constructor(private jiraService: JiraService) {}
 
 	@Get("/projects")

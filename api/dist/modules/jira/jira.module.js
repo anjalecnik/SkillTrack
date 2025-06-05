@@ -10,13 +10,14 @@ exports.JiraModule = void 0;
 const common_1 = require("@nestjs/common");
 const jira_admin_hub_controller_1 = require("./controllers/jira-admin-hub.controller");
 const jira_service_1 = require("./services/jira.service");
+const jira_user_hub_controller_1 = require("./controllers/jira-user-hub.controller");
 let JiraModule = class JiraModule {
 };
 exports.JiraModule = JiraModule;
 exports.JiraModule = JiraModule = __decorate([
     (0, common_1.Module)({
         imports: [],
-        controllers: [jira_admin_hub_controller_1.JiraAdminHubController],
+        controllers: [jira_admin_hub_controller_1.JiraAdminHubController, jira_user_hub_controller_1.JiraUserHubController],
         providers: [jira_service_1.JiraService],
         exports: [jira_service_1.JiraService]
     })
