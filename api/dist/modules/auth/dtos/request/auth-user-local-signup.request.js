@@ -19,7 +19,7 @@ class AuthUserLocalSignupRequest {
 }
 exports.AuthUserLocalSignupRequest = AuthUserLocalSignupRequest;
 __decorate([
-    (0, swagger_1.ApiProperty)({ example: "bob.the.builder@inova.si" }),
+    (0, swagger_1.ApiProperty)({ example: "bob.the.builder@gmail.com" }),
     (0, class_validator_1.IsEmail)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.MinLength)(constants_1.DB_VARCHAR_LENGTH_4),
