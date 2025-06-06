@@ -138,7 +138,8 @@
     "positions": "Positions",
     "performanceReviews": "Performance reviews",
     "logout": "Log out",
-    "jira": "Jira"
+    "jira": "Jira",
+    "myWork": "My work"
   },
 
   "workspaceReports": {
@@ -540,5 +541,13 @@
     "workingHours": "Monthly User Productivity (Hours)",
     "positionsStats": "Employee Distribution by Position",
     "taskProgress": "Task progress"
+  },
+
+  "myWork": {
+    "myWork": "My Work",
+    "noWork": "Hooray! You have no tickets with status TO DO or DONE!",
+    "openTicketInJira": "Open ticket in Jira",
+    "openProjectInJira": "Open project in Jira",
+    "tickets": "tickets"
   }
 }

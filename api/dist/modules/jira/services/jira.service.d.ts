@@ -2,6 +2,7 @@ import { JiraStatisticsResponse } from "src/modules/jira/dtos/response/jira-stat
 import { UserTicketHistory } from "../dtos/response/jira-user-ticket-history.response";
 import { Ticket } from "../dtos/response/jira-ticket.response";
 import { JiraOpenAISuggestionResponse } from "../dtos/response/jira-openai-suggestion.response";
+import { JiraTicketsForUserResponse } from "../dtos/response/jira-tickets-for-user.response";
 export declare class JiraService {
     private readonly jira;
     constructor();
@@ -13,4 +14,5 @@ export declare class JiraService {
     getTicketDetails(ticketId: string): Promise<Ticket>;
     suggestBestAssigneeWithOpenAI(projectKey: string, ticketId: string): Promise<JiraOpenAISuggestionResponse>;
     getTaskProgress(): Promise<number>;
+    getTicketsAssignedToUser(fullName: string): Promise<JiraTicketsForUserResponse[]>;
 }

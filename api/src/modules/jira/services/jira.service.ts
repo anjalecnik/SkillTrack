@@ -5,6 +5,7 @@ import { JiraStatisticsResponse } from "src/modules/jira/dtos/response/jira-stat
 import { UserTicketHistory } from "../dtos/response/jira-user-ticket-history.response"
 import { Ticket } from "../dtos/response/jira-ticket.response"
 import { JiraOpenAISuggestionResponse } from "../dtos/response/jira-openai-suggestion.response"
+import { JiraTicketsForUserResponse } from "../dtos/response/jira-tickets-for-user.response"
 
 @Injectable()
 export class JiraService {
@@ -213,5 +214,64 @@ export class JiraService {
 
 		const percentage = (totalCompleted / total) * 100
 		return parseFloat(percentage.toFixed(1))
+	}
+
+	async getTicketsAssignedToUser(fullName: string): Promise<JiraTicketsForUserResponse[]> {
+		const jiraBaseUrl = process.env.JIRA_BASE_URL
+		const projects = await this.getJiraProjects()
+		const results: { project: string; projectUrl: string; tickets: Ticket[] }[] = []
+
+		const normalize = (str: string) =>
+			str
+				.normalize("NFD")
+				.replace(/[\u0300-\u036f]/g, "")
+				.toLowerCase()
+
+		for (const project of projects) {
+			const jql = `
+			project = "${project.key}"
+			AND assignee IS NOT EMPTY
+			AND (statusCategory = "To Do" OR statusCategory = "In Progress")
+		  `
+			const response = await this.jira.searchJira(jql, {
+				fields: ["summary", "description", "assignee", "status"],
+				maxResults: 100
+			})
+
+			const tickets = response.issues
+				.filter((issue: any) => {
+					const assigneeName = issue.fields.assignee?.displayName ?? ""
+					const status = issue.fields.status?.name ?? ""
+
+					const normalizedAssignee = normalize(assigneeName)
+					const normalizedMatch = normalize(fullName)
+					const normalizedStatus = normalize(status)
+
+					const statusAllowed = normalizedStatus.includes("to do") || normalizedStatus.includes("in progress")
+					const nameMatch = normalizedAssignee.startsWith(normalizedMatch)
+
+					return nameMatch && statusAllowed
+				})
+				.map((issue: any) => {
+					const description = issue.fields.description || "No description"
+
+					return {
+						summary: issue.fields.summary,
+						description,
+						status: issue.fields.status.name,
+						ticketUrl: `${jiraBaseUrl}/browse/${issue.key}`
+					}
+				})
+
+			if (tickets.length > 0) {
+				results.push({
+					project: project.name,
+					projectUrl: `${jiraBaseUrl}/browse/${project.key}`,
+					tickets
+				})
+			}
+		}
+
+		return results
 	}
 }

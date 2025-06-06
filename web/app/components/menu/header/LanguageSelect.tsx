@@ -1,4 +1,5 @@
 import { IconButton, Menu, MenuItem, Box, Typography } from "@mui/material";
+import { useNavigate, useLocation } from "@remix-run/react";
 import { useState } from "react";
 import { FlagIcon } from "~/components/common";
 
@@ -15,6 +16,9 @@ export function LanguageSelect({
   onChangeLang: (code: string) => void;
 }) {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const open = Boolean(anchorEl);
   const selectedLang =
     supportedLanguages.find((lang) => lang.code === currentLang) ||
@@ -29,6 +33,9 @@ export function LanguageSelect({
   const handleChangeLang = (code: string) => {
     onChangeLang(code);
     handleClose();
+    setTimeout(() => {
+      navigate(location.pathname + location.search);
+    }, 200);
   };
 
   return (
