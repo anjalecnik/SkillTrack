@@ -85,6 +85,10 @@ SkillTrack se povezuje z zunanjimi storitvami za izboljšano uporabniško izkuš
      # ali:
      npx playwright test --ui
      ```
+     Za odprtje zadnjega HTML poročila:
+     ```bash
+     npx playwright show-report
+     ```
 <br/>
 
 ## 📚 API Dokumentacija (Swagger)
