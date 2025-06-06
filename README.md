@@ -42,7 +42,7 @@ SkillTrack vključuje avtomatsko testiranje in orodja za analizo kakovosti kode:
 | Orodje                      | Povezava                                                                 |
 |----------------------------------|------------------------------------------------------------------------|
 | **Playwright poročilo**                | [Poročilo na Google Drive](https://drive.google.com/drive/folders/1ZmV9NPFu_3dJQZCO5AUz7kq6XwKydvcP?usp=drive_link) |
-| **SonarQube poročilo**               | [Analiza na Google Drive](https://drive.google.com/drive/folders/1q-TqeJhpPUs8tVDbHzKouEBt-r-sMz7A?usp=drive_link) |
+| **SonarQube poročilo**               | [Analiza na SonarCloud](https://sonarcloud.io/project/overview?id=anjalecnik_SkillTrack) |
 <br/>
 
 ## Integracije 🔗
