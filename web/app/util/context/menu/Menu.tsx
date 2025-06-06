@@ -55,9 +55,10 @@ export const MenuProvider = ({
     const userHubFilteredItems = [
       "dashboard",
       "requests",
-      isSupervisor && "performanceReviews",
-      isSupervisor && "jira",
       isSupervisor && "teamMembers",
+      isSupervisor && "performanceReviews",
+      isSupervisor && "reports",
+      isSupervisor && "jira",
     ].filter(Boolean);
 
     return fullMenuItemsList

@@ -20,7 +20,7 @@ export class ProjectClient {
       limit?: number;
       metadata?: boolean;
     } = {},
-    workspaceUserIds?: number[]
+    userIds?: number[]
   ): Promise<PaginatedResponse<IProject>> {
     const { limit = 0, metadata = false } = options;
 
@@ -51,7 +51,7 @@ export class ProjectClient {
           page: page ? parseInt(page) : undefined,
           limit,
           metadata,
-          workspaceUserIds,
+          userIds,
         },
       }
     );

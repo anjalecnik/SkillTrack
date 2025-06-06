@@ -60,8 +60,7 @@ export class RequestClient {
         fullName: search,
         fromDateStart,
         toDateEnd,
-        forceShowDataForWorkspaceUserInParams:
-          args.forceShowDataForWorkspaceUserInParams,
+        forceShowDataForUserInParams: args.forceShowDataForUserInParams,
       },
     });
     data._embedded.requests = correctActivityDates(
