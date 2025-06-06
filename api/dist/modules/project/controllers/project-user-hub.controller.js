@@ -21,7 +21,6 @@ const project_service_1 = require("../services/project.service");
 const decorators_1 = require("../../../utils/decorators");
 const project_details_response_1 = require("../dtos/response/project-details.response");
 const project_mapper_1 = require("../mappers/project.mapper");
-const user_manager_guard_1 = require("../../../utils/guards/user-manager.guard");
 const project_overview_pagination_filter_request_1 = require("../dtos/request/project-overview-pagination-filter.request");
 const project_overview_list_response_1 = require("../dtos/response/project-overview-list.response");
 let ProjectUserHubController = class ProjectUserHubController {
@@ -58,7 +57,6 @@ __decorate([
 ], ProjectUserHubController.prototype, "getProject", null);
 __decorate([
     (0, common_1.Get)(""),
-    (0, common_1.UseGuards)(user_manager_guard_1.UserManagerGuard),
     (0, swagger_1.ApiOperation)({ summary: "Returns overview list of projects", description: `This endpoint requires supervisor role.` }),
     (0, swagger_1.ApiOkResponse)({ description: "List of users projects", type: project_overview_list_response_1.ProjectOverviewListResponse, isArray: true }),
     (0, swagger_1.ApiNotFoundResponse)({ description: "Project not found" }),

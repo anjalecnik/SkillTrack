@@ -31,7 +31,6 @@ export class ProjectUserHubController {
 	}
 
 	@Get("")
-	@UseGuards(UserManagerGuard)
 	@ApiOperation({ summary: "Returns overview list of projects", description: `This endpoint requires supervisor role.` })
 	@ApiOkResponse({ description: "List of users projects", type: ProjectOverviewListResponse, isArray: true })
 	@ApiNotFoundResponse({ description: "Project not found" })

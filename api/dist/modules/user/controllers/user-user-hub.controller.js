@@ -23,10 +23,16 @@ const user_list_response_1 = require("../dtos/response/user-list.response");
 const user_pagination_filter_request_1 = require("../dtos/request/user-pagination-filter.request");
 const user_mapper_1 = require("../mappers/user.mapper");
 const user_details_response_1 = require("../dtos/response/user-details.response");
+const user_work_overview_list_hal_response_1 = require("../dtos/response/user-work-overview-list.hal.response");
+const user_work_overview_list_filter_request_1 = require("../dtos/request/user-work-overview-list-filter.request");
+const user_work_overview_mapper_1 = require("../mappers/user-work-overview.mapper");
+const utility_service_1 = require("../../utility/services/utility.service");
 let UserUserHubController = class UserUserHubController {
     userService;
-    constructor(userService) {
+    utilityService;
+    constructor(userService, utilityService) {
         this.userService = userService;
+        this.utilityService = utilityService;
     }
     async getUserList(authPassport, filter) {
         const entities = await this.userService.getSubordinatesList({ ...filter, id: authPassport.user.id });
@@ -40,6 +46,14 @@ let UserUserHubController = class UserUserHubController {
     async getRequestorUserIsSupervisor(authPassport, userId) {
         const isSupervisor = await this.userService.validateGetUser({ id: userId, authPassport });
         return { isSupervisor: isSupervisor };
+    }
+    async getWorkspaceWorkOverview(filter) {
+        const workPositions = await this.userService.getOverview({
+            ...filter
+        });
+        const workingDays = await this.userService.getWorkingDays(workPositions, filter);
+        const holidays = await this.utilityService.getHolidaysInDateRange(filter.fromDateStart || new Date(), filter.toDateEnd || new Date());
+        return user_work_overview_mapper_1.UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays, holidays);
     }
 };
 exports.UserUserHubController = UserUserHubController;
@@ -82,9 +96,19 @@ __decorate([
     __metadata("design:paramtypes", [Object, Number]),
     __metadata("design:returntype", Promise)
 ], UserUserHubController.prototype, "getRequestorUserIsSupervisor", null);
+__decorate([
+    (0, common_1.Get)("/work/work-overview"),
+    (0, swagger_1.ApiOperation)({ summary: "Returns report of work overview", description: `Returns report of work overview` }),
+    (0, swagger_1.ApiOkResponse)({ description: "Returns report of work overview", type: user_work_overview_list_hal_response_1.UserWorkOverviewListHalResponse }),
+    __param(0, (0, common_1.Query)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [user_work_overview_list_filter_request_1.UserWorkOverviewListFilterRequest]),
+    __metadata("design:returntype", Promise)
+], UserUserHubController.prototype, "getWorkspaceWorkOverview", null);
 exports.UserUserHubController = UserUserHubController = __decorate([
     (0, common_1.Controller)(`/${constants_1.ROUTE_USER_HUB}/${constants_1.ROUTE_USER}`),
     (0, swagger_1.ApiTags)(`${constants_1.API_TAG_USER}`),
-    __metadata("design:paramtypes", [user_service_1.UserService])
+    __metadata("design:paramtypes", [user_service_1.UserService,
+        utility_service_1.UtilityService])
 ], UserUserHubController);
 //# sourceMappingURL=user-user-hub.controller.js.map

@@ -7,17 +7,15 @@ export class UserWorkOverviewListFilterRequest {
 	@ApiPropertyOptional({ example: [1], isArray: true })
 	@ParseParamArray()
 	@IsArray()
-	@IsInt({ each: true })
-	@IsPositive({ each: true })
 	@Type(() => Number)
-	@ValidateIf(object => !object.projectIds || object.workspaceUserIds)
+	@IsOptional()
+	@ValidateIf(object => !object.projectIds || object.userIds)
 	userIds?: number[]
 
 	@ApiPropertyOptional({ example: [1], isArray: true })
 	@IsArray()
-	@IsInt({ each: true })
-	@IsPositive({ each: true })
 	@Type(() => Number)
+	@IsOptional()
 	projectIds?: number[]
 
 	@ApiPropertyOptional({ example: "2024-01-10" })
