@@ -3,7 +3,6 @@ import { t } from "i18next";
 import { FlexColumn, MainCard } from "~/components/common";
 import {
   AddressSettingsForm,
-  VacationsForm,
   ProjectAssignForm,
   PersonalSettingsForm,
   EmployeeWorkPositionForm,
