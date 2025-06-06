@@ -98,16 +98,7 @@ export function EmployeeSettings({
           onCancelClick={() => toggleCancelState(Accordions.WorkPosition)}
           isCancelPressed={cancelStates[Accordions.WorkPosition]}
         />
-        <VacationsForm
-          workspaceUser={user}
-          lastResult={lastResults[Accordions.Vacation]}
-          open={accordionStates.vacation}
-          onAccordionClick={() => toggleAccordion(Accordions.Vacation)}
-          intent={Accordions.Vacation}
-          isLoading={loadingStates[Accordions.Vacation]}
-          onCancelClick={() => toggleCancelState(Accordions.Vacation)}
-          isCancelPressed={cancelStates[Accordions.Vacation]}
-        />
+
         <UserStatusForm
           lastResult={lastResults[Accordions.UserStatus]}
           open={accordionStates.userStatus}
