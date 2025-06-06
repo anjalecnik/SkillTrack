@@ -545,7 +545,9 @@
 
   "myWork": {
     "myWork": "My Work",
+    "work": "Work",
     "noWork": "Hooray! You have no tickets with status TO DO or DONE!",
+    "noWorkSupervisor": "This user has no tickets with status TO DO or DONE",
     "openTicketInJira": "Open ticket in Jira",
     "openProjectInJira": "Open project in Jira",
     "tickets": "tickets"
