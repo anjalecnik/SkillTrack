@@ -8,7 +8,6 @@ export * from "./tax-info-form";
 export * from "./user-management-form";
 export * from "./settings-vacations-form";
 export * from "./whitelist-domain-form";
-export * from "./vacations-form";
 export * from "./vacations-hidden-inputs-form";
 export * from "./vacations-initial-migration-form";
 export * from "./additional-address-form";
