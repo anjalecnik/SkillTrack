@@ -55,6 +55,7 @@ export const MenuProvider = ({
     const userHubFilteredItems = [
       "dashboard",
       "requests",
+      "myWork",
       isSupervisor && "teamMembers",
       isSupervisor && "performanceReviews",
       isSupervisor && "reports",

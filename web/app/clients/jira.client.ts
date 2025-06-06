@@ -30,6 +30,11 @@ export class JiraClient {
     return data;
   }
 
+  static async getMyWork(userName: string) {
+    const { data } = await privateClient.get<any>(`/jira/my-work/${userName}`);
+    return data;
+  }
+
   static async assignTicketToUser(ticketId: string, assignee: string) {
     const { data } = await privateClient.post<JiraStats>(
       `/jira/${ticketId}/${assignee}`

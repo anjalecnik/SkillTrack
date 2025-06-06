@@ -10,6 +10,7 @@ import {
   TableOutlined,
   LineChartOutlined,
   SolutionOutlined,
+  CodeOutlined,
 } from "@ant-design/icons";
 import { useTranslation } from "react-i18next";
 
@@ -30,6 +31,13 @@ export const useMenuItemsList = (): NavItemType[] => {
       type: "item",
       url: "/requests",
       icon: BulbOutlined,
+    },
+    {
+      id: "myWork",
+      title: t("menu.myWork"),
+      type: "item",
+      url: "/my-work",
+      icon: CodeOutlined,
     },
     {
       id: "employees",

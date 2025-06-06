@@ -138,7 +138,8 @@
     "positions": "Delovna mesta",
     "performanceReviews": "Ocene uspešnosti",
     "logout": "Odjava",
-    "jira": "Jira"
+    "jira": "Jira",
+    "myWork": "Moje delo"
   },
 
   "workspaceReports": {
@@ -540,5 +541,13 @@
     "workingHours": "Mesečna produktivnost uporabnikov (ure)",
     "positionsStats": "Razporeditev zaposlenih po delovnih mestih",
     "taskProgress": "Napredek nalog"
+  },
+
+  "myWork": {
+    "myWork": "Moje delo",
+    "noWork": "Jupi! Nimate nobenih zahtevkov s statusom TO DO ali DONE!",
+    "openTicketInJira": "Odpri zahtevek v Jiri",
+    "openProjectInJira": "Odpri projekt v Jiri",
+    "tickets": "zahtevki"
   }
 }

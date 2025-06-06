@@ -56,13 +56,10 @@ export function PerformanceReviewTable({
         })),
       ]}
       render={(item) => {
-        const scoresMap = item.scores.reduce(
-          (acc, score) => {
-            acc[score.quartal] = score;
-            return acc;
-          },
-          {} as Record<string, IPerformanceReview>
-        );
+        const scoresMap = item.scores.reduce((acc, score) => {
+          acc[score.quartal] = score;
+          return acc;
+        }, {} as Record<string, IPerformanceReview>);
 
         return (
           <TableRow key={item.id}>
@@ -71,7 +68,7 @@ export function PerformanceReviewTable({
                 to={
                   isOnWorkspaceHub
                     ? `/workspace-hub/employees/${item.id}?view=performanceReviews`
-                    : "#"
+                    : `/user-hub/employees/${item.id}?view=performanceReviews`
                 }
                 style={{ textDecoration: "none", color: "inherit" }}
               >
@@ -128,13 +125,15 @@ export function PerformanceReviewTable({
                       );
                     }}
                   >
-                   <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        key={index}
-                      >
-                        { scoresMap[quartal] ? `${scoresMap[quartal].score} %` :"/"}
-                      </Typography>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      key={index}
+                    >
+                      {scoresMap[quartal]
+                        ? `${scoresMap[quartal].score} %`
+                        : "/"}
+                    </Typography>
                   </TableCell>
                 </Tooltip>
               );
