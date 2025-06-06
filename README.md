@@ -26,11 +26,23 @@ S tem SkillTrack podpira tako operativno delo ekip kot strateške odločitve vod
 
 ### Tehnološki sklad 🛠️
 
-| Frontend      | Backend  | Baza        | Avtentikacija   | DevOps           | Testiranje     |
-|---------------|----------|-------------|------------------|-------------------|----------------|
-| Remix         | NestJS   | PostgreSQL  | Google OAuth     | Vercel / Render   | Playwright     |
-| TypeScript    | REST API |             | JWT              | Docker            |                |
+| Frontend      | Backend  | Baza        | Avtentikacija   | DevOps           | Testiranje     | Integracije     |
+|---------------|----------|-------------|------------------|-------------------|----------------|----------------|
+| Remix         | NestJS   | PostgreSQL  | Google OAuth     | Vercel / Render   | Playwright     |Jira REST API   |
+| TypeScript    | REST API |             | JWT              | Docker            |                |OpenAI API   |
+|               |          |             |                  |                   |                |Sistem za e-pošto (SMTP)    |
+|               |          |             |                  |                   |                |Google OAuth    |
+<br/>
 
+### Testiranje & kakovost kode 🔍
+SkillTrack vključuje avtomatsko testiranje in orodja za analizo kakovosti kode:
+- **Playwright testi**: integrirani e2e testi za preverjanje funkcionalnosti aplikacije.
+- **SonarQube analiza**: statična analiza kode z merjenjem tehničnega dolga, varnostnih ranljivosti in kakovosti.
+
+| Orodje                      | Povezava                                                                 |
+|----------------------------------|------------------------------------------------------------------------|
+| **Playwright poročilo**                | [Poročilo na Google Drive](https://drive.google.com/drive/folders/1ZmV9NPFu_3dJQZCO5AUz7kq6XwKydvcP?usp=drive_link) |
+| **SonarQube poročilo**               | [Analiza na Google Drive](https://drive.google.com/drive/folders/1q-TqeJhpPUs8tVDbHzKouEBt-r-sMz7A?usp=drive_link) |
 <br/>
 
 ## Integracije 🔗
@@ -174,6 +186,14 @@ Frontend `.env` (`web/.env`)
     git push
      ```
 <br/>
+
+## Dokumentacija 📁
+Dodatna dokumentacija o projektu SkillTrack je dostopna na naslednjih lokacijah:
+
+🔗 [SkillTrack – Drive mapa](https://drive.google.com/drive/folders/10kck_JPW4za2kZfd5E199hLyQyqgQvuj?usp=sharing)
+
+🔗 [SkillTrack – GitHub repozitorij](https://github.com/anjalecnik/SkillTrack/tree/main/Dokumentacija)
+<br/><br/>
 
 ## Author
 [Anja Lečnik](https://si.linkedin.com/in/anja-lecnik)
