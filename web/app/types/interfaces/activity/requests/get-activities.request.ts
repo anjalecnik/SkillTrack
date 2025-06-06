@@ -3,5 +3,5 @@ export interface IGetActivitiesRequest {
   dateStart?: string;
   dateEnd?: string;
   absencesOnly?: boolean;
-  forceShowDataForWorkspaceUserInParams?: boolean;
+  forceShowDataForUserInParams?: boolean;
 }

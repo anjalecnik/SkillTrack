@@ -21,6 +21,7 @@ import {
   ActivitiesTable,
   UserHubTableFilters,
   AbsencesTable,
+  RequestsCard,
 } from "~/components/features";
 import { SubmissionResult } from "@conform-to/react";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
@@ -31,7 +32,11 @@ import { useMobile } from "~/hooks";
 import { t } from "i18next";
 import { Button, Typography } from "@mui/material";
 import { PlusOutlined } from "@ant-design/icons";
-import { ADMIN_HUB_BASE_PATH, USER_HUB_BASE_PATH } from "~/constants";
+import {
+  ADMIN_HUB_BASE_PATH,
+  DEFAULT_PAGINATION_LIMIT,
+  USER_HUB_BASE_PATH,
+} from "~/constants";
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
 import { EmployeePerformanceReviewCard } from "./EmployeePerformanceReviewCard";
 import { IUserPerformanceDetails } from "~/types/interfaces/performance-review/user-performance-details";
@@ -273,6 +278,26 @@ export function EmployeeCard({
                 )}
               </FlexColumn>
             )}
+
+            {pageView === EmployeeDetailsView.Requests &&
+              loaderData.requests && (
+                <FlexColumn padding="20px" paddingTop="20px" gap="30px">
+                  <Typography variant="subtitle1">
+                    {t("workspaceEmployees.requests")}
+                  </Typography>
+
+                  <RequestsCard
+                    limit={DEFAULT_PAGINATION_LIMIT}
+                    requests={loaderData.requests}
+                    disabledItemById={undefined}
+                    setIsMoreToReportDialogOpen={setIsMoreToReportDialogOpen}
+                    setIsPlanAbsenceDialogOpen={setIsPlanAbsenceDialogOpen}
+                    handleDailyReportClick={handleDailyReportClick}
+                    shouldShowPersonalRequestsCheckbox={false}
+                    shouldShowSearchBox={false}
+                  />
+                </FlexColumn>
+              )}
 
             {pageView === EmployeeDetailsView.PerformanceReviews && (
               <FlexColumn padding="20px" paddingTop="20px" gap="30px">

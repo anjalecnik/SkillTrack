@@ -25,18 +25,16 @@ __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: [1], isArray: true }),
     (0, class_transformer_2.ParseParamArray)(),
     (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsInt)({ each: true }),
-    (0, class_validator_1.IsPositive)({ each: true }),
     (0, class_transformer_1.Type)(() => Number),
-    (0, class_validator_1.ValidateIf)(object => !object.projectIds || object.workspaceUserIds),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.ValidateIf)(object => !object.projectIds || object.userIds),
     __metadata("design:type", Array)
 ], UserWorkOverviewListFilterRequest.prototype, "userIds", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)({ example: [1], isArray: true }),
     (0, class_validator_1.IsArray)(),
-    (0, class_validator_1.IsInt)({ each: true }),
-    (0, class_validator_1.IsPositive)({ each: true }),
     (0, class_transformer_1.Type)(() => Number),
+    (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Array)
 ], UserWorkOverviewListFilterRequest.prototype, "projectIds", void 0);
 __decorate([

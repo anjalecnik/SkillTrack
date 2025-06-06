@@ -10,11 +10,18 @@ import { UserPaginationFilterRequest } from "../dtos/request/user-pagination-fil
 import { UserMapper } from "../mappers/user.mapper"
 import { UserDetailsResponse } from "../dtos/response/user-details.response"
 import { UserIsSupervisorResponse } from "../dtos/response/user-is-supervisor.response"
+import { UserWorkOverviewListHalResponse } from "../dtos/response/user-work-overview-list.hal.response"
+import { UserWorkOverviewListFilterRequest } from "../dtos/request/user-work-overview-list-filter.request"
+import { UserWorkOverviewMapper } from "../mappers/user-work-overview.mapper"
+import { UtilityService } from "src/modules/utility/services/utility.service"
 
 @Controller(`/${ROUTE_USER_HUB}/${ROUTE_USER}`)
 @ApiTags(`${API_TAG_USER}`)
 export class UserUserHubController {
-	constructor(private userService: UserService) {}
+	constructor(
+		private userService: UserService,
+		private readonly utilityService: UtilityService
+	) {}
 
 	@Get()
 	@ApiBearerAuth()
@@ -51,5 +58,19 @@ export class UserUserHubController {
 	): Promise<UserIsSupervisorResponse> {
 		const isSupervisor = await this.userService.validateGetUser({ id: userId, authPassport })
 		return { isSupervisor: isSupervisor }
+	}
+
+	@Get("/work/work-overview")
+	@ApiOperation({ summary: "Returns report of work overview", description: `Returns report of work overview` })
+	@ApiOkResponse({ description: "Returns report of work overview", type: UserWorkOverviewListHalResponse })
+	async getWorkspaceWorkOverview(@Query() filter: UserWorkOverviewListFilterRequest): Promise<UserWorkOverviewListHalResponse> {
+		const workPositions = await this.userService.getOverview({
+			...filter
+		})
+
+		const workingDays = await this.userService.getWorkingDays(workPositions, filter)
+		const holidays = await this.utilityService.getHolidaysInDateRange(filter.fromDateStart || new Date(), filter.toDateEnd || new Date())
+
+		return UserWorkOverviewMapper.mapWorkOverview(workPositions, filter, workingDays, holidays)
 	}
 }
