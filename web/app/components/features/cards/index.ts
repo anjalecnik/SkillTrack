@@ -17,3 +17,4 @@ export * from "./ProjectCard";
 export * from "./VerifyDataCard";
 export * from "./ActivityDashboardCard";
 export * from "./PerformanceReviewCard";
+export * from "./EmployeeWorkCard";

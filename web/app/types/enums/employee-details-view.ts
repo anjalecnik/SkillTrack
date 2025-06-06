@@ -2,5 +2,6 @@ export enum EmployeeDetailsView {
   UserDetails = "userDetails",
   Activity = "activity",
   PerformanceReviews = "performanceReviews",
-  Requests = "requests"
+  Requests = "requests",
+  Work = "work",
 }

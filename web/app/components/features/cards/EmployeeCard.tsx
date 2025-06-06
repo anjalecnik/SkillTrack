@@ -22,6 +22,7 @@ import {
   UserHubTableFilters,
   AbsencesTable,
   RequestsCard,
+  EmployeeWorkCard,
 } from "~/components/features";
 import { SubmissionResult } from "@conform-to/react";
 import { Dispatch, SetStateAction, useEffect, useMemo, useState } from "react";
@@ -40,6 +41,7 @@ import {
 import { IActivityPerformanceReviewForm } from "~/types/interfaces/activity/activity-performance-review-form";
 import { EmployeePerformanceReviewCard } from "./EmployeePerformanceReviewCard";
 import { IUserPerformanceDetails } from "~/types/interfaces/performance-review/user-performance-details";
+import { JiraClient } from "~/clients/jira.client";
 
 interface IEmployeeCardProps {
   lastResult: SubmissionResult<string[]> | null;
@@ -112,6 +114,8 @@ export function EmployeeCard({
   const isOnWorkspaceHub = location.pathname.startsWith(
     `/${ADMIN_HUB_BASE_PATH}`
   );
+  const [loading, setLoading] = useState(true);
+  const [work, setWork] = useState([]);
 
   useEffect(() => {
     if (!pageView) {
@@ -124,6 +128,23 @@ export function EmployeeCard({
       setSearchParams(params, { replace: true });
     }
   }, [setSearchParams, params, pageView, isDetailsViewVisible]);
+
+  useEffect(() => {
+    const fetchWork = async () => {
+      if (user) {
+        setLoading(true);
+        try {
+          const jiraAssignedWork = await JiraClient.getMyWork(
+            `${user.name} ${user.surname}`
+          );
+          setWork(jiraAssignedWork);
+        } finally {
+          setLoading(false);
+        }
+      }
+    };
+    fetchWork();
+  }, [user]);
 
   const handleTabChange = (
     event: React.SyntheticEvent,
@@ -218,6 +239,11 @@ export function EmployeeCard({
     newTabs.push({
       label: t("workspaceEmployees.performanceReviews"),
       value: EmployeeDetailsView.PerformanceReviews,
+    });
+
+    newTabs.push({
+      label: t("myWork.work"),
+      value: EmployeeDetailsView.Work,
     });
 
     setTabs(newTabs);
@@ -330,6 +356,27 @@ export function EmployeeCard({
                   setIsPerformanceReviewPopupOpen={
                     setIsPerformanceReviewPopupOpen
                   }
+                />
+              </FlexColumn>
+            )}
+
+            {pageView === EmployeeDetailsView.Work && (
+              <FlexColumn padding="20px" paddingTop="20px" gap="30px">
+                <Flex
+                  justifyContent="space-between"
+                  alignItems="end"
+                  gap="10px"
+                  sx={{ ...(isMobile && { flexDirection: "column" }) }}
+                >
+                  <Typography variant="subtitle1">
+                    {t("myWork.work")}
+                  </Typography>
+                </Flex>
+
+                <EmployeeWorkCard
+                  loading={loading}
+                  work={work}
+                  noWorkText="myWork.noWorkSupervisor"
                 />
               </FlexColumn>
             )}
