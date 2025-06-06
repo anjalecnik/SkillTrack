@@ -23,6 +23,7 @@ const jira_service_1 = require("../services/jira.service");
 const jira_openai_suggestion_response_1 = require("../dtos/response/jira-openai-suggestion.response");
 const user_guard_1 = require("../../../utils/guards/user.guard");
 const user_role_enum_1 = require("../../../utils/types/enums/user-role.enum");
+const jira_tickets_for_user_response_1 = require("../dtos/response/jira-tickets-for-user.response");
 let JiraAdminHubController = class JiraAdminHubController {
     jiraService;
     constructor(jiraService) {
@@ -36,6 +37,9 @@ let JiraAdminHubController = class JiraAdminHubController {
     }
     async getJiraProjectParticipants(projectKey) {
         return this.jiraService.getJiraProjectParticipantsAvailability(projectKey);
+    }
+    async getJiraAssignedWork(userName) {
+        return this.jiraService.getTicketsAssignedToUser(userName);
     }
     async getOpenAISuggestionForAsignee(projectKey, ticketId) {
         return this.jiraService.suggestBestAssigneeWithOpenAI(projectKey, ticketId);
@@ -80,6 +84,18 @@ __decorate([
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", Promise)
 ], JiraAdminHubController.prototype, "getJiraProjectParticipants", null);
+__decorate([
+    (0, common_1.Get)("/my-work/:userName"),
+    (0, common_1.UseGuards)(),
+    (0, swagger_1.ApiOperation)({
+        summary: "Returns Jira work for employee"
+    }),
+    (0, swagger_1.ApiOkResponse)({ description: "Jira work", type: jira_tickets_for_user_response_1.JiraTicketsForUserResponse }),
+    __param(0, (0, common_1.Param)("userName")),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [String]),
+    __metadata("design:returntype", Promise)
+], JiraAdminHubController.prototype, "getJiraAssignedWork", null);
 __decorate([
     (0, common_1.Get)("/openai/:projectKey/:ticketId"),
     (0, common_1.UseGuards)(),
