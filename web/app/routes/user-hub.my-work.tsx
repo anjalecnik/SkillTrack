@@ -176,9 +176,10 @@ export default function UserHubMyWork() {
                               alignItems="center"
                               justifyContent="space-between"
                             >
-                              <Typography variant="body2" fontWeight={500}>
-                                {ticket.summary}
-                              </Typography>
+                              <Typography
+                                variant="body2"
+                                fontWeight={500}
+                              ></Typography>
                               <Chip
                                 label={ticket.status}
                                 size="small"
