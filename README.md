@@ -148,6 +148,12 @@ Frontend `.env` (`web/.env`)
   GOOGLE_CLIENT_SECRET="google-client-secret"
   GOOGLE_CALLBACK_URL="http://localhost:8080/auth/users/google/redirect"
   ```
+Playwright `.env` (`playwright-tests/.env`)
+  ```bash
+  GOOGLE_IDTOKEN_SUPERVISOR="supervisor-google-token"
+  GOOGLE_IDTOKEN_ADMIN="admin-google-token"
+  GOOGLE_IDTOKEN_USER="user-google-token"
+  ```
 <br/>
 
 ## Konkurenčne rešitve in prednosti ✅
