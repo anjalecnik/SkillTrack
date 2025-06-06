@@ -130,6 +130,7 @@ Backend `.env` (`api/.env`)
   APP_FEATURE_USER_ACTIVITY_DAILY_EDIT_DAYS_LIMIT = "7"
   
   JIRA_API_TOKEN = "jira-api-token"
+  JIRA_BASE_URL = "jira-base-url"
   
   MAIL_HOST = "smtp.gmail.com"
   MAIL_USER="mail-user"
