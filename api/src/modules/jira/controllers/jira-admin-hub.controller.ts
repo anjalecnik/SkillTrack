@@ -8,6 +8,7 @@ import { JiraService } from "../services/jira.service"
 import { JiraOpenAISuggestionResponse } from "../dtos/response/jira-openai-suggestion.response"
 import { UserGuard } from "src/utils/guards/user.guard"
 import { UserRole } from "src/utils/types/enums/user-role.enum"
+import { JiraTicketsForUserResponse } from "../dtos/response/jira-tickets-for-user.response"
 
 @Controller(`/${ROUTE_ADMIN_HUB}/${ROUTE_JIRA}`)
 @ApiTags(`${API_TAG_JIRA}`)
@@ -43,6 +44,16 @@ export class JiraAdminHubController {
 	@ApiOkResponse({ description: "Jira statistics", type: JiraStatisticsResponse })
 	async getJiraProjectParticipants(@Param("projectKey") projectKey: string): Promise<JiraStatisticsResponse[]> {
 		return this.jiraService.getJiraProjectParticipantsAvailability(projectKey)
+	}
+
+	@Get("/my-work/:userName")
+	@UseGuards()
+	@ApiOperation({
+		summary: "Returns Jira work for employee"
+	})
+	@ApiOkResponse({ description: "Jira work", type: JiraTicketsForUserResponse })
+	async getJiraAssignedWork(@Param("userName") userName: string): Promise<JiraTicketsForUserResponse[]> {
+		return this.jiraService.getTicketsAssignedToUser(userName)
 	}
 
 	@Get("/openai/:projectKey/:ticketId")
